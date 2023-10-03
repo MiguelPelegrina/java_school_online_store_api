@@ -8,28 +8,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class CountryService {
-    private final CountryRepository repository;
+    private final CountryRepository countryRepository;
 
     @Transactional
-    public List<Country> getAllEntities() {
-        return repository.findAll();
+    public List<Country> getAllCountries() {
+        return countryRepository.findAll();
     }
 
     @Transactional
-    public Country getEntityById(String name) {
-        return repository.findById(name).orElse(null);
+    public Country getCountryById(String name) {
+        return countryRepository.findById(name).orElse(null);
     }
 
     @Transactional
-    public Country saveEntity(Country entity) {
-        return repository.save(entity);
+    public Country saveCountry(Country country) {
+        return countryRepository.save(country);
     }
 
     @Transactional
-    public void deleteEntity(String name) {
-        repository.deleteById(name);
+    public void deleteCountry(String name) {
+        countryRepository.deleteById(name);
     }
 }

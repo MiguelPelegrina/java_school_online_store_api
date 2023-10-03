@@ -7,29 +7,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/countries")
+@RequestMapping(path = "countries")
 @RequiredArgsConstructor
+@RestController
 public class CountryController {
     private final CountryService service;
 
     @GetMapping
-    public List<Country> getAllEntities() {
-        return service.getAllEntities();
+    public List<Country> getAllCountries() {
+        return service.getAllCountries();
     }
 
     @GetMapping("/{name}")
-    public Country getEntityById(@PathVariable String name) {
-        return service.getEntityById(name);
+    public Country getCountryById(@PathVariable String name) {
+        return service.getCountryById(name);
     }
 
     @PostMapping
-    public Country saveEntity(@RequestBody Country entity) {
-        return service.saveEntity(entity);
+    public Country saveCountry(@RequestBody Country country) {
+        return service.saveCountry(country);
     }
 
     @DeleteMapping("/{name}")
-    public void deleteEntity(@PathVariable String name) {
-        service.deleteEntity(name);
+    public void deleteCountry(@PathVariable String name) {
+        service.deleteCountry(name);
     }
 }
