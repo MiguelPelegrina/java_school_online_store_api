@@ -10,17 +10,15 @@ import java.util.Objects;
 @Getter
 @RequiredArgsConstructor
 @Setter
-@Table(name = "countries", schema = "onlinestore")
+@Table(name = "countries", schema = "public", catalog = "online_store")
 @ToString
 public class Country {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Basic
     @Column(name = "is_active", nullable = false)
-    private byte isActive;
+    private boolean isActive;
 
     @Override
     public final boolean equals(Object o) {
