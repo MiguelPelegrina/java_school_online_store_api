@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-// TODO Specify HttpHeaders
-// TODO Add PutMapping
+// TODO Specify HttpHeaders?
+// TODO Add PutMapping and PatchMapping
 @RequestMapping(path = "countries")
 @RequiredArgsConstructor
 @RestController
@@ -47,6 +48,16 @@ public class CountryController {
         } else {
             return new ResponseEntity<>(service.saveCountry(country), HttpStatus.OK);
         }
+    }
+
+    @PutMapping("/{name}")
+    public ResponseEntity<Country> updateCountry(@PathVariable String name, @RequestBody Country country){
+        return new ResponseEntity<>(service.updateCountry(name, country), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{name}")
+    public ResponseEntity<Country> partiallyUpdateCountry(@PathVariable String name, @RequestBody Country country){
+        return new ResponseEntity<>(service.partiallyUpdate(name, country), HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
