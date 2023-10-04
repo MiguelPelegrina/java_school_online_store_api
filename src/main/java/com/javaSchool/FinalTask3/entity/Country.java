@@ -1,9 +1,6 @@
 package com.javaSchool.FinalTask3.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -13,15 +10,17 @@ import java.util.Objects;
 @Getter
 @RequiredArgsConstructor
 @Setter
-@Table(name = "countries")
+@Table(name = "countries", schema = "onlinestore")
 @ToString
 public class Country {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Basic
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    private byte isActive;
 
     @Override
     public final boolean equals(Object o) {
