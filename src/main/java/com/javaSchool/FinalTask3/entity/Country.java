@@ -4,9 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+// TODO Why does Postman show "is_active" as "active". When I want to save a new Country the field name is must be active
+@AllArgsConstructor
+@Builder
 @Data
 @Entity
 @RequiredArgsConstructor

@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-// TODO Specify HttpHeaders?
-// TODO Add PutMapping and PatchMapping
+// TODO What information do I specify in the HttpHeaders?
 @RequestMapping(path = "countries")
 @RequiredArgsConstructor
 @RestController
@@ -60,6 +59,7 @@ public class CountryController {
         return new ResponseEntity<>(service.partiallyUpdate(name, country), HttpStatus.OK);
     }
 
+    // TODO What kind of ResponseEntity do I return if a country is deleted?
     @DeleteMapping("/{name}")
     public void deleteCountry(@PathVariable String name) {
         service.deleteCountry(name);

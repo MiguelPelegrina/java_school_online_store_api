@@ -31,6 +31,7 @@ public class CountryService {
     public Country updateCountry(String name, Country country) {
         Country savedCountry = countryRepository.findById(name).orElse(null);
 
+        // Check if the country exists
         if (savedCountry != null){
             savedCountry.setName(country.getName());
             savedCountry.setActive(country.isActive());
@@ -43,15 +44,19 @@ public class CountryService {
 
     @Transactional
     public Country partiallyUpdate(String name, Country country){
-        Country savedCountry = countryRepository.findById(name).orElse(null);
+        Country existingCountry = countryRepository.findById(name).orElse(null);
 
-        if(savedCountry != null){
+        // Check if the country exists
+        if(existingCountry != null){
+            // Check updated attributes and replace old values with them
             if (country.getName() != null) {
-                savedCountry.setName(country.getName());
+                existingCountry.setName(country.getName());
             }
             if (country.isActive()) {
-                savedCountry.setActive(true);
+                existingCountry.setActive(true);
             }
+
+            return countryRepository.save(existingCountry);
         }
 
         return null;
