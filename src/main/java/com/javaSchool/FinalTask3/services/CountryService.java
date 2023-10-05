@@ -17,36 +17,40 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 public class CountryService {
-    private final CountryRepository countryRepository;
+    private final CountryRepository repository;
 
     private final ModelMapper modelMapper;
 
     public List<CountryDTO> getAllCountries() {
-        List<Country> countries = countryRepository.findAll();
+        List<Country> countries = repository.findAll();
+
         return countries.stream().map(country -> modelMapper.map(country, CountryDTO.class)).collect(Collectors.toList());
     }
 
     public CountryDTO getCountryById(String name) {
-        Country country = countryRepository.findById(name).orElse(null);
+        Country country = repository.findById(name).orElse(null);
+
         return modelMapper.map(country, CountryDTO.class);
     }
 
     @Transactional
     public CountryDTO saveCountry(Country country) {
-        Country savedCountry = countryRepository.save(country);
+        Country savedCountry = repository.save(country);
+
         return modelMapper.map(savedCountry, CountryDTO.class);
     }
 
     @Transactional
     public CountryDTO updateCountry(String name, Country country) {
-        Country existingCountry = countryRepository.findById(name).orElse(null);
+        Country existingCountry = repository.findById(name).orElse(null);
 
         // Check if the country exists
         if (existingCountry != null){
             existingCountry.setName(country.getName());
             existingCountry.setActive(country.isActive());
 
-            Country savedCountry = countryRepository.save(existingCountry);
+            Country savedCountry = repository.save(existingCountry);
+
             return modelMapper.map(savedCountry, CountryDTO.class);
         }
 
@@ -54,8 +58,8 @@ public class CountryService {
     }
 
     @Transactional
-    public CountryDTO partiallyUpdate(String name, Country updatedCountry){
-        Country existingCountry = countryRepository.findById(name).orElse(null);
+    public CountryDTO partiallyUpdateCountry(String name, Country updatedCountry){
+        Country existingCountry = repository.findById(name).orElse(null);
 
         // Check if the country exists
         if(existingCountry != null){
@@ -67,7 +71,8 @@ public class CountryService {
                 existingCountry.setActive(true);
             }
 
-            Country savedCountry = countryRepository.save(existingCountry);
+            Country savedCountry = repository.save(existingCountry);
+
             return modelMapper.map(savedCountry, CountryDTO.class);
         }
 
@@ -76,6 +81,6 @@ public class CountryService {
 
     @Transactional
     public void deleteCountry(String name) {
-        countryRepository.deleteById(name);
+        repository.deleteById(name);
     }
 }

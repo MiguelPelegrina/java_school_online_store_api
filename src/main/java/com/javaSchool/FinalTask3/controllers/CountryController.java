@@ -46,7 +46,7 @@ public class CountryController {
         if (savedCountry == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(service.saveCountry(country), HttpStatus.OK);
+            return new ResponseEntity<>(savedCountry, HttpStatus.OK);
         }
     }
 
@@ -57,7 +57,7 @@ public class CountryController {
 
     @PatchMapping("/{name}")
     public ResponseEntity<CountryDTO> partiallyUpdateCountry(@PathVariable String name, @RequestBody Country country){
-        return new ResponseEntity<>(service.partiallyUpdate(name, country), HttpStatus.OK);
+        return new ResponseEntity<>(service.partiallyUpdateCountry(name, country), HttpStatus.OK);
     }
 
     // TODO What kind of ResponseEntity do I return if a country is deleted?
