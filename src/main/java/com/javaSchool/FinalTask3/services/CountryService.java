@@ -1,62 +1,74 @@
 package com.javaSchool.FinalTask3.services;
 
-import com.javaSchool.FinalTask3.entity.Country;
+import com.javaSchool.FinalTask3.dtos.CountryDTO;
+import com.javaSchool.FinalTask3.entities.Country;
 import com.javaSchool.FinalTask3.repositories.CountryRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+// TODO Not sure if I should try to implement the Spring transaction routing mentioned in
+// https://vladmihalcea.com/read-write-read-only-transaction-routing-spring/
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class CountryService {
     private final CountryRepository countryRepository;
 
-    public List<Country> getAllCountries() {
-        return countryRepository.findAll();
+    private final ModelMapper modelMapper;
+
+    public List<CountryDTO> getAllCountries() {
+        List<Country> countries = countryRepository.findAll();
+        return countries.stream().map(country -> modelMapper.map(country, CountryDTO.class)).collect(Collectors.toList());
     }
 
-    public Country getCountryById(String name) {
-        return countryRepository.findById(name).orElse(null);
+    public CountryDTO getCountryById(String name) {
+        Country country = countryRepository.findById(name).orElse(null);
+        return modelMapper.map(country, CountryDTO.class);
     }
 
     @Transactional
-    public Country saveCountry(Country country) {
-        return countryRepository.save(country);
+    public CountryDTO saveCountry(Country country) {
+        Country savedCountry = countryRepository.save(country);
+        return modelMapper.map(savedCountry, CountryDTO.class);
     }
 
     @Transactional
-    public Country updateCountry(String name, Country country) {
-        Country savedCountry = countryRepository.findById(name).orElse(null);
+    public CountryDTO updateCountry(String name, Country country) {
+        Country existingCountry = countryRepository.findById(name).orElse(null);
 
         // Check if the country exists
-        if (savedCountry != null){
-            savedCountry.setName(country.getName());
-            savedCountry.setActive(country.isActive());
+        if (existingCountry != null){
+            existingCountry.setName(country.getName());
+            existingCountry.setActive(country.isActive());
 
-            return countryRepository.save(savedCountry);
+            Country savedCountry = countryRepository.save(existingCountry);
+            return modelMapper.map(savedCountry, CountryDTO.class);
         }
 
         return null;
     }
 
     @Transactional
-    public Country partiallyUpdate(String name, Country country){
+    public CountryDTO partiallyUpdate(String name, Country updatedCountry){
         Country existingCountry = countryRepository.findById(name).orElse(null);
 
         // Check if the country exists
         if(existingCountry != null){
             // Check updated attributes and replace old values with them
-            if (country.getName() != null) {
-                existingCountry.setName(country.getName());
+            if (updatedCountry.getName() != null) {
+                existingCountry.setName(updatedCountry.getName());
             }
-            if (country.isActive()) {
+            if (updatedCountry.isActive()) {
                 existingCountry.setActive(true);
             }
 
-            return countryRepository.save(existingCountry);
+            Country savedCountry = countryRepository.save(existingCountry);
+            return modelMapper.map(savedCountry, CountryDTO.class);
         }
 
         return null;

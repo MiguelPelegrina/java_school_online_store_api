@@ -1,6 +1,7 @@
 package com.javaSchool.FinalTask3.controllers;
 
-import com.javaSchool.FinalTask3.entity.Country;
+import com.javaSchool.FinalTask3.dtos.CountryDTO;
+import com.javaSchool.FinalTask3.entities.Country;
 import com.javaSchool.FinalTask3.services.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,22 +26,22 @@ public class CountryController {
     private final CountryService service;
 
     @GetMapping
-    public ResponseEntity<List<Country>> getAllCountries() {
-        List<Country> countries = service.getAllCountries();
+    public ResponseEntity<List<CountryDTO>> getAllCountries() {
+        List<CountryDTO> countries = service.getAllCountries();
 
         return new ResponseEntity<>(countries, HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<Country> getCountryById(@PathVariable String name) {
-        Country country = service.getCountryById(name);
+    public ResponseEntity<CountryDTO> getCountryById(@PathVariable String name) {
+        CountryDTO countryDTO = service.getCountryById(name);
 
-        return new ResponseEntity<>(country, HttpStatus.OK);
+        return new ResponseEntity<>(countryDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Country> saveCountry(@RequestBody Country country) {
-        Country savedCountry = service.saveCountry(country);
+    public ResponseEntity<CountryDTO> saveCountry(@RequestBody Country country) {
+        CountryDTO savedCountry = service.saveCountry(country);
 
         if (savedCountry == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -50,12 +51,12 @@ public class CountryController {
     }
 
     @PutMapping("/{name}")
-    public ResponseEntity<Country> updateCountry(@PathVariable String name, @RequestBody Country country){
+    public ResponseEntity<CountryDTO> updateCountry(@PathVariable String name, @RequestBody Country country){
         return new ResponseEntity<>(service.updateCountry(name, country), HttpStatus.OK);
     }
 
     @PatchMapping("/{name}")
-    public ResponseEntity<Country> partiallyUpdateCountry(@PathVariable String name, @RequestBody Country country){
+    public ResponseEntity<CountryDTO> partiallyUpdateCountry(@PathVariable String name, @RequestBody Country country){
         return new ResponseEntity<>(service.partiallyUpdate(name, country), HttpStatus.OK);
     }
 
