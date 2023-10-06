@@ -19,4 +19,7 @@ public class PaymentStatus {
     @Id
     @Column(name = "name", length = 45)
     private String name;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 }
