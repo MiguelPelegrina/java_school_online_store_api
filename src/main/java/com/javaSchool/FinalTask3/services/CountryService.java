@@ -22,38 +22,31 @@ public class CountryService {
     private final ModelMapper modelMapper;
 
     public List<CountryDTO> getAllCountries() {
-        List<Country> countries = repository.findAll();
-
-        return countries.stream().map(country -> modelMapper.map(country, CountryDTO.class)).collect(Collectors.toList());
+        return repository.findAll()
+                .stream()
+                .map(country ->
+                        modelMapper.map(country, CountryDTO.class))
+                .collect(Collectors.toList());
     }
 
     public CountryDTO getCountryById(String name) {
-        Country country = repository.findById(name).orElse(null);
-
-        return modelMapper.map(country, CountryDTO.class);
+        return modelMapper.map(repository.findById(name)
+                .orElse(null), CountryDTO.class);
     }
 
     @Transactional
     public CountryDTO saveCountry(Country country) {
-        Country savedCountry = repository.save(country);
-
-        return modelMapper.map(savedCountry, CountryDTO.class);
+        return modelMapper.map(repository.save(country), CountryDTO.class);
     }
 
     @Transactional
     public CountryDTO updateCountry(String name, Country country) {
-        Country existingCountry = repository.findById(name).orElse(null);
-
-        // Check if the country exists
-        if (existingCountry != null){
-            existingCountry.setActive(country.isActive());
-
-            Country savedCountry = repository.save(existingCountry);
-
-            return modelMapper.map(savedCountry, CountryDTO.class);
-        } else {
-            return null;
-        }
+        return repository.findById(name)
+                .map(existingCountry -> {
+                    existingCountry.setActive(country.isActive());
+                    return modelMapper.map(repository.save(existingCountry), CountryDTO.class);
+                })
+                .orElse(null);
     }
 
     @Transactional

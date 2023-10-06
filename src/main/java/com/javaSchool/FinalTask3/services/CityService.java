@@ -21,39 +21,32 @@ public class CityService {
     private final ModelMapper modelMapper;
 
     public List<CityDTO> getAllCities(){
-        List<City> cities = repository.findAll();
-
-        return cities.stream().map(city -> modelMapper.map(city, CityDTO.class)).collect(Collectors.toList());
+        return repository.findAll()
+                .stream()
+                .map(city ->
+                        modelMapper.map(city, CityDTO.class))
+                .collect(Collectors.toList());
     }
 
     public CityDTO getCityById(String name){
-        City city = repository.findById(name).orElse(null);
-
-        return modelMapper.map(city, CityDTO.class);
+        return modelMapper.map(repository.findById(name)
+                .orElse(null), CityDTO.class);
     }
 
     @Transactional
     public CityDTO saveCity(City city){
-        City savedCity = repository.save(city);
-
-        return modelMapper.map(savedCity, CityDTO.class);
+        return modelMapper.map(repository.save(city), CityDTO.class);
     }
 
     @Transactional
     public CityDTO updateCity(String name, City city){
-        City existingCity = repository.findById(name).orElse(null);
-
-        // Check if the city exists
-        if (existingCity != null){
-            existingCity.setActive(city.isActive());
-            existingCity.setCountry(city.getCountry());
-
-            City savedCity = repository.save(city);
-
-            return modelMapper.map(savedCity, CityDTO.class);
-        } else {
-            return null;
-        }
+        return repository.findById(name)
+                .map(existingCity -> {
+                    existingCity.setActive(city.isActive());
+                    existingCity.setCountry(city.getCountry());
+                    return modelMapper.map(repository.save(existingCity), CityDTO.class);
+                })
+                .orElse(null);
     }
 
     @Transactional

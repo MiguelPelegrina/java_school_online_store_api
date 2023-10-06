@@ -20,38 +20,32 @@ public class PostalCodeService {
     private final ModelMapper modelMapper;
 
     public List<PostalCodeDTO> getAllPostalCodes(){
-        List<PostalCode> postalCodes = repository.findAll();
-
-        return postalCodes.stream().map(postalCode -> modelMapper.map(postalCode, PostalCodeDTO.class)).collect(Collectors.toList());
+        return repository.findAll()
+                .stream()
+                .map(postalCode ->
+                        modelMapper.map(postalCode, PostalCodeDTO.class))
+                .collect(Collectors.toList());
     }
 
     public PostalCodeDTO getPostalCodeById(String code){
-        PostalCode postalCode = repository.findById(code).orElse(null);
-
-        return modelMapper.map(postalCode, PostalCodeDTO.class);
+        return modelMapper.map(repository.findById(code)
+                .orElse(null), PostalCodeDTO.class);
     }
 
     @Transactional
     public PostalCodeDTO savePostalCode(PostalCode postalCode){
-        PostalCode savedPostalCode = repository.save(postalCode);
-
-        return modelMapper.map(savedPostalCode, PostalCodeDTO.class);
+        return modelMapper.map(repository.save(postalCode), PostalCodeDTO.class);
     }
 
     @Transactional
     public PostalCodeDTO updatePostalCode(String code, PostalCode postalCode){
-        PostalCode existingPostalCode = repository.findById(code).orElse(null);
-
-        if(existingPostalCode != null){
-            existingPostalCode.setActive(postalCode.isActive());
-            existingPostalCode.setCity(postalCode.getCity());
-
-            PostalCode savedPostalCode = repository.save(existingPostalCode);
-
-            return modelMapper.map(savedPostalCode, PostalCodeDTO.class);
-        } else {
-            return null;
-        }
+        return repository.findById(code)
+                .map(existingPostalCode -> {
+                    existingPostalCode.setCity(postalCode.getCity());
+                    existingPostalCode.setActive(postalCode.isActive());
+                    return modelMapper.map(existingPostalCode, PostalCodeDTO.class);
+                })
+                .orElse(null);
     }
 
     @Transactional
