@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class CountryDTO {
     private String name;
-
     // TODO Might be an unnecessary attribute?
     private boolean isActive;
 }

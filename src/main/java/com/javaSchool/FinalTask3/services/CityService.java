@@ -45,16 +45,15 @@ public class CityService {
 
         // Check if the city exists
         if (existingCity != null){
-            existingCity.setName(city.getName());
             existingCity.setActive(city.isActive());
             existingCity.setCountry(city.getCountry());
 
             City savedCity = repository.save(city);
 
             return modelMapper.map(savedCity, CityDTO.class);
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     @Transactional
@@ -64,9 +63,6 @@ public class CityService {
         // Check if the city exists
         if (existingCity != null){
             // Check updated attributes and replace old values with them
-            if (updatedCity.getName() != null) {
-                existingCity.setName(updatedCity.getName());
-            }
             if (updatedCity.isActive()){
                 existingCity.setActive(true);
             }
@@ -77,9 +73,9 @@ public class CityService {
             City savedCity = repository.save(existingCity);
 
             return modelMapper.map(savedCity, CityDTO.class);
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     @Transactional

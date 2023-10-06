@@ -3,8 +3,8 @@ package com.javaSchool.FinalTask3.dtos;
 import lombok.Data;
 
 @Data
-public class CityDTO {
-    private String name;
+public class PostalCodeDTO {
+    private String code;
     private boolean isActive;
-    private String countryName;
+    private String cityName;
 }

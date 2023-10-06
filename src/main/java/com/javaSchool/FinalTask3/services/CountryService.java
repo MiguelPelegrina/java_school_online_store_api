@@ -46,15 +46,14 @@ public class CountryService {
 
         // Check if the country exists
         if (existingCountry != null){
-            existingCountry.setName(country.getName());
             existingCountry.setActive(country.isActive());
 
             Country savedCountry = repository.save(existingCountry);
 
             return modelMapper.map(savedCountry, CountryDTO.class);
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     @Transactional
@@ -64,9 +63,6 @@ public class CountryService {
         // Check if the country exists
         if(existingCountry != null){
             // Check updated attributes and replace old values with them
-            if (updatedCountry.getName() != null) {
-                existingCountry.setName(updatedCountry.getName());
-            }
             if (updatedCountry.isActive()) {
                 existingCountry.setActive(true);
             }
@@ -74,9 +70,9 @@ public class CountryService {
             Country savedCountry = repository.save(existingCountry);
 
             return modelMapper.map(savedCountry, CountryDTO.class);
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     @Transactional
