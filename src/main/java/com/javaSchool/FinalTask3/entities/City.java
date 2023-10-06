@@ -1,6 +1,5 @@
 package com.javaSchool.FinalTask3.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,8 +23,9 @@ public class City {
     @Column(name = "name", nullable = false)
     private String name;
 
-    // TODO With DTO all fetch types are lazy?
-    // TODO Cascade type?
+    // TODO With DTOs all fetch types are lazy?
+    // TODO Cascade type? --> At the moment it is not part of the requirements, the database admin can insert new
+    //  countries when the customer asks for it.
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "country_name", referencedColumnName = "name", nullable = false)
     private Country country;

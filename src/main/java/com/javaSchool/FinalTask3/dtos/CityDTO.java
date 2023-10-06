@@ -1,6 +1,5 @@
 package com.javaSchool.FinalTask3.dtos;
 
-import com.javaSchool.FinalTask3.entities.Country;
 import lombok.Data;
 
 @Data
