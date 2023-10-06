@@ -1,5 +1,6 @@
 package com.javaSchool.FinalTask3.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -16,5 +17,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "delivery_methods", schema = "public", catalog = "online_store")
 public class DeliveryMethod {
     @Id
+    @Column(name = "name", length = 45)
     private String name;
 }
