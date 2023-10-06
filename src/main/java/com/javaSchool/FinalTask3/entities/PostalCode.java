@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Table(name = "postal_codes", schema = "public", catalog = "online_store")
 public class PostalCode {
     @Id
-    @Column(name = "code", nullable = false, length = 45)
+    @Column(name = "code", length = 45)
     private String code;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
