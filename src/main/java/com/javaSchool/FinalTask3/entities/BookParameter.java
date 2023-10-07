@@ -3,6 +3,7 @@ package com.javaSchool.FinalTask3.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,18 +18,19 @@ import lombok.RequiredArgsConstructor;
 @Data
 @Entity
 @RequiredArgsConstructor
-@Table(name = "cities", schema = "public", catalog = "online_store")
-public class City {
+@Table(name = "book_parameters", schema = "public", catalog = "online_store")
+public class BookParameter {
     @Id
-    @Column(name = "name", nullable = false, length = 45)
-    private String name;
+    @Column(name = "id")
+    @GeneratedValue
+    private int id;
 
-    // TODO With DTOs all fetch types are lazy?
-    // TODO Cascade type? --> At the moment it is not part of the requirements, the database admin can insert new
-    //  countries when the customer asks for it.
+    @Column(name = "author", nullable = false, length = 60)
+    private String author;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "country_name", referencedColumnName = "name", nullable = false)
-    private Country country;
+    @JoinColumn(name = "format", referencedColumnName = "name", nullable = false)
+    private BookParametersFormat format;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;

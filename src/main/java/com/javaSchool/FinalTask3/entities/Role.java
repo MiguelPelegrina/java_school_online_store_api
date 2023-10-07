@@ -9,19 +9,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-// TODO Why does Postman show "is_active" as "active". When I want to save a new Country the field name must be active (
-//  not is_active)
 @AllArgsConstructor
 @Builder
 @Data
 @Entity
 @RequiredArgsConstructor
-@Table(name = "countries", schema = "public", catalog = "online_store")
-public class Country {
+@Table(name = "roles", schema = "public", catalog = "online_store")
+public class Role {
     @Id
-    @Column(name = "name", nullable = false, length = 45)
+    @Column(name = "name", length = 45)
     private String name;
-
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive;
 }
