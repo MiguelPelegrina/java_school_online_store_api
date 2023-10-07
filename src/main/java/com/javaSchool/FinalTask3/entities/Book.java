@@ -33,6 +33,9 @@ public class Book {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    @Column(name = "isbn", nullable = false)
+    private String isbn;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "genre", referencedColumnName = "name", nullable = false)
     private BookGenre genre;
