@@ -44,7 +44,7 @@ public class DeliveryMethodController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{name}")
     public ResponseEntity<DeliveryMethodDTO> updateDeliveryMethod(@PathVariable String name, @RequestBody DeliveryMethod deliveryMethod){
         return new ResponseEntity<>(service.updateDeliveryMethod(name, deliveryMethod), HttpStatus.OK);
     }
