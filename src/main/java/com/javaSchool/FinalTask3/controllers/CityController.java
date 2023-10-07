@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,16 +25,12 @@ public class CityController {
 
     @GetMapping
     public ResponseEntity<List<CityDTO>> getAllCities(){
-        List<CityDTO> cities = service.getAllCities();
-
-        return new ResponseEntity<>(cities, HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllCities(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<CityDTO> getCityById(@PathVariable String name){
-        CityDTO cityDTO = service.getCityById(name);
-
-        return new ResponseEntity<>(cityDTO, HttpStatus.OK);
+        return new ResponseEntity<>(service.getCityById(name), HttpStatus.OK);
     }
 
     @PostMapping
@@ -52,11 +47,6 @@ public class CityController {
     @PutMapping("/{name}")
     public ResponseEntity<CityDTO> updateCity(@PathVariable String name, @RequestBody City city){
         return new ResponseEntity<>(service.updateCity(name, city), HttpStatus.OK);
-    }
-
-    @PatchMapping("/{name}")
-    public ResponseEntity<CityDTO> partiallyUpdateCity(@PathVariable String name, @RequestBody City city){
-        return new ResponseEntity<>(service.partiallyUpdateCity(name, city), HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")

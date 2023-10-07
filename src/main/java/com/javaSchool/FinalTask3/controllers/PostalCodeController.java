@@ -26,16 +26,12 @@ public class PostalCodeController {
 
     @GetMapping
     public ResponseEntity<List<PostalCodeDTO>> getAllPostalCodes(){
-        List<PostalCodeDTO> postalCodes = service.getAllPostalCodes();
-
-        return new ResponseEntity<>(postalCodes, HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllPostalCodes(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{code}")
     public ResponseEntity<PostalCodeDTO> getPostalCodeById(@PathVariable String code){
-        PostalCodeDTO postalCodeDTO = service.getPostalCodeById(code);
-
-        return new ResponseEntity<>(postalCodeDTO, HttpStatus.OK);
+        return new ResponseEntity<>(service.getPostalCodeById(code), HttpStatus.OK);
     }
 
     @PostMapping

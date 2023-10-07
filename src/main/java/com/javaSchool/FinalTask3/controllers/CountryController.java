@@ -27,16 +27,12 @@ public class CountryController {
 
     @GetMapping
     public ResponseEntity<List<CountryDTO>> getAllCountries() {
-        List<CountryDTO> countries = service.getAllCountries();
-
-        return new ResponseEntity<>(countries, HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllCountries(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<CountryDTO> getCountryById(@PathVariable String name) {
-        CountryDTO countryDTO = service.getCountryById(name);
-
-        return new ResponseEntity<>(countryDTO, HttpStatus.OK);
+        return new ResponseEntity<>(service.getCountryById(name), HttpStatus.OK);
     }
 
     @PostMapping
@@ -53,11 +49,6 @@ public class CountryController {
     @PutMapping("/{name}")
     public ResponseEntity<CountryDTO> updateCountry(@PathVariable String name, @RequestBody Country country){
         return new ResponseEntity<>(service.updateCountry(name, country), HttpStatus.OK);
-    }
-
-    @PatchMapping("/{name}")
-    public ResponseEntity<CountryDTO> partiallyUpdateCountry(@PathVariable String name, @RequestBody Country country){
-        return new ResponseEntity<>(service.partiallyUpdateCountry(name, country), HttpStatus.OK);
     }
 
     // TODO What kind of ResponseEntity do I return if a country is deleted?
