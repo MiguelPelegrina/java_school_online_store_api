@@ -19,7 +19,7 @@ public class UserAddressService {
 
     private final ModelMapper modelMapper;
 
-    public List<UserAddressDTO> getAllUserAddress(){
+    public List<UserAddressDTO> getAllUserAddresses(){
         return repository.findAll()
                 .stream()
                 .map((userAddress) ->

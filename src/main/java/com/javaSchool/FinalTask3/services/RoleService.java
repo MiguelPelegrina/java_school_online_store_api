@@ -27,8 +27,8 @@ public class RoleService {
                 .collect(Collectors.toList());
     }
 
-    public RoleDTO getRoleById(String id){
-        return modelMapper.map(repository.findById(id)
+    public RoleDTO getRoleById(String name){
+        return modelMapper.map(repository.findById(name)
                 .orElse(null), RoleDTO.class);
     }
 
@@ -38,8 +38,8 @@ public class RoleService {
     }
 
     @Transactional
-    public RoleDTO updateRole(String id, Role role){
-        return repository.findById(id).map(existingRole -> {
+    public RoleDTO updateRole(String name, Role role){
+        return repository.findById(name).map(existingRole -> {
                     existingRole.setRoles(role.getRoles());
                     return modelMapper.map(role, RoleDTO.class);
                 })

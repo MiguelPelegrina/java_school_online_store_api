@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class BookParameterFormatService {
+public class BookParametersFormatService {
     private final BookParameterFormatRepository repository;
 
     private final ModelMapper modelMapper;

@@ -1,4 +1,4 @@
-package com.javaSchool.FinalTask3.controllers;
+package com.javaSchool.FinalTask3.controller;
 
 import com.javaSchool.FinalTask3.dtos.DeliveryMethodDTO;
 import com.javaSchool.FinalTask3.entities.DeliveryMethod;
