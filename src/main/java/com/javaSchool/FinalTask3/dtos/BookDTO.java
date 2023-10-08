@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object (DTO) of {@link com.javaSchool.FinalTask3.entities.Book}.
+ */
 @Data
 public class BookDTO {
     private int id;

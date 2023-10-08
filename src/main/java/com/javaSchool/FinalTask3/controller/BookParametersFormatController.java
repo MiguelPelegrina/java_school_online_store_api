@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping
+@RequestMapping("bookparametersformat")
 @RequiredArgsConstructor
 @RestController
 public class BookParametersFormatController {
