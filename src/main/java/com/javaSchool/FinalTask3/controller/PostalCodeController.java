@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
 @RequestMapping(path = "postalcodes")
 @RequiredArgsConstructor
 @RestController
@@ -26,17 +25,17 @@ public class PostalCodeController {
 
     @GetMapping
     public ResponseEntity<List<PostalCodeDTO>> getAllPostalCodes(){
-        return new ResponseEntity<>(service.getAllPostalCodes(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{code}")
     public ResponseEntity<PostalCodeDTO> getPostalCodeById(@PathVariable String code){
-        return new ResponseEntity<>(service.getPostalCodeById(code), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(code), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<PostalCodeDTO> savePostalCodeById(@RequestBody PostalCode postalCode){
-        PostalCodeDTO savedPostalCode = service.savePostalCode(postalCode);
+        PostalCodeDTO savedPostalCode = service.saveInstance(postalCode);
 
         if(savedPostalCode == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -47,11 +46,11 @@ public class PostalCodeController {
 
     @PutMapping("/{code}")
     public ResponseEntity<PostalCodeDTO> updatePostalCode(@PathVariable String code, @RequestBody PostalCode postalCode){
-        return new ResponseEntity<>(service.updatePostalCode(code, postalCode), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(code, postalCode), HttpStatus.OK);
     }
 
     @DeleteMapping("/{code}")
     public void deletePostalCode(@PathVariable String code){
-        service.deletePostalCode(code);
+        service.deleteInstance(code);
     }
 }

@@ -3,15 +3,11 @@ package com.javaSchool.FinalTask3.services;
 import com.javaSchool.FinalTask3.dtos.BookGenreDTO;
 import com.javaSchool.FinalTask3.dtos.PaymentMethodDTO;
 import com.javaSchool.FinalTask3.entities.BookGenre;
-import com.javaSchool.FinalTask3.entities.Country;
 import com.javaSchool.FinalTask3.entities.PaymentMethod;
 import com.javaSchool.FinalTask3.repositories.PaymentMethodRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service class responsible for the interaction between the {@link PaymentMethodRepository} and the

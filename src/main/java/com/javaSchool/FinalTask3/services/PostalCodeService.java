@@ -3,53 +3,45 @@ package com.javaSchool.FinalTask3.services;
 import com.javaSchool.FinalTask3.dtos.PostalCodeDTO;
 import com.javaSchool.FinalTask3.entities.PostalCode;
 import com.javaSchool.FinalTask3.repositories.PostalCodeRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@RequiredArgsConstructor
+/**
+ * Service class responsible for the interaction between the {@link PostalCodeRepository} and the
+ * {@link com.javaSchool.FinalTask3.controller.PostalCodeController}. Obtains data from the
+ * {@link PostalCodeRepository} and returns the object(s) of the entity {@link PostalCode} as
+ * {@link PostalCodeDTO} to the {@link com.javaSchool.FinalTask3.controller.PostalCodeController}.
+ */
 @Service
 @Transactional(readOnly = true)
-public class PostalCodeService {
-    private final PostalCodeRepository repository;
-
-    private final ModelMapper modelMapper;
-
-    public List<PostalCodeDTO> getAllPostalCodes(){
-        return repository.findAll()
-                .stream()
-                .map(postalCode ->
-                        modelMapper.map(postalCode, PostalCodeDTO.class))
-                .collect(Collectors.toList());
+public class PostalCodeService extends BaseServiceWithUpdate<PostalCode, PostalCodeDTO, String>{
+    /**
+     * All arguments constructor.
+     * @param repository {@link PostalCodeRepository} of the {@link PostalCode} entity.
+     * @param modelMapper ModelMapper that converts the {@link PostalCode} to {@link PostalCodeDTO}
+     */
+    public PostalCodeService(PostalCodeRepository repository, ModelMapper modelMapper) {
+        super(repository, modelMapper);
     }
 
-    public PostalCodeDTO getPostalCodeById(String code){
-        return modelMapper.map(repository.findById(code)
-                .orElse(null), PostalCodeDTO.class);
+    /**
+     * Returns the DTO class of the {@link PostalCode} entity.
+     * @return Returns the {@link PostalCodeDTO} class.
+     */
+    @Override
+    protected Class<PostalCodeDTO> getDTOClass() {
+        return PostalCodeDTO.class;
     }
 
-    @Transactional
-    public PostalCodeDTO savePostalCode(PostalCode postalCode){
-        return modelMapper.map(repository.save(postalCode), PostalCodeDTO.class);
-    }
-
-    @Transactional
-    public PostalCodeDTO updatePostalCode(String code, PostalCode postalCode){
-        return repository.findById(code)
-                .map(existingPostalCode -> {
-                    existingPostalCode.setCity(postalCode.getCity());
-                    existingPostalCode.setActive(postalCode.isActive());
-                    return modelMapper.map(existingPostalCode, PostalCodeDTO.class);
-                })
-                .orElse(null);
-    }
-
-    @Transactional
-    public void deletePostalCode(String code) {
-        repository.deleteById(code);
+    /**
+     * Updates the values of an existing {@link PostalCode} instance with new ones.
+     * @param existingInstance Instance that already exists in the database.
+     * @param newInstance Instance that stores the value to update the existing instance.
+     */
+    @Override
+    protected void updateValues(PostalCode existingInstance, PostalCode newInstance) {
+        existingInstance.setActive(newInstance.isActive());
+        existingInstance.setCity(newInstance.getCity());
     }
 }

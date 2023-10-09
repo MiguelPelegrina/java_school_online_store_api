@@ -25,17 +25,17 @@ public class UserRoleController {
 
     @GetMapping
     public ResponseEntity<List<UserRoleDTO>> getAllUserRoles(){
-        return new ResponseEntity<>(service.getAllUserRoles(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserRoleDTO> getUserRoleById(@PathVariable int id){
-        return new ResponseEntity<>(service.getUserRoleById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserRoleDTO> saveUserRole(@RequestBody UserRole userRole){
-        UserRoleDTO savedUserRole = service.saveUserRole(userRole);
+        UserRoleDTO savedUserRole = service.saveInstance(userRole);
 
         if (savedUserRole == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class UserRoleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserRoleDTO> updateUserRole(@PathVariable int id, @RequestBody UserRole userRole){
-        return new ResponseEntity<>(service.updateUserRole(id, userRole), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(id, userRole), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUserRole(@PathVariable int id){
-        service.deleteUserRole(id);
+        service.deleteInstance(id);
     }
 }

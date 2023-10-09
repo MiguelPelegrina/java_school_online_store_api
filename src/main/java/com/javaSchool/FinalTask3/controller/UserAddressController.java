@@ -25,17 +25,17 @@ public class UserAddressController {
 
     @GetMapping
     public ResponseEntity<List<UserAddressDTO>> getAllUserAddresses(){
-        return new ResponseEntity<>(service.getAllUserAddresses(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserAddressDTO> getUserAddressById(@PathVariable int id){
-        return new ResponseEntity<>(service.getUserAddressById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserAddressDTO> saveUserAddress(@RequestBody UserAddress userAddress){
-        UserAddressDTO savedUserAddress = service.saveUserAddress(userAddress);
+        UserAddressDTO savedUserAddress = service.saveInstance(userAddress);
 
         if (savedUserAddress == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,12 +46,12 @@ public class UserAddressController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserAddressDTO> updateUserAddress(@PathVariable int id, @RequestBody UserAddress userAddress){
-        return new ResponseEntity<>(service.updateUserAddress(id, userAddress), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(id, userAddress), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUserAddress(@PathVariable int id){
-        service.deleteUserAddress(id);
+        service.deleteInstance(id);
     }
 
 }

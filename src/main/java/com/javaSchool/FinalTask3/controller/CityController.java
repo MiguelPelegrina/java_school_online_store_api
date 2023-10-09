@@ -25,17 +25,17 @@ public class CityController {
 
     @GetMapping
     public ResponseEntity<List<CityDTO>> getAllCities(){
-        return new ResponseEntity<>(service.getAllCities(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<CityDTO> getCityById(@PathVariable String name){
-        return new ResponseEntity<>(service.getCityById(name), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(name), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<CityDTO> saveCity(@RequestBody City city){
-        CityDTO savedCity = service.saveCity(city);
+        CityDTO savedCity = service.saveInstance(city);
 
         if (savedCity == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class CityController {
 
     @PutMapping("/{name}")
     public ResponseEntity<CityDTO> updateCity(@PathVariable String name, @RequestBody City city){
-        return new ResponseEntity<>(service.updateCity(name, city), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(name, city), HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
     public void deleteCity(@PathVariable String name){
-        service.deleteCity(name);
+        service.deleteInstance(name);
     }
 }
