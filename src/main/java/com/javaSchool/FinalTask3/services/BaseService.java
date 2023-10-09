@@ -9,11 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 // TODO Try to add something that guaranties that the modelMapper and the repository are never null, if possible.
 /**
  * Parent service responsible for the interaction between repositories and controller. Obtains data from the
  * repository and returns the instance(s) of the entity as Data Transfer Object(s) (DTO) to the related controller.
  * Used for entities that only have one attribute and therefore can't be updated.
+ * @param <Entity> Entity instance that will be managed.
+ * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
+ * @param <EntityID> Identifier of the entity instance.
  */
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
@@ -29,7 +33,7 @@ public abstract class BaseService<Entity, EntityDTO, EntityID> {
      * of DTOs.
      * @return Returns a {@link List} of all DTOs.
      */
-    public List<EntityDTO> getAllItems() {
+    public List<EntityDTO> getAllInstances() {
         return repository.findAll()
                 .stream()
                 .map(entity ->
@@ -43,18 +47,18 @@ public abstract class BaseService<Entity, EntityDTO, EntityID> {
      * @param id ID of the instance that will be searched.
      * @return Returns the found instance. If no instance is found, it returns null.
      */
-    public EntityDTO getItemById(EntityID id){
+    public EntityDTO getInstanceById(EntityID id){
         return modelMapper.map(repository.findById(id).orElse(null), getDTOClass());
     }
 
     /**
      * Handles the POST request. Saves an instance of the entity into the database.
-     * @param item Instance of the entity that will be saved.
+     * @param instance Instance of the entity that will be saved.
      * @return Returns the DTO. If the instance could not be saved, it returns null.
      */
     @Transactional
-    public EntityDTO saveItem(Entity item){
-        return modelMapper.map(repository.save(item), getDTOClass());
+    public EntityDTO saveInstance(Entity instance){
+        return modelMapper.map(repository.save(instance), getDTOClass());
     }
 
     /**
@@ -62,7 +66,7 @@ public abstract class BaseService<Entity, EntityDTO, EntityID> {
      * @param id ID of the instance that will be deleted.
      */
     @Transactional
-    public void deleteItem(EntityID id){
+    public void deleteInstance(EntityID id){
         repository.deleteById(id);
     }
 
