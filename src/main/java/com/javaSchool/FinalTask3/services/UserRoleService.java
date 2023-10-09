@@ -3,53 +3,46 @@ package com.javaSchool.FinalTask3.services;
 import com.javaSchool.FinalTask3.dtos.UserRoleDTO;
 import com.javaSchool.FinalTask3.entities.UserRole;
 import com.javaSchool.FinalTask3.repositories.UserRoleRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@RequiredArgsConstructor
+/**
+ * Service class responsible for the interaction between the {@link UserRoleRepository} and the
+ * {@link com.javaSchool.FinalTask3.controller.UserRoleController}. Obtains data from the
+ * {@link UserRoleRepository} and returns the object(s) of the entity {@link UserRole} as
+ * {@link UserRoleDTO} to the {@link com.javaSchool.FinalTask3.controller.UserRoleController}.
+ */
 @Service
 @Transactional(readOnly = true)
-public class UserRoleService {
-    private final UserRoleRepository repository;
-
-    private final ModelMapper modelMapper;
-
-    public List<UserRoleDTO> getAllUserRoles(){
-        return repository.findAll()
-                .stream()
-                .map((userRole) ->
-                        modelMapper.map(userRole, UserRoleDTO.class))
-                .collect(Collectors.toList());
+public class UserRoleService extends BaseServiceWithUpdate<UserRole, UserRoleDTO, Integer>{
+    /**
+     * All arguments constructor.
+     * @param repository {@link UserRoleRepository} of the {@link UserRole} entity.
+     * @param modelMapper ModelMapper that converts the {@link UserRole} to {@link UserRoleDTO}
+     */
+    public UserRoleService(UserRoleRepository repository, ModelMapper modelMapper) {
+        super(repository, modelMapper);
     }
 
-    public UserRoleDTO getUserRoleById(int id){
-        return modelMapper.map(repository.findById(id)
-                .orElse(null), UserRoleDTO.class);
+    /**
+     * Returns the DTO class of the {@link UserRole} entity.
+     * @return Returns the {@link UserRoleDTO} class.
+     */
+    @Override
+    protected Class<UserRoleDTO> getDTOClass() {
+        return UserRoleDTO.class;
     }
 
-    @Transactional
-    public UserRoleDTO saveUserRole(UserRole userRole){
-        return modelMapper.map(repository.save(userRole), UserRoleDTO.class);
-    }
-
-    @Transactional
-    public UserRoleDTO updateUserRole(int id, UserRole userRole){
-        return repository.findById(id).map(existingUserRole -> {
-                    existingUserRole.setUser(userRole.getUser());
-                    existingUserRole.setRole(userRole.getRole());
-                    existingUserRole.setAssignedDate(userRole.getAssignedDate());
-                    return modelMapper.map(repository.save(existingUserRole), UserRoleDTO.class);
-                })
-                .orElse(null);
-    }
-
-    @Transactional
-    public void deleteUserRole(int id){
-        repository.deleteById(id);
+    /**
+     * Updates the values of an existing {@link UserRole} instance with new ones.
+     * @param existingInstance Instance that already exists in the database.
+     * @param newInstance Instance that stores the value to update the existing instance.
+     */
+    @Override
+    protected void updateValues(UserRole existingInstance, UserRole newInstance) {
+        existingInstance.setUser(newInstance.getUser());
+        existingInstance.setRole(newInstance.getRole());
+        existingInstance.setAssignedDate(newInstance.getAssignedDate());
     }
 }

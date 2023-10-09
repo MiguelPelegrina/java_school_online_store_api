@@ -4,75 +4,45 @@ import com.javaSchool.FinalTask3.dtos.CityDTO;
 import com.javaSchool.FinalTask3.entities.City;
 import com.javaSchool.FinalTask3.repositories.CityRepository;
 
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@RequiredArgsConstructor
+/**
+ * Service class responsible for the interaction between the {@link CityRepository} and the
+ * {@link com.javaSchool.FinalTask3.controller.CityController}. Obtains data from the
+ * {@link CityRepository} and returns the object(s) of the entity {@link City} as
+ * {@link CityDTO} to the {@link com.javaSchool.FinalTask3.controller.CityController}.
+ */
 @Service
 @Transactional(readOnly = true)
-public class CityService {
-    private final CityRepository repository;
-
-    private final ModelMapper modelMapper;
-
-    public List<CityDTO> getAllCities(){
-        return repository.findAll()
-                .stream()
-                .map(city ->
-                        modelMapper.map(city, CityDTO.class))
-                .collect(Collectors.toList());
+public class CityService extends BaseServiceWithUpdate<City, CityDTO, String>{
+    /**
+     * All arguments constructor.
+     * @param repository {@link CityRepository} of the {@link City} entity.
+     * @param modelMapper ModelMapper that converts the {@link CityRepository} to {@link CityDTO}
+     */
+    public CityService(CityRepository repository, ModelMapper modelMapper) {
+        super(repository, modelMapper);
     }
 
-    public CityDTO getCityById(String name){
-        return modelMapper.map(repository.findById(name)
-                .orElse(null), CityDTO.class);
+    /**
+     * Returns the DTO class of the {@link City} entity.
+     * @return Returns the {@link CityDTO} class.
+     */
+    @Override
+    protected Class<CityDTO> getDTOClass() {
+        return CityDTO.class;
     }
 
-    @Transactional
-    public CityDTO saveCity(City city){
-        return modelMapper.map(repository.save(city), CityDTO.class);
-    }
-
-    @Transactional
-    public CityDTO updateCity(String name, City city){
-        return repository.findById(name)
-                .map(existingCity -> {
-                    existingCity.setActive(city.isActive());
-                    existingCity.setCountry(city.getCountry());
-                    return modelMapper.map(repository.save(existingCity), CityDTO.class);
-                })
-                .orElse(null);
-    }
-
-    @Transactional
-    public CityDTO partiallyUpdateCity(String name, City updatedCity){
-        City existingCity = repository.findById(name).orElse(null);
-
-        // Check if the city exists
-        if (existingCity != null){
-            // Check updated attributes and replace old values with them
-            if (updatedCity.isActive()){
-                existingCity.setActive(true);
-            }
-            if (updatedCity.getCountry() != null){
-                existingCity.setCountry(updatedCity.getCountry());
-            }
-
-            City savedCity = repository.save(existingCity);
-
-            return modelMapper.map(savedCity, CityDTO.class);
-        } else {
-            return null;
-        }
-    }
-
-    @Transactional
-    public void deleteCity(String name){
-        repository.deleteById(name);
+    /**
+     * Updates the values of an existing {@link City} instance with new ones.
+     * @param existingInstance Instance that already exists in the database.
+     * @param newInstance Instance that stores the value to update the existing instance.
+     */
+    @Override
+    protected void updateValues(City existingInstance, City newInstance) {
+        existingInstance.setActive(newInstance.isActive());
+        existingInstance.setCountry(newInstance.getCountry());
     }
 }

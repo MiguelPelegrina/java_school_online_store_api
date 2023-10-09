@@ -33,7 +33,7 @@ public class BookController {
      */
     @GetMapping
     public ResponseEntity<List<BookDTO>> getAllBooks(){
-        return new ResponseEntity<>(service.getAllBooks(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     /**
@@ -44,7 +44,7 @@ public class BookController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<BookDTO> getBookById(@PathVariable int id){
-        return new ResponseEntity<>(service.getBookById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(id), HttpStatus.OK);
     }
 
     /**
@@ -55,7 +55,7 @@ public class BookController {
      */
     @PostMapping
     public ResponseEntity<BookDTO> saveBook(@RequestBody Book book){
-        BookDTO savedBook = service.saveBook(book);
+        BookDTO savedBook = service.saveInstance(book);
 
         if(savedBook == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -73,7 +73,7 @@ public class BookController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<BookDTO> updateBook(@PathVariable int id, @RequestBody Book book){
-        return new ResponseEntity<>(service.updateBook(id, book), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(id, book), HttpStatus.OK);
     }
 
     /**
@@ -82,6 +82,6 @@ public class BookController {
      */
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable int id){
-        service.deleteBook(id);
+        service.deleteInstance(id);
     }
 }

@@ -24,27 +24,27 @@ public class BookGenreController {
 
     @GetMapping
     public ResponseEntity<List<BookGenreDTO>> getAllBookGenres(){
-        return new ResponseEntity<>(service.getAllBookGenres(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<BookGenreDTO> getBookGenreById(@PathVariable String name){
-        return new ResponseEntity<>(service.getBookGenreById(name), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(name), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<BookGenreDTO> saveBookGenre(@RequestBody BookGenre bookGenre){
-        BookGenreDTO savedBookGenre = service.saveBookGenre(bookGenre);
+        BookGenreDTO savedBookGenre = service.saveInstance(bookGenre);
 
         if (savedBookGenre == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(service.saveBookGenre(bookGenre), HttpStatus.CREATED);
+            return new ResponseEntity<>(savedBookGenre, HttpStatus.CREATED);
         }
     }
 
     @DeleteMapping("/{name}")
     public void deleteBookGenre(@PathVariable String name){
-        service.deleteBookGenre(name);
+        service.deleteInstance(name);
     }
 }

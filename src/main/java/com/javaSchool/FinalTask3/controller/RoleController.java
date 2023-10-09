@@ -25,17 +25,17 @@ public class RoleController {
 
     @GetMapping
     public ResponseEntity<List<RoleDTO>> getAllRoles(){
-        return new ResponseEntity<>(service.getAllRoles(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<RoleDTO> getRoleById(@PathVariable String name){
-        return new ResponseEntity<>(service.getRoleById(name), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(name), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<RoleDTO> saveRole(@RequestBody Role role){
-        RoleDTO savedRole = service.saveRole(role);
+        RoleDTO savedRole = service.saveInstance(role);
 
         if(savedRole == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class RoleController {
 
     @PutMapping("/{name}")
     public ResponseEntity<RoleDTO> updateRole(@PathVariable String name, @RequestBody Role role){
-        return new ResponseEntity<>(service.updateRole(name, role), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(name, role), HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
     public void deleteRole(@PathVariable String name){
-        service.deleteRole(name);
+        service.deleteInstance(name);
     }
 }

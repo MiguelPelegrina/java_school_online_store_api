@@ -24,27 +24,27 @@ public class BookParametersFormatController {
 
     @GetMapping
     public ResponseEntity<List<BookParametersFormatDTO>> getAllBookParametersFormat(){
-        return new ResponseEntity<>(service.getAllBookParametersFormat(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<BookParametersFormatDTO> getBookParametersFormatById(@PathVariable String name){
-        return new ResponseEntity<>(service.getBookParametersFormatById(name), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(name), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<BookParametersFormatDTO> saveBookParametersFormat(@RequestBody BookParametersFormat bookParametersFormat){
-        BookParametersFormatDTO savedBookParametersFormat = service.saveBookParametersFormat(bookParametersFormat);
+        BookParametersFormatDTO savedBookParametersFormat = service.saveInstance(bookParametersFormat);
 
         if (savedBookParametersFormat == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedBookParametersFormat, HttpStatus.CREATED);
+            return new ResponseEntity<>(savedBookParametersFormat, HttpStatus.OK);
         }
     }
 
     @DeleteMapping("/{name}")
     public void deleteBookParametersFormat(@PathVariable String name){
-        service.deleteBookParametersFormat(name);
+        service.deleteInstance(name);
     }
 }

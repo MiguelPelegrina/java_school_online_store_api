@@ -26,17 +26,17 @@ public class OrderBookController {
 
     @GetMapping
     public ResponseEntity<List<OrderBookDTO>> getAllOrderBooks(){
-        return new ResponseEntity<>(service.getAllOrderBooks(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderBookDTO> getOrderBookById(@PathVariable OrderBookId id){
-        return new ResponseEntity<>(service.getOrderBookById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<OrderBookDTO> saveOrderBook(@RequestBody OrderBook orderBook){
-        OrderBookDTO savedOrderBook = service.saveOrderBook(orderBook);
+        OrderBookDTO savedOrderBook = service.saveInstance(orderBook);
 
         if(savedOrderBook == null){
             return new ResponseEntity<>(HttpStatus.OK);
@@ -47,11 +47,11 @@ public class OrderBookController {
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderBookDTO> updateOrderBook(@PathVariable OrderBookId id, @RequestBody OrderBook orderBook){
-        return new ResponseEntity<>(service.updateOrderBook(id, orderBook), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(id, orderBook), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public void deleteOrderBook(@PathVariable OrderBookId id){
-        service.deleteOrderBook(id);
+        service.deleteInstance(id);
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 // TODO Not sure if I should try to implement the Spring transaction routing mentioned in
-// https://vladmihalcea.com/read-write-read-only-transaction-routing-spring/
+//  https://vladmihalcea.com/read-write-read-only-transaction-routing-spring/
 /**
  * Service class responsible for the interaction between the {@link CountryRepository} and the
  * {@link com.javaSchool.FinalTask3.controller.CountryController}. Obtains data from the

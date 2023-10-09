@@ -25,17 +25,17 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getAllOrders(){
-        return new ResponseEntity<>(service.getAllOrders(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable int id){
-        return new ResponseEntity<>(service.getOrderById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<OrderDTO> saveOrder(@RequestBody Order order){
-        OrderDTO savedOrder = service.saveOrder(order);
+        OrderDTO savedOrder = service.saveInstance(order);
 
         if (savedOrder == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class OrderController {
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderDTO> updateOrder(@PathVariable int id, @RequestBody Order order){
-        return new ResponseEntity<>(service.updateOrder(id, order), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(id, order), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public void deleteOrder(@PathVariable int id){
-        service.deleteOrder(id);
+        service.deleteInstance(id);
     }
 }

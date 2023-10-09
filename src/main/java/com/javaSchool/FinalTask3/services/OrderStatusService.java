@@ -1,11 +1,7 @@
 package com.javaSchool.FinalTask3.services;
 
-import com.javaSchool.FinalTask3.dtos.BookGenreDTO;
 import com.javaSchool.FinalTask3.dtos.OrderStatusDTO;
-import com.javaSchool.FinalTask3.entities.BookGenre;
-import com.javaSchool.FinalTask3.entities.Country;
 import com.javaSchool.FinalTask3.entities.OrderStatus;
-import com.javaSchool.FinalTask3.repositories.BookGenreRepository;
 import com.javaSchool.FinalTask3.repositories.OrderStatusRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -28,7 +24,6 @@ public class OrderStatusService extends BaseServiceWithUpdate<OrderStatus, Order
     public OrderStatusService(OrderStatusRepository repository, ModelMapper modelMapper) {
         super(repository, modelMapper);
     }
-
 
     /**
      * Returns the DTO class of the {@link OrderStatusDTO} entity.
