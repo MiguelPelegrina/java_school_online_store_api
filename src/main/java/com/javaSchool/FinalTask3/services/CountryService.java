@@ -3,73 +3,46 @@ package com.javaSchool.FinalTask3.services;
 import com.javaSchool.FinalTask3.dtos.CountryDTO;
 import com.javaSchool.FinalTask3.entities.Country;
 import com.javaSchool.FinalTask3.repositories.CountryRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 // TODO Not sure if I should try to implement the Spring transaction routing mentioned in
 // https://vladmihalcea.com/read-write-read-only-transaction-routing-spring/
-@RequiredArgsConstructor
+/**
+ * Service class responsible for the interaction between the {@link CountryRepository} and the
+ * {@link com.javaSchool.FinalTask3.controller.CountryController}. Obtains data from the
+ * {@link CountryRepository} and returns the object(s) of the entity {@link Country} as
+ * {@link CountryDTO} to the {@link com.javaSchool.FinalTask3.controller.CountryController}.
+ */
 @Service
 @Transactional(readOnly = true)
-public class CountryService {
-    private final CountryRepository repository;
-
-    private final ModelMapper modelMapper;
-
-    public List<CountryDTO> getAllCountries() {
-        return repository.findAll()
-                .stream()
-                .map(country ->
-                        modelMapper.map(country, CountryDTO.class))
-                .collect(Collectors.toList());
+public class CountryService extends BaseServiceWithUpdate<Country, CountryDTO, String>{
+    /**
+     * All arguments constructor.
+     * @param repository {@link CountryRepository} of the {@link Country} entity.
+     * @param modelMapper ModelMapper that converts the {@link Country} to {@link CountryDTO}
+     */
+    public CountryService(CountryRepository repository, ModelMapper modelMapper) {
+        super(repository, modelMapper);
     }
 
-    public CountryDTO getCountryById(String name) {
-        return modelMapper.map(repository.findById(name)
-                .orElse(null), CountryDTO.class);
+    /**
+     * Returns the DTO class of the {@link Country} entity.
+     * @return Returns the {@link CountryDTO} class.
+     */
+    @Override
+    protected Class<CountryDTO> getDTOClass() {
+        return CountryDTO.class;
     }
 
-    @Transactional
-    public CountryDTO saveCountry(Country country) {
-        return modelMapper.map(repository.save(country), CountryDTO.class);
-    }
-
-    @Transactional
-    public CountryDTO updateCountry(String name, Country country) {
-        return repository.findById(name)
-                .map(existingCountry -> {
-                    existingCountry.setActive(country.isActive());
-                    return modelMapper.map(repository.save(existingCountry), CountryDTO.class);
-                })
-                .orElse(null);
-    }
-
-    @Transactional
-    public CountryDTO partiallyUpdateCountry(String name, Country updatedCountry){
-        Country existingCountry = repository.findById(name).orElse(null);
-
-        // Check if the country exists
-        if(existingCountry != null){
-            // Check updated attributes and replace old values with them
-            if (updatedCountry.isActive()) {
-                existingCountry.setActive(true);
-            }
-
-            Country savedCountry = repository.save(existingCountry);
-
-            return modelMapper.map(savedCountry, CountryDTO.class);
-        } else {
-            return null;
-        }
-    }
-
-    @Transactional
-    public void deleteCountry(String name) {
-        repository.deleteById(name);
+    /**
+     * Updates the values of an existing {@link Country} instance with new ones.
+     * @param existingInstance Instance that already exists in the database.
+     * @param newInstance Instance that stores the value to update the existing instance.
+     */
+    @Override
+    protected void updateValues(Country existingInstance, Country newInstance) {
+        existingInstance.setActive(newInstance.isActive());
     }
 }

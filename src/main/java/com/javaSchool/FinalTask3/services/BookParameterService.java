@@ -3,54 +3,46 @@ package com.javaSchool.FinalTask3.services;
 import com.javaSchool.FinalTask3.dtos.BookParameterDTO;
 import com.javaSchool.FinalTask3.entities.BookParameter;
 import com.javaSchool.FinalTask3.repositories.BookParameterRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@RequiredArgsConstructor
+/**
+ * Service class responsible for the interaction between the {@link BookParameterRepository} and the
+ * {@link com.javaSchool.FinalTask3.controller.BookParameterController}. Obtains data from the
+ * {@link BookParameterRepository} and returns the object(s) of the entity {@link BookParameter} as
+ * {@link BookParameterDTO} to the {@link com.javaSchool.FinalTask3.controller.BookParameterController}.
+ */
 @Service
 @Transactional(readOnly = true)
-public class BookParameterService {
-    private final BookParameterRepository repository;
-
-    private final ModelMapper modelMapper;
-
-    public List<BookParameterDTO> getAllBookParameters(){
-        return repository.findAll()
-                .stream()
-                .map(bookParameter ->
-                        modelMapper.map(bookParameter, BookParameterDTO.class))
-                .collect(Collectors.toList());
+public class BookParameterService extends BaseServiceWithUpdate<BookParameter, BookParameterDTO, Integer>{
+    /**
+     * All arguments constructor.
+     * @param repository {@link BookParameterRepository} of the {@link BookParameter} entity.
+     * @param modelMapper ModelMapper that converts the {@link BookParameter} to {@link com.javaSchool.FinalTask3.dtos.BookParameterDTO}
+     */
+    public BookParameterService(BookParameterRepository repository, ModelMapper modelMapper) {
+        super(repository, modelMapper);
     }
 
-    public BookParameterDTO getBookParametersById(int id){
-        return modelMapper.map(repository.findById(id)
-                .orElse(null), BookParameterDTO.class);
+    /**
+     * Returns the DTO class of the {@link BookParameter} entity.
+     * @return Returns the {@link BookParameterDTO} class.
+     */
+    @Override
+    protected Class<BookParameterDTO> getDTOClass() {
+        return null;
     }
 
-    @Transactional
-    public BookParameterDTO saveBookParameter(BookParameter bookParameter){
-        return modelMapper.map(repository.save(bookParameter), BookParameterDTO.class);
-    }
-
-    @Transactional
-    public BookParameterDTO updateBookParameter(int id, BookParameter bookParameter){
-        return repository.findById(id)
-                .map(existingBookParameter -> {
-                    existingBookParameter.setAuthor(bookParameter.getAuthor());
-                    existingBookParameter.setFormat(bookParameter.getFormat());
-                    existingBookParameter.setActive(bookParameter.isActive());
-                    return modelMapper.map(existingBookParameter, BookParameterDTO.class);
-                })
-                .orElse(null);
-    }
-
-    @Transactional
-    public void deleteBookParameter(int id){
-        repository.deleteById(id);
+    /**
+     * Updates the values of an existing instance of {@link BookParameter}.
+     * @param existingItem Instance of {@link BookParameter} that already exists in the database.
+     * @param newItem Instance of {@link BookParameter} that stores the new values to update the existing instance with.
+     */
+    @Override
+    protected void updateValues(BookParameter existingItem, BookParameter newItem) {
+        existingItem.setActive(newItem.isActive());
+        existingItem.setAuthor(newItem.getAuthor());
+        existingItem.setFormat(newItem.getFormat());
     }
 }

@@ -25,17 +25,17 @@ public class BookParameterController {
 
     @GetMapping
     public ResponseEntity<List<BookParameterDTO>> getBookParameter(){
-        return new ResponseEntity<>(service.getAllBookParameters(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookParameterDTO> getBookParameterById(@PathVariable int id){
-        return new ResponseEntity<>(service.getBookParametersById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<BookParameterDTO> saveBookParameter(@RequestBody BookParameter bookParameter){
-        BookParameterDTO savedBookParameter = service.saveBookParameter(bookParameter);
+        BookParameterDTO savedBookParameter = service.saveInstance(bookParameter);
 
         if(savedBookParameter == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class BookParameterController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BookParameterDTO> updateBookParameter(@PathVariable int id, @RequestBody BookParameter bookParameter){
-        return new ResponseEntity<>(service.updateBookParameter(id, bookParameter), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(id, bookParameter), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public void deleteBookParameter(@PathVariable int id){
-        service.deleteBookParameter(id);
+        service.deleteInstance(id);
     }
 }

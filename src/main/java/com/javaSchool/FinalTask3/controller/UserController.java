@@ -25,17 +25,17 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers(){
-        return new ResponseEntity<>(service.getAllUsers(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable int id){
-        return new ResponseEntity<>(service.getUserById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserDTO> saveUser(@RequestBody User user){
-        UserDTO savedUser = service.saveUser(user);
+        UserDTO savedUser = service.saveInstance(user);
 
         if (savedUser == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable int id, @RequestBody User user){
-        return new ResponseEntity<>(service.updateUser(id, user), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(id, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id){
-        service.deleteUser(id);
+        service.deleteInstance(id);
     }
 }

@@ -25,17 +25,17 @@ public class DeliveryMethodController {
 
     @GetMapping
     public ResponseEntity<List<DeliveryMethodDTO>> getAllDeliveryMethods(){
-        return new ResponseEntity<>(service.getAllDeliveryMethods(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<DeliveryMethodDTO> getDeliveryMethodByid(@PathVariable String name){
-        return new ResponseEntity<>(service.getDeliveryMethodById(name), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(name), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<DeliveryMethodDTO> saveDeliveryMethod(@RequestBody DeliveryMethod deliveryMethod){
-        DeliveryMethodDTO savedDeliveryMethod = service.saveDeliveryMethod(deliveryMethod);
+        DeliveryMethodDTO savedDeliveryMethod = service.saveInstance(deliveryMethod);
 
         if (savedDeliveryMethod == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class DeliveryMethodController {
 
     @PutMapping("/{name}")
     public ResponseEntity<DeliveryMethodDTO> updateDeliveryMethod(@PathVariable String name, @RequestBody DeliveryMethod deliveryMethod){
-        return new ResponseEntity<>(service.updateDeliveryMethod(name, deliveryMethod), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(name, deliveryMethod), HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
     public void deleteDeliveryMethod(@PathVariable String name){
-        service.deleteDeliveryMethod(name);
+        service.deleteInstance(name);
     }
 }

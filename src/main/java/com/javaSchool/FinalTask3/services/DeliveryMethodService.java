@@ -1,54 +1,47 @@
 package com.javaSchool.FinalTask3.services;
 
+import com.javaSchool.FinalTask3.dtos.BookGenreDTO;
 import com.javaSchool.FinalTask3.dtos.DeliveryMethodDTO;
 import com.javaSchool.FinalTask3.entities.DeliveryMethod;
 import com.javaSchool.FinalTask3.repositories.DeliveryMethodRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@RequiredArgsConstructor
+/**
+ * Service class responsible for the interaction between the {@link DeliveryMethodRepository} and the
+ * {@link com.javaSchool.FinalTask3.controller.DeliveryMethodController}. Obtains data from the
+ * {@link DeliveryMethodRepository} and returns the object(s) of the entity {@link DeliveryMethod} as
+ * {@link DeliveryMethodDTO} to the {@link com.javaSchool.FinalTask3.controller.DeliveryMethodController}.
+ */
 @Service
 @Transactional(readOnly = true)
-public class DeliveryMethodService {
-    private final DeliveryMethodRepository repository;
-
-    private final ModelMapper modelMapper;
-
-    public List<DeliveryMethodDTO> getAllDeliveryMethods(){
-        return repository.findAll()
-                .stream()
-                .map((deliveryMethod) ->
-                        modelMapper.map(deliveryMethod, DeliveryMethodDTO.class))
-                .collect(Collectors.toList());
+public class DeliveryMethodService extends BaseServiceWithUpdate<DeliveryMethod, DeliveryMethodDTO, String>{
+    /**
+     * All arguments constructor.
+     * @param repository {@link DeliveryMethodRepository} of the {@link DeliveryMethod} entity.
+     * @param modelMapper ModelMapper that converts the {@link DeliveryMethod} to {@link BookGenreDTO}
+     */
+    public DeliveryMethodService(DeliveryMethodRepository repository, ModelMapper modelMapper) {
+        super(repository, modelMapper);
     }
 
-    public DeliveryMethodDTO getDeliveryMethodById(String name){
-        return modelMapper.map(repository.findById(name)
-                .orElse(null), DeliveryMethodDTO.class);
+    /**
+     * Returns the DTO class of the {@link DeliveryMethod} entity.
+     * @return Returns the {@link DeliveryMethodDTO} class.
+     */
+    @Override
+    protected Class<DeliveryMethodDTO> getDTOClass() {
+        return DeliveryMethodDTO.class;
     }
 
-    @Transactional
-    public DeliveryMethodDTO saveDeliveryMethod(DeliveryMethod deliveryMethod){
-        return modelMapper.map(repository.save(deliveryMethod), DeliveryMethodDTO.class);
-    }
-
-    @Transactional
-    public DeliveryMethodDTO updateDeliveryMethod(String name, DeliveryMethod deliveryMethod){
-        return repository.findById(name)
-                .map(existingDeliveryMethod -> {
-                    existingDeliveryMethod.setActive(deliveryMethod.isActive());
-                    return modelMapper.map(repository.save(existingDeliveryMethod), DeliveryMethodDTO.class);
-                })
-                .orElse(null);
-    }
-
-    @Transactional
-    public void deleteDeliveryMethod(String name){
-        repository.deleteById(name);
+    /**
+     * Updates the values of an existing {@link DeliveryMethod} instance with new ones.
+     * @param existingInstance Instance that already exists in the database.
+     * @param newInstance Instance that stores the value to update the existing instance.
+     */
+    @Override
+    protected void updateValues(DeliveryMethod existingInstance, DeliveryMethod newInstance) {
+        existingInstance.setActive(newInstance.isActive());
     }
 }

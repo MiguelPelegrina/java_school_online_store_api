@@ -39,8 +39,8 @@ public abstract class BaseServiceWithUpdate<Entity, EntityDTO, EntityID> extends
 
     /**
      * Abstract method to be implemented by subclasses to update existing item properties
-     * @param existingItem Instance that already exists in the database.
-     * @param newItem Instance that stores the value to update the existing instance.
+     * @param existingInstance Instance that already exists in the database.
+     * @param newInstance Instance that stores the value to update the existing instance.
      */
-    protected abstract void updateValues(Entity existingItem, Entity newItem);
+    protected abstract void updateValues(Entity existingInstance, Entity newInstance);
 }
