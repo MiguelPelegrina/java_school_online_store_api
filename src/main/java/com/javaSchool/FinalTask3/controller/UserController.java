@@ -40,7 +40,7 @@ public class UserController {
         if (savedUser == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedUser, HttpStatus.OK);
+            return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
         }
     }
 

@@ -40,7 +40,7 @@ public class CityController {
         if (savedCity == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedCity, HttpStatus.OK);
+            return new ResponseEntity<>(savedCity, HttpStatus.CREATED);
         }
     }
 

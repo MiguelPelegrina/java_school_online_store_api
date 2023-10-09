@@ -41,7 +41,7 @@ public class OrderBookController {
         if(savedOrderBook == null){
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(savedOrderBook, HttpStatus.OK);
+            return new ResponseEntity<>(savedOrderBook, HttpStatus.CREATED);
         }
     }
 

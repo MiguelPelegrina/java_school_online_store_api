@@ -40,7 +40,7 @@ public class OrderController {
         if (savedOrder == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedOrder, HttpStatus.OK);
+            return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
         }
     }
 

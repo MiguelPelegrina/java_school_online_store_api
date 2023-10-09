@@ -60,7 +60,7 @@ public class BookController {
         if(savedBook == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedBook, HttpStatus.OK);
+            return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
         }
     }
 

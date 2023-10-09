@@ -40,7 +40,7 @@ public class PaymentMethodController {
         if (savedPaymentMethod == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedPaymentMethod, HttpStatus.OK);
+            return new ResponseEntity<>(savedPaymentMethod, HttpStatus.CREATED);
         }
     }
 

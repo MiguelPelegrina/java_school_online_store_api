@@ -40,7 +40,7 @@ public class RoleController {
         if(savedRole == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedRole, HttpStatus.OK);
+            return new ResponseEntity<>(savedRole, HttpStatus.CREATED);
         }
     }
 

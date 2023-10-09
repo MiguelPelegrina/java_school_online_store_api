@@ -41,7 +41,7 @@ public class PostalCodeController {
         if(savedPostalCode == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedPostalCode, HttpStatus.OK);
+            return new ResponseEntity<>(savedPostalCode, HttpStatus.CREATED);
         }
     }
 

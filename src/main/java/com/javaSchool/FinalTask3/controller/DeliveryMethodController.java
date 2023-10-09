@@ -40,7 +40,7 @@ public class DeliveryMethodController {
         if (savedDeliveryMethod == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedDeliveryMethod, HttpStatus.OK);
+            return new ResponseEntity<>(savedDeliveryMethod, HttpStatus.CREATED);
         }
     }
 

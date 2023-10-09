@@ -40,7 +40,7 @@ public class BookParameterController {
         if(savedBookParameter == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedBookParameter, HttpStatus.OK);
+            return new ResponseEntity<>(savedBookParameter, HttpStatus.CREATED);
         }
     }
 

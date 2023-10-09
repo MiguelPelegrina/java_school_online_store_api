@@ -39,7 +39,7 @@ public class BookParametersFormatController {
         if (savedBookParametersFormat == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedBookParametersFormat, HttpStatus.OK);
+            return new ResponseEntity<>(savedBookParametersFormat, HttpStatus.CREATED);
         }
     }
 

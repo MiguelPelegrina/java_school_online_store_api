@@ -39,7 +39,7 @@ public class BookGenreController {
         if (savedBookGenre == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(service.saveBookGenre(bookGenre), HttpStatus.OK);
+            return new ResponseEntity<>(service.saveBookGenre(bookGenre), HttpStatus.CREATED);
         }
     }
 

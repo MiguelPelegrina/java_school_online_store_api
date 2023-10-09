@@ -41,7 +41,7 @@ public class CountryController {
         if (savedCountry == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedCountry, HttpStatus.OK);
+            return new ResponseEntity<>(savedCountry, HttpStatus.CREATED);
         }
     }
 

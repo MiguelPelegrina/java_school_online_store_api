@@ -40,7 +40,7 @@ public class UserAddressController {
         if (savedUserAddress == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(savedUserAddress, HttpStatus.OK);
+            return new ResponseEntity<>(savedUserAddress, HttpStatus.CREATED);
         }
     }
 
