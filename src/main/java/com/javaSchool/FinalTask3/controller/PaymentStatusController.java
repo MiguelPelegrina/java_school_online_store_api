@@ -25,17 +25,17 @@ public class PaymentStatusController {
 
     @GetMapping
     public ResponseEntity<List<PaymentStatusDTO>> getAllPaymentStatuses(){
-        return new ResponseEntity<>(service.getAllPaymentStatuses(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<PaymentStatusDTO> getPaymentStatus(@PathVariable String name){
-        return new ResponseEntity<>(service.getPaymentStatusById(name), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(name), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<PaymentStatusDTO> savePaymentStatus(@RequestBody PaymentStatus paymentStatus){
-        PaymentStatusDTO savedPaymentStatus = service.savePaymentStatus(paymentStatus);
+        PaymentStatusDTO savedPaymentStatus = service.saveInstance(paymentStatus);
 
         if (savedPaymentStatus == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class PaymentStatusController {
 
     @PutMapping("/{name}")
     public ResponseEntity<PaymentStatusDTO> updatePaymentStatus(@PathVariable String name, @RequestBody PaymentStatus paymentStatus){
-        return new ResponseEntity<>(service.updatePaymentStatus(name, paymentStatus), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(name, paymentStatus), HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
     public void deletePaymentMethod(String name){
-        service.deletePaymentMethod(name);
+        service.deleteInstance(name);
     }
 }

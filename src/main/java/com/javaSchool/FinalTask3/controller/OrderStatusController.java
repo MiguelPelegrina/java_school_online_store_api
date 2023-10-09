@@ -25,17 +25,17 @@ public class OrderStatusController {
 
     @GetMapping
     public ResponseEntity<List<OrderStatusDTO>> getAllOrderStatuses(){
-        return new ResponseEntity<>(service.getAllOrderStatuses(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<OrderStatusDTO> getOrderStatusById(@PathVariable String name){
-        return new ResponseEntity<>(service.getOrderStatusById(name), HttpStatus.OK);
+        return new ResponseEntity<>(service.getInstanceById(name), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<OrderStatusDTO> saveOrderStatus(@RequestBody OrderStatus orderStatus){
-        OrderStatusDTO savedOrderStatus = service.saveOrderStatus(orderStatus);
+        OrderStatusDTO savedOrderStatus = service.saveInstance(orderStatus);
 
         if(savedOrderStatus == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -46,11 +46,11 @@ public class OrderStatusController {
 
     @PutMapping("/{name}")
     public ResponseEntity<OrderStatusDTO> updateOrderStatus(@PathVariable String name, @RequestBody OrderStatus orderStatus){
-        return new ResponseEntity<>(service.updateOrderStatus(name, orderStatus), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(name, orderStatus), HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
     public void deleteOrderStatus(@PathVariable String name){
-        service.deleteOrderStatus(name);
+        service.deleteInstance(name);
     }
 }

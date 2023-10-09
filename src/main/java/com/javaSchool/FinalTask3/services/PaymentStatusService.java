@@ -1,53 +1,50 @@
 package com.javaSchool.FinalTask3.services;
 
+import com.javaSchool.FinalTask3.dtos.BookGenreDTO;
 import com.javaSchool.FinalTask3.dtos.PaymentStatusDTO;
+import com.javaSchool.FinalTask3.entities.BookGenre;
+import com.javaSchool.FinalTask3.entities.Country;
 import com.javaSchool.FinalTask3.entities.PaymentStatus;
+import com.javaSchool.FinalTask3.repositories.BookGenreRepository;
 import com.javaSchool.FinalTask3.repositories.PaymentStatusRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@RequiredArgsConstructor
+/**
+ * Service class responsible for the interaction between the {@link PaymentStatusRepository} and the
+ * {@link com.javaSchool.FinalTask3.controller.PaymentStatusController}. Obtains data from the {@link PaymentStatusRepository}
+ * and returns the object(s) of the entity {@link PaymentStatus} as {@link PaymentStatusDTO} to the
+ * {@link com.javaSchool.FinalTask3.controller.PaymentStatusController}.
+ */
 @Service
 @Transactional(readOnly = true)
-public class PaymentStatusService {
-    private final PaymentStatusRepository repository;
-
-    private final ModelMapper modelMapper;
-
-    public List<PaymentStatusDTO> getAllPaymentStatuses(){
-        return repository.findAll()
-                .stream()
-                .map(paymentStatus ->
-                        modelMapper.map(paymentStatus, PaymentStatusDTO.class))
-                .collect(Collectors.toList());
+public class PaymentStatusService extends BaseServiceWithUpdate<PaymentStatus, PaymentStatusDTO, String>{
+    /**
+     * All arguments constructor.
+     * @param repository {@link BookGenreRepository} of the {@link BookGenre} entity.
+     * @param modelMapper ModelMapper that converts the {@link BookGenre} to {@link BookGenreDTO}
+     */
+    public PaymentStatusService(PaymentStatusRepository repository, ModelMapper modelMapper) {
+        super(repository, modelMapper);
     }
 
-    public PaymentStatusDTO getPaymentStatusById(String name){
-        return modelMapper.map(repository.findById(name).orElse(null), PaymentStatusDTO.class);
+    /**
+     * Returns the DTO class of the {@link PaymentStatus} entity.
+     * @return Returns the {@link PaymentStatusDTO} class.
+     */
+    @Override
+    protected Class<PaymentStatusDTO> getDTOClass() {
+        return PaymentStatusDTO.class;
     }
 
-    @Transactional
-    public PaymentStatusDTO savePaymentStatus(PaymentStatus paymentStatus){
-        return modelMapper.map(repository.save(paymentStatus), PaymentStatusDTO.class);
-    }
-
-    @Transactional
-    public PaymentStatusDTO updatePaymentStatus(String name, PaymentStatus paymentStatus){
-        return repository.findById(name)
-                .map(existingPaymentStatus -> {
-                    existingPaymentStatus.setActive(paymentStatus.isActive());
-                    return modelMapper.map(existingPaymentStatus, PaymentStatusDTO.class);
-                })
-                .orElse(null);
-    }
-
-    @Transactional
-    public void deletePaymentMethod(String name){
-        repository.deleteById(name);
+    /**
+     * Updates the values of an existing {@link PaymentStatus} instance with new ones.
+     * @param existingInstance Instance that already exists in the database.
+     * @param newInstance Instance that stores the value to update the existing instance.
+     */
+    @Override
+    protected void updateValues(PaymentStatus existingInstance, PaymentStatus newInstance) {
+        existingInstance.setActive(newInstance.isActive());
     }
 }

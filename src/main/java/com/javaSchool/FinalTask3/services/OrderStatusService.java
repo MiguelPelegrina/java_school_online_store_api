@@ -1,54 +1,51 @@
 package com.javaSchool.FinalTask3.services;
 
+import com.javaSchool.FinalTask3.dtos.BookGenreDTO;
 import com.javaSchool.FinalTask3.dtos.OrderStatusDTO;
+import com.javaSchool.FinalTask3.entities.BookGenre;
+import com.javaSchool.FinalTask3.entities.Country;
 import com.javaSchool.FinalTask3.entities.OrderStatus;
+import com.javaSchool.FinalTask3.repositories.BookGenreRepository;
 import com.javaSchool.FinalTask3.repositories.OrderStatusRepository;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@RequiredArgsConstructor
+/**
+ * Service class responsible for the interaction between the {@link OrderStatusRepository} and the
+ * {@link com.javaSchool.FinalTask3.controller.OrderStatusController}. Obtains data from the {@link OrderStatusRepository}
+ * and returns the object(s) of the entity {@link OrderStatus} as {@link OrderStatusDTO} to the
+ * {@link com.javaSchool.FinalTask3.controller.OrderStatusController}.
+ */
 @Service
 @Transactional(readOnly = true)
-public class OrderStatusService {
-    private final OrderStatusRepository repository;
-
-    private final ModelMapper modelMapper;
-
-    public List<OrderStatusDTO> getAllOrderStatuses(){
-        return repository.findAll()
-                .stream()
-                .map((orderStatus) ->
-                        modelMapper.map(orderStatus, OrderStatusDTO.class))
-                .collect(Collectors.toList());
+public class OrderStatusService extends BaseServiceWithUpdate<OrderStatus, OrderStatusDTO, String>{
+    /**
+     * All arguments constructor.
+     * @param repository {@link OrderStatusRepository} of the {@link OrderStatus} entity.
+     * @param modelMapper ModelMapper that converts the {@link OrderStatus} to {@link OrderStatusDTO}
+     */
+    public OrderStatusService(OrderStatusRepository repository, ModelMapper modelMapper) {
+        super(repository, modelMapper);
     }
 
-    public OrderStatusDTO getOrderStatusById(String name){
-        return modelMapper.map(repository.findById(name)
-                .orElse(null), OrderStatusDTO.class);
+
+    /**
+     * Returns the DTO class of the {@link OrderStatusDTO} entity.
+     * @return Returns the {@link OrderStatusDTO} class.
+     */
+    @Override
+    protected Class<OrderStatusDTO> getDTOClass() {
+        return OrderStatusDTO.class;
     }
 
-    @Transactional
-    public OrderStatusDTO saveOrderStatus(OrderStatus orderStatus){
-        return modelMapper.map(repository.save(orderStatus), OrderStatusDTO.class);
-    }
-
-    @Transactional
-    public OrderStatusDTO updateOrderStatus(String name, OrderStatus orderStatus){
-        return repository.findById(name)
-                .map(existingOrderStatus -> {
-                    existingOrderStatus.setActive(orderStatus.isActive());
-                    return modelMapper.map(repository.save(orderStatus), OrderStatusDTO.class);
-                })
-                .orElse(null);
-    }
-
-    @Transactional
-    public void deleteOrderStatus(String name){
-        repository.deleteById(name);
+    /**
+     * Updates the values of an existing {@link OrderStatus} instance with new ones.
+     * @param existingInstance Instance that already exists in the database.
+     * @param newInstance Instance that stores the value to update the existing instance.
+     */
+    @Override
+    protected void updateValues(OrderStatus existingInstance, OrderStatus newInstance) {
+        existingInstance.setActive(newInstance.isActive());
     }
 }
