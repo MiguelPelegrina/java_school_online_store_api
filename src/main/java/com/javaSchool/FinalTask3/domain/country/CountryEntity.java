@@ -24,4 +24,8 @@ public class CountryEntity {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
+    public CountryEntity(String name) {
+        this.name = name;
+    }
 }

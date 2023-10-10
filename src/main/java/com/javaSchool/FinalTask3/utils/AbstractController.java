@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 // TODO Try to add something that guaranties that the service is never null, if possible.
+// TODO What information do I specify in the HttpHeaders?
 /**
  * Parent controller responsible for the interaction between service and user. Obtains data from the services and
  * returns a {@link ResponseEntity} that contains the Data Transfer Object (DTO) of the entity and the status of the
