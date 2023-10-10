@@ -2,6 +2,7 @@ package com.javaSchool.FinalTask3.controller;
 
 import com.javaSchool.FinalTask3.dtos.BookGenreDTO;
 import com.javaSchool.FinalTask3.entities.BookGenre;
+import com.javaSchool.FinalTask3.services.BaseService;
 import com.javaSchool.FinalTask3.services.BookGenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,34 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RequestMapping("bookgenres")
-@RequiredArgsConstructor
 @RestController
-public class BookGenreController {
-    private final BookGenreService service;
-
-    @GetMapping
-    public ResponseEntity<List<BookGenreDTO>> getAllBookGenres(){
-        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{name}")
-    public ResponseEntity<BookGenreDTO> getBookGenreById(@PathVariable String name){
-        return new ResponseEntity<>(service.getInstanceById(name), HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<BookGenreDTO> saveBookGenre(@RequestBody BookGenre bookGenre){
-        BookGenreDTO savedBookGenre = service.saveInstance(bookGenre);
-
-        if (savedBookGenre == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(savedBookGenre, HttpStatus.CREATED);
-        }
-    }
-
-    @DeleteMapping("/{name}")
-    public void deleteBookGenre(@PathVariable String name){
-        service.deleteInstance(name);
+public class BookGenreController extends BaseController<BookGenre, BookGenreDTO, String>{
+    public BookGenreController(BaseService<BookGenre, BookGenreDTO, String> service){
+        super(service);
     }
 }
