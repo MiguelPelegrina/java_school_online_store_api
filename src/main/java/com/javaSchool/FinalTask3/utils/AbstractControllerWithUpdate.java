@@ -1,5 +1,6 @@
 package com.javaSchool.FinalTask3.utils;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,9 +20,7 @@ public abstract class AbstractControllerWithUpdate<Entity, EntityDTO, EntityID> 
      */
     @PutMapping("/{id}")
     public ResponseEntity<EntityDTO> updateInstance(@PathVariable EntityID id, @RequestBody Entity instance){
-        // TODO This is not working as intended
         AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> service = (AbstractServiceWithUpdate<Entity, EntityDTO, EntityID>) this.service;
-        return null;
-        //return new ResponseEntity<>(((AbstractServiceWithUpdate)service).updateInstance(id, instance), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateInstance(id, instance),HttpStatus.OK);
     }
 }
