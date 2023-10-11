@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.role;
 
-import com.javaSchool.FinalTask3.domain.userRole.UserRole;
+import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -25,5 +25,5 @@ public class RoleEntity {
     private String name;
 
     @OneToMany(mappedBy = "role")
-    private Set<UserRole> userRoles;
+    private Set<UserRoleEntity> userRoles;
 }

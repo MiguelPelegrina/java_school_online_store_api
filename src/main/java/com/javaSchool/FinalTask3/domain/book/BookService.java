@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link BookRepository} and the
- * {@link BookController}. Obtains data from the {@link BookRepository} and returns
- * the object(s) of the entity {@link BookEntity} as {@link BookDTO} to the {@link BookController}.
+ * {@link BookRestController}. Obtains data from the {@link BookRepository} and returns
+ * the object(s) of the entity {@link BookEntity} as {@link BookDTO} to the {@link BookRestController}.
  */
 @Service
 @Transactional(readOnly = true)

@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link DeliveryMethodRepository} and the
- * {@link DeliveryMethodController}. Obtains data from the
+ * {@link DeliveryMethodRestController}. Obtains data from the
  * {@link DeliveryMethodRepository} and returns the object(s) of the entity {@link DeliveryMethodEntity} as
- * {@link DeliveryMethodDTO} to the {@link DeliveryMethodController}.
+ * {@link DeliveryMethodDTO} to the {@link DeliveryMethodRestController}.
  */
 @Service
 @Transactional(readOnly = true)

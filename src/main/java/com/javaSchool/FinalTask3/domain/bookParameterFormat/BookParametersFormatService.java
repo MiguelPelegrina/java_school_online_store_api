@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link BookParametersFormatRepository} and the
- * {@link BookParametersFormatController}. Obtains data from the
+ * {@link BookParametersFormatRestController}. Obtains data from the
  * {@link BookParametersFormatRepository} and returns the object(s) of the entity {@link BookParametersFormatEntity} as
- * {@link BookParametersFormatDTO} to the {@link BookParametersFormatController}.
+ * {@link BookParametersFormatDTO} to the {@link BookParametersFormatRestController}.
  */
 @Service
 @Transactional(readOnly = true)

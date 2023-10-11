@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// TODO Maybe use an interface (instead of an intermediate parent class) with a default method and an abstract one
 /**
  * Parent service that inherits from {@link AbstractService}. Adds the necessary methods to update an instance of an entity
  * in the database. Used for entities that have more than one attribute and therefore can be updated.
@@ -38,7 +39,7 @@ public abstract class AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> ext
     }
 
     /**
-     * Abstract method to be implemented by subclasses to update existing item properties
+     * Abstract method to be implemented by subclasses to update existing item properties.
      * @param existingInstance Instance that already exists in the database.
      * @param newInstance Instance that stores the value to update the existing instance.
      */

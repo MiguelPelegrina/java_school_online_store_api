@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 //  https://vladmihalcea.com/read-write-read-only-transaction-routing-spring/
 /**
  * Service class responsible for the interaction between the {@link CountryRepository} and the
- * {@link CountryController}. Obtains data from the
+ * {@link CountryRestController}. Obtains data from the
  * {@link CountryRepository} and returns the object(s) of the entity {@link CountryEntity} as
- * {@link CountryDTO} to the {@link CountryController}.
+ * {@link CountryDTO} to the {@link CountryRestController}.
  */
 @Service
 @Transactional(readOnly = true)

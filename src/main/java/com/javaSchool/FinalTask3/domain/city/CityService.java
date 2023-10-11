@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link CityRepository} and the
- * {@link CityController}. Obtains data from the
+ * {@link CityRestController}. Obtains data from the
  * {@link CityRepository} and returns the object(s) of the entity {@link CityEntity} as
- * {@link CityDTO} to the {@link CityController}.
+ * {@link CityDTO} to the {@link CityRestController}.
  */
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +28,6 @@ public class CityService extends AbstractServiceWithUpdate<CityEntity, CityDTO, 
         this.countryRepository = countryRepository;
     }
 
-    // TODO Can it be done differently?
     /**
      * Handles the POST request. Saves an instance of the entity into the database.
      * @param instance Instance of the entity that will be saved.

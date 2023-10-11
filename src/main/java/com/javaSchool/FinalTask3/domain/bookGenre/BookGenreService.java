@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service class responsible for the interaction between the {@link BookGenreRepository} and the {@link BookGenreController}.
+ * Service class responsible for the interaction between the {@link BookGenreRepository} and the {@link BookGenreRestController}.
  * Obtains data from the {@link BookGenreRepository} and returns the object(s) of the entity {@link BookGenreEntity}
- * as {@link BookGenreDTO} to the {@link BookGenreController}.
+ * as {@link BookGenreDTO} to the {@link BookGenreRestController}.
  */
 @Service
 @Transactional(readOnly = true)

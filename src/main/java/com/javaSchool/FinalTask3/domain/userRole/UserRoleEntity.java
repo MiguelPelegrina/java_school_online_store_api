@@ -23,7 +23,7 @@ import java.time.LocalDate;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "user_roles", schema = "public", catalog = "online_store")
-public class UserRole {
+public class UserRoleEntity {
     @Id
     @GeneratedValue
     private int id;

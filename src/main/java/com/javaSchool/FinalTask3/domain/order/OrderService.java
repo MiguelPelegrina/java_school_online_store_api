@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service class responsible for the interaction between the {@link OrderRepository} and the {@link OrderController}.
+ * Service class responsible for the interaction between the {@link OrderRepository} and the {@link OrderRestController}.
  * Obtains data from the {@link OrderRepository} and returns the object(s) of the {@link OrderEntity} as {@link OrderDTO}
- * to the {@link OrderController}.
+ * to the {@link OrderRestController}.
  */
 @Service
 @Transactional(readOnly = true)

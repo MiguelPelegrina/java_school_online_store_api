@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-public abstract class AbstractControllerWithUpdate<Entity, EntityDTO, EntityID> extends AbstractController<Entity, EntityDTO, EntityID> {
-    public AbstractControllerWithUpdate(AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> service){
+public abstract class AbstractRestControllerWithUpdate<Entity, EntityDTO, EntityID> extends AbstractRestController<Entity, EntityDTO, EntityID> {
+    public AbstractRestControllerWithUpdate(AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> service){
         super(service);
     }
 
@@ -20,7 +20,11 @@ public abstract class AbstractControllerWithUpdate<Entity, EntityDTO, EntityID> 
      */
     @PutMapping("/{id}")
     public ResponseEntity<EntityDTO> updateInstance(@PathVariable EntityID id, @RequestBody Entity instance){
-        AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> service = (AbstractServiceWithUpdate<Entity, EntityDTO, EntityID>) this.service;
-        return new ResponseEntity<>(service.updateInstance(id, instance),HttpStatus.OK);
+        if (this.service instanceof AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> service) {
+            return new ResponseEntity<>(service.updateInstance(id, instance),HttpStatus.OK);
+        } else {
+            // TODO Should throw an exception
+            return null;
+        }
     }
 }

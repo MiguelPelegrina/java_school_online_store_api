@@ -51,6 +51,11 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
         return modelMapper.map(repository.findById(id).orElse(null), getDTOClass());
     }
 
+    // TODO Having a method implementation that does not work properly for all child classes does not seem right. At the
+    //  same time though, I don't want to use an interface just to duplicate this line of code for all classes that
+    //  don't have relations with other entities. Creating another intermediate parent/child class, would imply that I
+    //  need to have a list of repositories, to access every related entity and for each of it I would need to load the
+    //  instance
     /**
      * Handles the POST request. Saves an instance of the entity into the database.
      * @param instance Instance of the entity that will be saved.

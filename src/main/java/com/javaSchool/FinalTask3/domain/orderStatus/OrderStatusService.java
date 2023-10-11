@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link OrderStatusRepository} and the
- * {@link OrderStatusController}. Obtains data from the {@link OrderStatusRepository}
+ * {@link OrderStatusRestController}. Obtains data from the {@link OrderStatusRepository}
  * and returns the object(s) of the entity {@link OrderStatusEntity} as {@link OrderStatusDTO} to the
- * {@link OrderStatusController}.
+ * {@link OrderStatusRestController}.
  */
 @Service
 @Transactional(readOnly = true)

@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link PaymentStatusRepository} and the
- * {@link PaymentStatusController}. Obtains data from the {@link PaymentStatusRepository}
+ * {@link PaymentStatusRestController}. Obtains data from the {@link PaymentStatusRepository}
  * and returns the object(s) of the entity {@link PaymentStatusEntity} as {@link PaymentStatusDTO} to the
- * {@link PaymentStatusController}.
+ * {@link PaymentStatusRestController}.
  */
 @Service
 @Transactional(readOnly = true)

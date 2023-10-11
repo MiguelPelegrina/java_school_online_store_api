@@ -26,7 +26,7 @@ import java.util.List;
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @RestController
-public abstract class AbstractController<Entity, EntityDTO, EntityID> {
+public abstract class AbstractRestController<Entity, EntityDTO, EntityID> {
     protected final AbstractService<Entity, EntityDTO, EntityID> service;
 
     /**
