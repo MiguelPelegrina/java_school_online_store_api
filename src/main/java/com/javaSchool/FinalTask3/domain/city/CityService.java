@@ -15,28 +15,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class CityService extends AbstractServiceWithUpdate<CityEntity, CityDTO, String> {
+    // TODO Not sure if necessary
     private final CountryRepository countryRepository;
+
     /**
      * All arguments constructor.
      *
-     * @param repository        {@link CityRepository} of the {@link CityEntity} entity.
+     * @param repository        {@link CityRepository} of the {@link CityEntity} instance.
      * @param modelMapper       ModelMapper that converts the {@link CityRepository} to {@link CityDTO}
-     * @param countryRepository {@link CountryRepository} of an entity City relies upon
+     * @param countryRepository {@link CountryRepository} to access the instance of the
+     * {@link com.javaSchool.FinalTask3.domain.country.CountryEntity} of this {@link CityEntity} instance.
      */
     public CityService(CityRepository repository, ModelMapper modelMapper, CountryRepository countryRepository) {
         super(repository, modelMapper);
+        // TODO Not sure if necessary
         this.countryRepository = countryRepository;
     }
 
-    /**
-     * Handles the POST request. Saves an instance of the entity into the database.
-     * @param instance Instance of the entity that will be saved.
-     * @return Returns the DTO. If the instance could not be saved, it returns null.
-     */
+    // TODO Not sure if necessary
     @Override
     @Transactional
     public CityDTO saveInstance(CityEntity instance){
-        instance.setCountry(countryRepository.getReferenceById(instance.getCountry().getName()));
+        instance.setCountryName(countryRepository.getReferenceById(instance.getCountryName().getName()));
         return modelMapper.map(repository.save(instance), getDTOClass());
     }
 
@@ -62,6 +62,6 @@ public class CityService extends AbstractServiceWithUpdate<CityEntity, CityDTO, 
     @Override
     protected void updateValues(CityEntity existingInstance, CityEntity newInstance) {
         existingInstance.setActive(newInstance.isActive());
-        existingInstance.setCountry(newInstance.getCountry());
+        existingInstance.setCountryName(newInstance.getCountryName());
     }
 }

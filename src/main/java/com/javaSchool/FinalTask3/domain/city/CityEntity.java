@@ -29,8 +29,13 @@ public class CityEntity {
     //  countries when the customer asks for it, but what happens when a country is deleted?
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "country_name", referencedColumnName = "name", nullable = false)
-    private CountryEntity country;
+    private CountryEntity countryName;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
+    // TODO Not sure if necessary
+    public CityEntity(String name){
+        this.name = name;
+    }
 }
