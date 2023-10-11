@@ -23,12 +23,12 @@ public class BusinessLogicExceptionHandler {
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     public ResponseEntity<?> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException e){
-        return ResponseEntity.status(415).body(StringValues.acceptableMedia + MediaType.APPLICATION_JSON_VALUE);
+        return ResponseEntity.status(415).body(StringValues.ACCEPTABLE_MEDIA + MediaType.APPLICATION_JSON_VALUE);
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleUnknown(Exception e){
         String errorId = UUID.randomUUID().toString();
 
-        return ResponseEntity.status(500).body(StringValues.serverError + errorId);
+        return ResponseEntity.status(500).body(StringValues.SERVER_ERROR + errorId);
     }
 }

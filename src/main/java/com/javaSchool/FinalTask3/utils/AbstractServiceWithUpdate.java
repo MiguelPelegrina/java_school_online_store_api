@@ -1,16 +1,19 @@
 package com.javaSchool.FinalTask3.utils;
 
 import com.javaSchool.FinalTask3.exception.ResourceConflictException;
+import com.javaSchool.FinalTask3.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-// TODO Maybe use an interface (instead of an intermediate parent class) with a default method and an abstract one
 /**
- * Parent service that inherits from {@link AbstractService}. Adds the necessary methods to update an instance of an entity
- * in the database. Used for entities that have more than one attribute and therefore can be updated.
+ * Parent service that inherits from {@link AbstractService}. Adds the necessary methods to update an instance of an
+ * entity in the database. Used for entities that have more than one attribute and therefore can be updated.
+ * @param <Entity> Entity that is managed through a Service.
+ * @param <EntityDTO> Data Transfer Object (DTO) of the entity.
+ * @param <EntityID> Identifier of the entity.
  */
 @RequiredArgsConstructor
 @Service
@@ -25,7 +28,6 @@ public abstract class AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> ext
         super(repository, modelMapper);
     }
 
-    // TODO Bad practice. Use placeholder
     /**
      * Handles the PUT request. Updates an existing instance of the entity in the database.
      * @param id ID of the instance that will be updated.
@@ -35,12 +37,12 @@ public abstract class AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> ext
     @Transactional
     public EntityDTO updateInstance(EntityID id, Entity instance){
         if (!id.equals(this.getEntityId(instance))){
-           throw new ResourceConflictException("Both IDs are not the same: " + id + " - " + this.getEntityId(instance));
+           throw new ResourceConflictException(String.format(StringValues.SAME_ID, id, this.getEntityId(instance)));
         }
         return repository.findById(id).map(existingItem -> {
             updateValues(existingItem, instance);
             return modelMapper.map(repository.save(existingItem), getDTOClass());
-        }).orElse(null);
+        }).orElseThrow(() -> new ResourceNotFoundException(String.format(StringValues.INSTANCE_NOT_FOUND, id)));
     }
 
     /**

@@ -43,7 +43,6 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
                 .collect(Collectors.toList());
     }
 
-    // TODO Bad practice. Use placeholder instead
     /**
      * Handles the GET request with a specified ID. Obtains the instance of the entity with the specified ID from the
      * database and returns it as a DTO.
@@ -52,15 +51,14 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
      */
     public EntityDTO getInstanceById(EntityID id){
         return modelMapper.map(repository.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Instance " + id + " not found ")), getDTOClass());
+                        .orElseThrow(() -> new ResourceNotFoundException(String.format(StringValues.INSTANCE_NOT_FOUND, id))), getDTOClass());
     }
 
     // TODO Having a method implementation that does not work properly for all child classes does not seem right. At the
     //  same time though, I don't want to use an interface just to duplicate this line of code for all classes that
     //  don't have relations with other entities. Creating another intermediate parent/child class, would imply that I
     //  need to have a list of repositories, to access every related entity and for each of it I would need to load the
-    //  instance
-    // TODO Bad practice. Use placeholder.
+    //  instance.
     /**
      * Handles the POST request. Saves an instance of the entity into the database.
      * @param instance Instance of the entity that will be saved.
@@ -68,9 +66,8 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
      */
     @Transactional
     public EntityDTO saveInstance(Entity instance){
-        // TODO Does not work
         if (repository.existsById(getEntityId(instance))){
-            throw new ResourceConflictException("ID is already taken " + getEntityId(instance));
+            throw new ResourceConflictException(String.format(StringValues.ID_ALREADY_TAKEN, getEntityId(instance)));
         }
         return modelMapper.map(repository.save(instance), getDTOClass());
     }
@@ -90,5 +87,10 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
      */
     protected abstract Class<EntityDTO> getDTOClass();
 
+    /**
+     * Abstract method to be implemented by subclasses to obtain the Identifier of the entity.
+     * @param instance Instance of the entity.
+     * @return Returns the Identifier of the entity.
+     */
     protected abstract EntityID getEntityId(Entity instance);
 }

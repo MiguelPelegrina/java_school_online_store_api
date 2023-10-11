@@ -73,7 +73,9 @@ public abstract class AbstractRestController<Entity, EntityDTO, EntityID> {
      * @param id Identifier (ID) of the instance that will be deleted.
      */
     @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable EntityID id){
+    public ResponseEntity<?> deleteItem(@PathVariable EntityID id){
+        // TODO Try - catch with HibernateException/SQLException?
         service.deleteInstance(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
