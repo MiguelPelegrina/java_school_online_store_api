@@ -32,4 +32,9 @@ public class BookParametersFormatService extends AbstractService<BookParametersF
     protected Class<BookParametersFormatDTO> getDTOClass() {
         return BookParametersFormatDTO.class;
     }
+
+    @Override
+    protected String getEntityId(BookParametersFormatEntity instance) {
+        return instance.getName();
+    }
 }

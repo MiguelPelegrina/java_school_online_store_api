@@ -32,6 +32,11 @@ public class UserRoleService extends AbstractServiceWithUpdate<UserRoleEntity, U
         return UserRoleDTO.class;
     }
 
+    @Override
+    protected Integer getEntityId(UserRoleEntity instance) {
+        return instance.getId();
+    }
+
     /**
      * Updates the values of an existing {@link UserRoleEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

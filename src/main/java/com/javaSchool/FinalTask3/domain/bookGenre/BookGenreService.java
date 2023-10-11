@@ -34,4 +34,9 @@ public class BookGenreService extends AbstractService<BookGenreEntity, BookGenre
     protected Class<BookGenreDTO> getDTOClass() {
         return BookGenreDTO.class;
     }
+
+    @Override
+    protected String getEntityId(BookGenreEntity instance) {
+        return instance.getName();
+    }
 }

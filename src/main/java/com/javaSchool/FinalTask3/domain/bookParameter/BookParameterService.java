@@ -32,6 +32,11 @@ public class BookParameterService extends AbstractServiceWithUpdate<BookParamete
         return null;
     }
 
+    @Override
+    protected Integer getEntityId(BookParameterEntity instance) {
+        return instance.getId();
+    }
+
     /**
      * Updates the values of an existing instance of {@link BookParameterEntity}.
      * @param existingItem Instance of {@link BookParameterEntity} that already exists in the database.

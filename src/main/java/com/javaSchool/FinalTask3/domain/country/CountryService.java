@@ -34,6 +34,11 @@ public class CountryService extends AbstractServiceWithUpdate<CountryEntity, Cou
         return CountryDTO.class;
     }
 
+    @Override
+    protected String getEntityId(CountryEntity instance) {
+        return instance.getName();
+    }
+
     /**
      * Updates the values of an existing {@link CountryEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

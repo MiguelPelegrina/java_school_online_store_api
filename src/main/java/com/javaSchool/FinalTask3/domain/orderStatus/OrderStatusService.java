@@ -32,6 +32,11 @@ public class OrderStatusService extends AbstractServiceWithUpdate<OrderStatusEnt
         return OrderStatusDTO.class;
     }
 
+    @Override
+    protected String getEntityId(OrderStatusEntity instance) {
+        return instance.getName();
+    }
+
     /**
      * Updates the values of an existing {@link OrderStatusEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

@@ -1,5 +1,6 @@
 package com.javaSchool.FinalTask3.utils;
 
+import com.javaSchool.FinalTask3.exception.ResourceConflictException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,16 +25,20 @@ public abstract class AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> ext
         super(repository, modelMapper);
     }
 
+    // TODO Bad practice. Use placeholder
     /**
      * Handles the PUT request. Updates an existing instance of the entity in the database.
      * @param id ID of the instance that will be updated.
-     * @param item Instance that will be updated in the database.
+     * @param instance Instance that will be updated in the database.
      * @return Returns the updated instance. If the instance could not be updated, it returns null.
      */
     @Transactional
-    public EntityDTO updateInstance(EntityID id, Entity item){
+    public EntityDTO updateInstance(EntityID id, Entity instance){
+        if (!id.equals(this.getEntityId(instance))){
+           throw new ResourceConflictException("Both IDs are not the same: " + id + " - " + this.getEntityId(instance));
+        }
         return repository.findById(id).map(existingItem -> {
-            updateValues(existingItem, item);
+            updateValues(existingItem, instance);
             return modelMapper.map(repository.save(existingItem), getDTOClass());
         }).orElse(null);
     }

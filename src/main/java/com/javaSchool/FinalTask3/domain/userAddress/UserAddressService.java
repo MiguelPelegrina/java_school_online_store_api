@@ -32,6 +32,11 @@ public class UserAddressService extends AbstractServiceWithUpdate<UserAddressEnt
         return UserAddressDTO.class;
     }
 
+    @Override
+    protected Integer getEntityId(UserAddressEntity instance) {
+        return instance.getId();
+    }
+
     /**
      * Updates the values of an existing {@link UserAddressEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

@@ -49,6 +49,11 @@ public class CityService extends AbstractServiceWithUpdate<CityEntity, CityDTO, 
         return CityDTO.class;
     }
 
+    @Override
+    protected String getEntityId(CityEntity instance) {
+        return instance.getName();
+    }
+
     /**
      * Updates the values of an existing {@link CityEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

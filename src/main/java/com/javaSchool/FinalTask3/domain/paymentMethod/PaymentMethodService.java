@@ -35,6 +35,11 @@ public class PaymentMethodService extends AbstractServiceWithUpdate<PaymentMetho
         return PaymentMethodDTO.class;
     }
 
+    @Override
+    protected String getEntityId(PaymentMethodEntity instance) {
+        return instance.getName();
+    }
+
     /**
      * Updates the values of an existing {@link PaymentMethodEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

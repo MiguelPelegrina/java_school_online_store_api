@@ -31,6 +31,11 @@ public class PostalCodeService extends AbstractServiceWithUpdate<PostalCodeEntit
         return PostalCodeDTO.class;
     }
 
+    @Override
+    protected String getEntityId(PostalCodeEntity instance) {
+        return instance.getCode();
+    }
+
     /**
      * Updates the values of an existing {@link PostalCodeEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

@@ -26,7 +26,7 @@ public class CityEntity {
 
     // TODO With DTOs all fetch types are lazy?
     // TODO Cascade type? --> At the moment it is not part of the requirements, the database admin can insert new
-    //  countries when the customer asks for it.
+    //  countries when the customer asks for it, but what happens when a country is deleted?
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "country_name", referencedColumnName = "name", nullable = false)
     private CountryEntity country;

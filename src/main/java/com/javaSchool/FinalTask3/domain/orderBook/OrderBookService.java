@@ -32,6 +32,11 @@ public class OrderBookService extends AbstractServiceWithUpdate<OrderBookEntity,
         return OrderBookDTO.class;
     }
 
+    @Override
+    protected OrderBookId getEntityId(OrderBookEntity instance) {
+        return instance.getId();
+    }
+
     /**
      * Updates the values of an existing {@link OrderBookEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

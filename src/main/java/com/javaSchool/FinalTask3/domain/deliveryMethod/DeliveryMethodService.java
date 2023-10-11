@@ -33,6 +33,11 @@ public class DeliveryMethodService extends AbstractServiceWithUpdate<DeliveryMet
         return DeliveryMethodDTO.class;
     }
 
+    @Override
+    protected String getEntityId(DeliveryMethodEntity instance) {
+        return instance.getName();
+    }
+
     /**
      * Updates the values of an existing {@link DeliveryMethodEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

@@ -1,7 +1,10 @@
 package com.javaSchool.FinalTask3.utils;
 
+import com.javaSchool.FinalTask3.exception.ResourceConflictException;
+import com.javaSchool.FinalTask3.exception.ResourceNotFoundException;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
  * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
  * @param <EntityID> Identifier of the entity instance.
  */
+@Log4j2
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @Service
@@ -41,6 +45,7 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
                 .collect(Collectors.toList());
     }
 
+    // TODO Bad practice. Use placeholder instead
     /**
      * Handles the GET request with a specified ID. Obtains the instance of the entity with the specified ID from the
      * database and returns it as a DTO.
@@ -48,7 +53,8 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
      * @return Returns the found instance. If no instance is found, it returns null.
      */
     public EntityDTO getInstanceById(EntityID id){
-        return modelMapper.map(repository.findById(id).orElse(null), getDTOClass());
+        return modelMapper.map(repository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Instance " + id + " not found ")), getDTOClass());
     }
 
     // TODO Having a method implementation that does not work properly for all child classes does not seem right. At the
@@ -56,6 +62,7 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
     //  don't have relations with other entities. Creating another intermediate parent/child class, would imply that I
     //  need to have a list of repositories, to access every related entity and for each of it I would need to load the
     //  instance
+    // TODO Bad practice. Use placeholder.
     /**
      * Handles the POST request. Saves an instance of the entity into the database.
      * @param instance Instance of the entity that will be saved.
@@ -63,6 +70,10 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
      */
     @Transactional
     public EntityDTO saveInstance(Entity instance){
+        // TODO Does not work
+        if (repository.existsById(getEntityId(instance))){
+            throw new ResourceConflictException("ID is already taken " + getEntityId(instance));
+        }
         return modelMapper.map(repository.save(instance), getDTOClass());
     }
 
@@ -80,4 +91,6 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
      * @return Returns the DTO class of the entity
      */
     protected abstract Class<EntityDTO> getDTOClass();
+
+    protected abstract EntityID getEntityId(Entity instance);
 }

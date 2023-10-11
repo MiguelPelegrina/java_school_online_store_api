@@ -31,6 +31,11 @@ public class BookService extends AbstractServiceWithUpdate<BookEntity, BookDTO, 
         return BookDTO.class;
     }
 
+    @Override
+    protected Integer getEntityId(BookEntity instance) {
+        return instance.getId();
+    }
+
     /**
      * Updates the values of an existing {@link BookEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

@@ -31,6 +31,11 @@ public class RoleService extends AbstractServiceWithUpdate<RoleEntity, RoleDTO, 
         return RoleDTO.class;
     }
 
+    @Override
+    protected String getEntityId(RoleEntity instance) {
+        return instance.getName();
+    }
+
     /**
      * Updates the values of an existing {@link RoleEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

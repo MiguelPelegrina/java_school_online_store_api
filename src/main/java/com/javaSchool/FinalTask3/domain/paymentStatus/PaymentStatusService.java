@@ -35,6 +35,11 @@ public class PaymentStatusService extends AbstractServiceWithUpdate<PaymentStatu
         return PaymentStatusDTO.class;
     }
 
+    @Override
+    protected String getEntityId(PaymentStatusEntity instance) {
+        return instance.getName();
+    }
+
     /**
      * Updates the values of an existing {@link PaymentStatusEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.

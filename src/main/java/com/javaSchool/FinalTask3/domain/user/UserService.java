@@ -32,6 +32,11 @@ public class UserService extends AbstractServiceWithUpdate<UserEntity, UserDTO, 
         return UserDTO.class;
     }
 
+    @Override
+    protected Integer getEntityId(UserEntity instance) {
+        return instance.getId();
+    }
+
     /**
      * Updates the values of an existing {@link UserEntity} instance with new ones.
      * @param existingInstance Instance that already exists in the database.
