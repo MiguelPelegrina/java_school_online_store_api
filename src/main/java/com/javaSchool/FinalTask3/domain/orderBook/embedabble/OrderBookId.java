@@ -1,5 +1,6 @@
-package com.javaSchool.FinalTask3.domain.orderBook;
+package com.javaSchool.FinalTask3.domain.orderBook.embedabble;
 
+import com.javaSchool.FinalTask3.domain.orderBook.OrderBookEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

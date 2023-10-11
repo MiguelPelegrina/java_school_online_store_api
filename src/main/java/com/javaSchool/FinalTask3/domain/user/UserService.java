@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link UserRepository} and the
- * {@link UserController}. Obtains data from the
+ * {@link UserRestController}. Obtains data from the
  * {@link UserRepository} and returns the object(s) of the entity {@link UserEntity} as
- * {@link UserDTO} to the {@link UserController}.
+ * {@link UserDTO} to the {@link UserRestController}.
  */
 @Service
 @Transactional(readOnly = true)

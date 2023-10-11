@@ -1,5 +1,6 @@
 package com.javaSchool.FinalTask3.domain.orderBook;
 
+import com.javaSchool.FinalTask3.domain.orderBook.embedabble.OrderBookId;
 import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

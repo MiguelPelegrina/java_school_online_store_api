@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link UserAddressRepository} and the
- * {@link UserAddressController}. Obtains data from the
+ * {@link UserAddressRestController}. Obtains data from the
  * {@link UserAddressRepository} and returns the object(s) of the entity {@link UserAddressEntity} as
- * {@link UserAddressDTO} to the {@link UserAddressController}.
+ * {@link UserAddressDTO} to the {@link UserAddressRestController}.
  */
 @Service
 @Transactional(readOnly = true)

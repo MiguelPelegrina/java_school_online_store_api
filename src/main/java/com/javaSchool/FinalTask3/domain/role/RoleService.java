@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service class responsible for the interaction between the {@link RoleRepository} and the {@link RoleController}.
+ * Service class responsible for the interaction between the {@link RoleRepository} and the {@link RoleRestController}.
  * Obtains data from the {@link RoleRepository} and returns the object(s) of the {@link RoleEntity} as
- * {@link RoleDTO} to the {@link RoleController}.
+ * {@link RoleDTO} to the {@link RoleRestController}.
  */
 @Service
 @Transactional(readOnly = true)

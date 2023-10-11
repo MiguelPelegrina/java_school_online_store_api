@@ -4,7 +4,6 @@ import com.javaSchool.FinalTask3.exception.ResourceConflictException;
 import com.javaSchool.FinalTask3.exception.ResourceNotFoundException;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
  * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
  * @param <EntityID> Identifier of the entity instance.
  */
-@Log4j2
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @Service

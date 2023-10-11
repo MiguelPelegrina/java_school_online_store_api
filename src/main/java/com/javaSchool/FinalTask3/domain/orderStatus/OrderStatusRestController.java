@@ -2,6 +2,7 @@ package com.javaSchool.FinalTask3.domain.orderStatus;
 
 import com.javaSchool.FinalTask3.utils.AbstractRestControllerWithUpdate;
 import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * RestController of the {@link OrderStatusEntity} entity. Handles the REST methods. Uses
  * {@link OrderStatusDTO} as returning object.
  */
-@RequestMapping(path = "/orderstatuses")
+@RequestMapping(path = "/orderstatuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class OrderStatusRestController extends AbstractRestControllerWithUpdate<OrderStatusEntity, OrderStatusDTO, String> {
     /**

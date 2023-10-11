@@ -2,6 +2,7 @@ package com.javaSchool.FinalTask3.domain.orderBook;
 
 import com.javaSchool.FinalTask3.domain.book.BookEntity;
 import com.javaSchool.FinalTask3.domain.order.OrderEntity;
+import com.javaSchool.FinalTask3.domain.orderBook.embedabble.OrderBookId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

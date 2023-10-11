@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("/users")
 @RestController
-public class UserController extends AbstractRestControllerWithUpdate<UserEntity, UserDTO, Integer> {
+public class UserRestController extends AbstractRestControllerWithUpdate<UserEntity, UserDTO, Integer> {
     /**
      * All arguments constructor.
      * @param service {@link UserService} of the {@link UserEntity} entity.
      */
-    public UserController(AbstractServiceWithUpdate<UserEntity, UserDTO, Integer> service) {
+    public UserRestController(AbstractServiceWithUpdate<UserEntity, UserDTO, Integer> service) {
         super(service);
     }
 }

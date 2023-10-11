@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service class responsible for the interaction between the {@link PostalCodeRepository} and the {@link PostalCodeController}.
+ * Service class responsible for the interaction between the {@link PostalCodeRepository} and the {@link PostalCodeRestController}.
  * Obtains data from the  {@link PostalCodeRepository} and returns the object(s) of the entity {@link PostalCodeEntity} as
- * {@link PostalCodeDTO} to the {@link PostalCodeController}.
+ * {@link PostalCodeDTO} to the {@link PostalCodeRestController}.
  */
 @Service
 @Transactional(readOnly = true)
