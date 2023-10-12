@@ -63,7 +63,8 @@ public abstract class AbstractRestController<Entity, EntityDTO, EntityID> {
         if (itemDTO == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(itemDTO, HttpStatus.CREATED);
+            return ResponseEntity.ok(itemDTO);
+            // return new ResponseEntity<>(itemDTO, HttpStatus.CREATED);
         }
     }
 

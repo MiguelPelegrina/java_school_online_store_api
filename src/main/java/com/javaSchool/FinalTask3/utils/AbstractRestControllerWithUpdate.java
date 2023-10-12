@@ -1,6 +1,5 @@
 package com.javaSchool.FinalTask3.utils;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,7 +31,8 @@ public abstract class AbstractRestControllerWithUpdate<Entity, EntityDTO, Entity
     @PutMapping("/{id}")
     public ResponseEntity<EntityDTO> updateInstance(@PathVariable EntityID id, @RequestBody Entity instance){
         if (this.service instanceof AbstractServiceWithUpdate<Entity, EntityDTO, EntityID> service) {
-            return new ResponseEntity<>(service.updateInstance(id, instance), HttpStatus.OK);
+            return ResponseEntity.ok(service.updateInstance(id, instance));
+            //return new ResponseEntity<>(service.updateInstance(id, instance), HttpStatus.OK);
         } else {
             // TODO Should throw an exception
             return null;

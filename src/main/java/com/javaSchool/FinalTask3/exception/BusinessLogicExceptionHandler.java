@@ -7,8 +7,6 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.UUID;
-
 @RestControllerAdvice
 public class BusinessLogicExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -25,10 +23,10 @@ public class BusinessLogicExceptionHandler {
     public ResponseEntity<?> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException e){
         return ResponseEntity.status(415).body(StringValues.ACCEPTABLE_MEDIA + MediaType.APPLICATION_JSON_VALUE);
     }
-    @ExceptionHandler(Exception.class)
+    /*@ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleUnknown(Exception e){
         String errorId = UUID.randomUUID().toString();
 
         return ResponseEntity.status(500).body(StringValues.SERVER_ERROR + errorId);
-    }
+    }*/
 }
