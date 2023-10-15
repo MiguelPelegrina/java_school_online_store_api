@@ -39,8 +39,11 @@ public class BookEntity {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Column(name = "isbn", nullable = false)
+    @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
+
+    @Column(name = "author", nullable = false, length = 60)
+    private String author;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "genre", referencedColumnName = "name", nullable = false)
@@ -56,7 +59,7 @@ public class BookEntity {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "image")
     @Lob
     // TODO Not sure if right
     private byte[] image;

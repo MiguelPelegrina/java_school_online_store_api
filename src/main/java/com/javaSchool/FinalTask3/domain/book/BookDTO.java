@@ -14,6 +14,7 @@ public class BookDTO {
     private String title;
     private BigDecimal price;
     private String genre;
+    private String author;
     // TODO Not sure if right
     private BookParameterDTO parameters;
     private int stock;
