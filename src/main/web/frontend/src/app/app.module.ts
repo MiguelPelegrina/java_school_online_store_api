@@ -13,7 +13,7 @@ import { DetailCountryComponent } from './components/country/detail-country/deta
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { ListBookComponent } from './components/book/list-book/list-book.component';
-import { AddBookComponent } from './components/book/add-book/add-book/add-book.component';
+import { AddBookComponent } from './components/book/add-book/add-book.component';
 
 @NgModule({
   declarations: [
