@@ -2,6 +2,7 @@ package com.javaSchool.FinalTask3.domain.book;
 
 import com.javaSchool.FinalTask3.domain.bookGenre.BookGenreEntity;
 import com.javaSchool.FinalTask3.domain.bookParameter.BookParameterEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,20 +37,28 @@ public class BookEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
+    /**
+     * TODO Will need a currency entity and a currencyPrice entity, just assuming one → e.g. euro → is not scalable
+     *  With Cascade → needs to be created when a book with a new currency is added,
+     *  Fields of CurrencyPriceEntity:
+     *      id (int) with bookId (1-N relation, bidirectional)
+     *      isActive (boolean),
+     *      name (string),
+     *      price (BigDecimal)
+     *  Add another column for Book --> priceId (set<String>)
+     */
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    // TODO Might move it to parameters
     @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
-
-    @Column(name = "author", nullable = false, length = 60)
-    private String author;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "genre", referencedColumnName = "name", nullable = false)
     private BookGenreEntity genre;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "parameters_id", referencedColumnName = "id", nullable = false)
     private BookParameterEntity parameters;
 

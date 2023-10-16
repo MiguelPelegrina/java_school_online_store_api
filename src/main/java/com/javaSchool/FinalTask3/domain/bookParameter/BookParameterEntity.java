@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+// TODO Might need to add something like edition
 @AllArgsConstructor
 @Builder
 @Data
