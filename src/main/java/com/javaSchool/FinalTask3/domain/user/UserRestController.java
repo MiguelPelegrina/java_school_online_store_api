@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.user;
 
-import com.javaSchool.FinalTask3.utils.AbstractRestControllerWithUpdate;
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractRestController;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("/users")
 @RestController
-public class UserRestController extends AbstractRestControllerWithUpdate<UserEntity, UserDTO, Integer> {
+public class UserRestController extends AbstractRestController<UserEntity, UserDTO, Integer> {
     /**
      * All arguments constructor.
      * @param service {@link UserService} of the {@link UserEntity} entity.
      */
-    public UserRestController(AbstractServiceWithUpdate<UserEntity, UserDTO, Integer> service) {
+    public UserRestController(AbstractService<UserEntity, UserDTO, Integer> service) {
         super(service);
     }
 }

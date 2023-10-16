@@ -8,7 +8,7 @@ import { ListBookComponent } from "./components/book/list-book/list-book.compone
 import { AddBookComponent } from "./components/book/add-book/add-book.component";
 
 const routes: Routes = [
-  // TODO Might change this routes to variables
+  // TODO Home page
   {path: '', redirectTo:'countries', pathMatch:'full'},
   {path: 'books', component: ListBookComponent},
   {path: 'books/add', component: AddBookComponent},

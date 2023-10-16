@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.userRole;
 
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class UserRoleService extends AbstractServiceWithUpdate<UserRoleEntity, UserRoleDTO, Integer> {
+public class UserRoleService extends AbstractService<UserRoleEntity, UserRoleDTO, Integer> {
     /**
      * All arguments constructor.
      * @param repository {@link UserRoleRepository} of the {@link UserRoleEntity} entity.
@@ -35,17 +35,5 @@ public class UserRoleService extends AbstractServiceWithUpdate<UserRoleEntity, U
     @Override
     protected Integer getEntityId(UserRoleEntity instance) {
         return instance.getId();
-    }
-
-    /**
-     * Updates the values of an existing {@link UserRoleEntity} instance with new ones.
-     * @param existingInstance Instance that already exists in the database.
-     * @param newInstance Instance that stores the value to update the existing instance.
-     */
-    @Override
-    protected void updateValues(UserRoleEntity existingInstance, UserRoleEntity newInstance) {
-        existingInstance.setUser(newInstance.getUser());
-        existingInstance.setRole(newInstance.getRole());
-        existingInstance.setAssignedDate(newInstance.getAssignedDate());
     }
 }

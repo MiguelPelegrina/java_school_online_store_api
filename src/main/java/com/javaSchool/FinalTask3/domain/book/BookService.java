@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.book;
 
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class BookService extends AbstractServiceWithUpdate<BookEntity, BookDTO, Integer> {
+public class BookService extends AbstractService<BookEntity, BookDTO, Integer> {
     /**
      * All arguments constructor.
      * @param repository {@link BookRepository} of the {@link BookEntity} entity.
@@ -34,22 +34,5 @@ public class BookService extends AbstractServiceWithUpdate<BookEntity, BookDTO, 
     @Override
     protected Integer getEntityId(BookEntity instance) {
         return instance.getId();
-    }
-
-    /**
-     * Updates the values of an existing {@link BookEntity} instance with new ones.
-     * @param existingInstance Instance that already exists in the database.
-     * @param newInstance Instance that stores the value to update the existing instance.
-     */
-    @Override
-    protected void updateValues(BookEntity existingInstance, BookEntity newInstance) {
-        existingInstance.setTitle(newInstance.getTitle());
-        existingInstance.setPrice(newInstance.getPrice());
-        existingInstance.setIsbn(newInstance.getIsbn());
-        existingInstance.setGenre(newInstance.getGenre());
-        existingInstance.setParameters(newInstance.getParameters());
-        existingInstance.setStock(newInstance.getStock());
-        existingInstance.setActive(newInstance.isActive());
-        existingInstance.setImage(newInstance.getImage());
     }
 }

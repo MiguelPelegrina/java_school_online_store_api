@@ -49,7 +49,7 @@
       name="price"
       [(ngModel)]="book.price"
       required
-      placeholder="Enter the price of the book"
+      placeholder="0.00"
       #name ="ngModel"
       >
       <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">

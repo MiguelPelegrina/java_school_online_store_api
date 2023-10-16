@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.user;
 
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class UserService extends AbstractServiceWithUpdate<UserEntity, UserDTO, Integer> {
+public class UserService extends AbstractService<UserEntity, UserDTO, Integer> {
     /**
      * All arguments constructor.
      * @param repository {@link UserRepository} of the {@link UserEntity} entity.
@@ -35,23 +35,5 @@ public class UserService extends AbstractServiceWithUpdate<UserEntity, UserDTO, 
     @Override
     protected Integer getEntityId(UserEntity instance) {
         return instance.getId();
-    }
-
-    /**
-     * Updates the values of an existing {@link UserEntity} instance with new ones.
-     * @param existingInstance Instance that already exists in the database.
-     * @param newInstance Instance that stores the value to update the existing instance.
-     */
-    @Override
-    protected void updateValues(UserEntity existingInstance, UserEntity newInstance) {
-        existingInstance.setName(newInstance.getName());
-        existingInstance.setSurname(newInstance.getSurname());
-        existingInstance.setDateOfBirth(newInstance.getDateOfBirth());
-        existingInstance.setEmail(newInstance.getEmail());
-        existingInstance.setPassword(newInstance.getPassword());
-        existingInstance.setActive(newInstance.isActive());
-        existingInstance.setPhoneNumber(newInstance.getPhoneNumber());
-        existingInstance.setAddress(newInstance.getAddress());
-        existingInstance.setRoles(newInstance.getRoles());
     }
 }

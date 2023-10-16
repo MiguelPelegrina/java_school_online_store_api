@@ -3,7 +3,7 @@ package com.javaSchool.FinalTask3.domain.paymentStatus;
 import com.javaSchool.FinalTask3.domain.bookGenre.BookGenreDTO;
 import com.javaSchool.FinalTask3.domain.bookGenre.BookGenreEntity;
 import com.javaSchool.FinalTask3.domain.bookGenre.BookGenreRepository;
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class PaymentStatusService extends AbstractServiceWithUpdate<PaymentStatusEntity, PaymentStatusDTO, String> {
+public class PaymentStatusService extends AbstractService<PaymentStatusEntity, PaymentStatusDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link BookGenreRepository} of the {@link BookGenreEntity} entity.
@@ -38,15 +38,5 @@ public class PaymentStatusService extends AbstractServiceWithUpdate<PaymentStatu
     @Override
     protected String getEntityId(PaymentStatusEntity instance) {
         return instance.getName();
-    }
-
-    /**
-     * Updates the values of an existing {@link PaymentStatusEntity} instance with new ones.
-     * @param existingInstance Instance that already exists in the database.
-     * @param newInstance Instance that stores the value to update the existing instance.
-     */
-    @Override
-    protected void updateValues(PaymentStatusEntity existingInstance, PaymentStatusEntity newInstance) {
-        existingInstance.setActive(newInstance.isActive());
     }
 }

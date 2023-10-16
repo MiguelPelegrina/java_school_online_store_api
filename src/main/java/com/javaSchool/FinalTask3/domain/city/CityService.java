@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.city;
 
 import com.javaSchool.FinalTask3.domain.country.CountryRepository;
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class CityService extends AbstractServiceWithUpdate<CityEntity, CityDTO, String> {
+public class CityService extends AbstractService<CityEntity, CityDTO, String> {
     // TODO Not sure if necessary
     private final CountryRepository countryRepository;
 
@@ -52,16 +52,5 @@ public class CityService extends AbstractServiceWithUpdate<CityEntity, CityDTO, 
     @Override
     protected String getEntityId(CityEntity instance) {
         return instance.getName();
-    }
-
-    /**
-     * Updates the values of an existing {@link CityEntity} instance with new ones.
-     * @param existingInstance Instance that already exists in the database.
-     * @param newInstance Instance that stores the value to update the existing instance.
-     */
-    @Override
-    protected void updateValues(CityEntity existingInstance, CityEntity newInstance) {
-        existingInstance.setActive(newInstance.isActive());
-        existingInstance.setCountryName(newInstance.getCountryName());
     }
 }

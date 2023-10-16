@@ -1,6 +1,5 @@
 package com.javaSchool.FinalTask3.utils;
 
-import com.javaSchool.FinalTask3.exception.ResourceConflictException;
 import com.javaSchool.FinalTask3.exception.ResourceNotFoundException;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -66,9 +65,6 @@ public abstract class AbstractService<Entity, EntityDTO, EntityID> {
      */
     @Transactional
     public EntityDTO saveInstance(Entity instance){
-        if (repository.existsById(getEntityId(instance))){
-            throw new ResourceConflictException(String.format(StringValues.ID_ALREADY_TAKEN, getEntityId(instance)));
-        }
         return modelMapper.map(repository.save(instance), getDTOClass());
     }
 

@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.orderStatus;
 
-import com.javaSchool.FinalTask3.utils.AbstractRestControllerWithUpdate;
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractRestController;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping(path = "/orderstatuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class OrderStatusRestController extends AbstractRestControllerWithUpdate<OrderStatusEntity, OrderStatusDTO, String> {
+public class OrderStatusRestController extends AbstractRestController<OrderStatusEntity, OrderStatusDTO, String> {
     /**
      * All arguments constructor.
      * @param service {@link OrderStatusService} of the {@link OrderStatusEntity} entity.
      */
-    public OrderStatusRestController(AbstractServiceWithUpdate<OrderStatusEntity, OrderStatusDTO, String> service) {
+    public OrderStatusRestController(AbstractService<OrderStatusEntity, OrderStatusDTO, String> service) {
         super(service);
     }
 }

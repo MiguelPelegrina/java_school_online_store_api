@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.orderBook;
 
 import com.javaSchool.FinalTask3.domain.orderBook.embedabble.OrderBookId;
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class OrderBookService extends AbstractServiceWithUpdate<OrderBookEntity, OrderBookDTO, OrderBookId> {
+public class OrderBookService extends AbstractService<OrderBookEntity, OrderBookDTO, OrderBookId> {
     /**
      * All arguments constructor.
      * @param repository {@link OrderBookRepository} of the {@link OrderBookEntity} entity.
@@ -36,17 +36,5 @@ public class OrderBookService extends AbstractServiceWithUpdate<OrderBookEntity,
     @Override
     protected OrderBookId getEntityId(OrderBookEntity instance) {
         return instance.getId();
-    }
-
-    /**
-     * Updates the values of an existing {@link OrderBookEntity} instance with new ones.
-     * @param existingInstance Instance that already exists in the database.
-     * @param newInstance Instance that stores the value to update the existing instance.
-     */
-    @Override
-    protected void updateValues(OrderBookEntity existingInstance, OrderBookEntity newInstance) {
-        existingInstance.setAmount(newInstance.getAmount());
-        existingInstance.setBook(newInstance.getBook());
-        existingInstance.setOrder(newInstance.getOrder());
     }
 }

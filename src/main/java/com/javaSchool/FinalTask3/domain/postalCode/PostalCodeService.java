@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.postalCode;
 
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class PostalCodeService extends AbstractServiceWithUpdate<PostalCodeEntity, PostalCodeDTO, String> {
+public class PostalCodeService extends AbstractService<PostalCodeEntity, PostalCodeDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link PostalCodeRepository} of the {@link PostalCodeEntity}.
@@ -34,16 +34,5 @@ public class PostalCodeService extends AbstractServiceWithUpdate<PostalCodeEntit
     @Override
     protected String getEntityId(PostalCodeEntity instance) {
         return instance.getCode();
-    }
-
-    /**
-     * Updates the values of an existing {@link PostalCodeEntity} instance with new ones.
-     * @param existingInstance Instance that already exists in the database.
-     * @param newInstance Instance that stores the value to update the existing instance.
-     */
-    @Override
-    protected void updateValues(PostalCodeEntity existingInstance, PostalCodeEntity newInstance) {
-        existingInstance.setActive(newInstance.isActive());
-        existingInstance.setCity(newInstance.getCity());
     }
 }

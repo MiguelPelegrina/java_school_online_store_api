@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export abstract class AbstractService<Entity, ID> {
-  constructor(private baseUrl: string, protected httpClient: HttpClient) {}
+  constructor(protected baseUrl: string, protected httpClient: HttpClient) {}
 
   public getAll(): Observable<Entity[]> {
     return this.httpClient.get<Entity[]>(this.baseUrl);

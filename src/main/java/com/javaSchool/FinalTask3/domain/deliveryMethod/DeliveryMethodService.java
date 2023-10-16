@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.deliveryMethod;
 
 import com.javaSchool.FinalTask3.domain.bookGenre.BookGenreDTO;
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class DeliveryMethodService extends AbstractServiceWithUpdate<DeliveryMethodEntity, DeliveryMethodDTO, String> {
+public class DeliveryMethodService extends AbstractService<DeliveryMethodEntity, DeliveryMethodDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link DeliveryMethodRepository} of the {@link DeliveryMethodEntity} entity.
@@ -36,15 +36,5 @@ public class DeliveryMethodService extends AbstractServiceWithUpdate<DeliveryMet
     @Override
     protected String getEntityId(DeliveryMethodEntity instance) {
         return instance.getName();
-    }
-
-    /**
-     * Updates the values of an existing {@link DeliveryMethodEntity} instance with new ones.
-     * @param existingInstance Instance that already exists in the database.
-     * @param newInstance Instance that stores the value to update the existing instance.
-     */
-    @Override
-    protected void updateValues(DeliveryMethodEntity existingInstance, DeliveryMethodEntity newInstance) {
-        existingInstance.setActive(newInstance.isActive());
     }
 }

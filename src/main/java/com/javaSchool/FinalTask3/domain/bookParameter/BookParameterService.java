@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.bookParameter;
 
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class BookParameterService extends AbstractServiceWithUpdate<BookParameterEntity, BookParameterDTO, Integer> {
+public class BookParameterService extends AbstractService<BookParameterEntity, BookParameterDTO, Integer> {
     /**
      * All arguments constructor.
      * @param repository {@link BookParameterRepository} of the {@link BookParameterEntity} entity.
@@ -35,17 +35,5 @@ public class BookParameterService extends AbstractServiceWithUpdate<BookParamete
     @Override
     protected Integer getEntityId(BookParameterEntity instance) {
         return instance.getId();
-    }
-
-    /**
-     * Updates the values of an existing instance of {@link BookParameterEntity}.
-     * @param existingItem Instance of {@link BookParameterEntity} that already exists in the database.
-     * @param newItem Instance of {@link BookParameterEntity} that stores the new values to update the existing instance with.
-     */
-    @Override
-    protected void updateValues(BookParameterEntity existingItem, BookParameterEntity newItem) {
-        existingItem.setActive(newItem.isActive());
-        existingItem.setAuthor(newItem.getAuthor());
-        existingItem.setFormat(newItem.getFormat());
     }
 }

@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.country;
 
-import com.javaSchool.FinalTask3.utils.AbstractServiceWithUpdate;
-import com.javaSchool.FinalTask3.utils.AbstractRestControllerWithUpdate;
+import com.javaSchool.FinalTask3.utils.AbstractRestController;
+import com.javaSchool.FinalTask3.utils.AbstractService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(path = "countries")
 @RestController
-public class CountryRestController extends AbstractRestControllerWithUpdate<CountryEntity, CountryDTO, String> {
+public class CountryRestController extends AbstractRestController<CountryEntity, CountryDTO, String> {
     /**
      * All arguments constructor.
      * @param service {@link CountryService} of the {@link CountryEntity} entity.
      */
-    public CountryRestController(AbstractServiceWithUpdate<CountryEntity, CountryDTO, String> service) {
+    public CountryRestController(AbstractService<CountryEntity, CountryDTO, String> service) {
         super(service);
     }
 }

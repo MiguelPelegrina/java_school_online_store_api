@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,6 +67,19 @@ public abstract class AbstractRestController<Entity, EntityDTO, EntityID> {
             return ResponseEntity.ok(itemDTO);
             // return new ResponseEntity<>(itemDTO, HttpStatus.CREATED);
         }
+    }
+
+    /**
+     * Submits a PUT request to update an existing instance of the entity in the database.
+     * @param id Identifier (ID) of the instance that will be updated.
+     * @param instance Instance with the updated values.
+     * @return Returns a ResponseEntity with the DTO of the update instance and the status of the PUT request.
+     * If successful, the code is 200.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<EntityDTO> updateInstance(@PathVariable EntityID id, @RequestBody Entity instance){
+        return ResponseEntity.ok(service.saveInstance(instance));
+        //return new ResponseEntity<>(service.updateInstance(id, instance), HttpStatus.OK);
     }
 
     // TODO What kind of ResponseEntity do I return if an instance is deleted?

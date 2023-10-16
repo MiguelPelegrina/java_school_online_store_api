@@ -4,6 +4,7 @@ import { CountryService } from '../../../services/country/country.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
+// TODO Loading animation
 @Component({
   selector: 'app-list-country',
   templateUrl: './list-country.component.html',
