@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * RestController of the {@link BookEntity} entity. Handles the REST methods. Uses {@link BookDTO} as returning object.
  */
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(path = "books"
-        //, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE
-)
+@RequestMapping(path = "books")
 @RestController
 public class BookRestController extends AbstractRestController<BookEntity, BookDTO, Integer> {
     /**

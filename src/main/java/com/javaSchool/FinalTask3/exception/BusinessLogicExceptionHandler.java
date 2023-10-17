@@ -7,6 +7,8 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 @RestControllerAdvice
 public class BusinessLogicExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)

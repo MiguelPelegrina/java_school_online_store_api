@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * {@link BookParametersFormatDTO} as returning object.
  */
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(path = "bookparametersformat")
+@RequestMapping(path = "book_parameters_format")
 @RestController
 public class BookParametersFormatRestController extends AbstractRestController<BookParametersFormatEntity, BookParametersFormatDTO, String> {
     /**

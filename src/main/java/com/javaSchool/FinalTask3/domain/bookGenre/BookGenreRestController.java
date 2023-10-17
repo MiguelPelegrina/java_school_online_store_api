@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * returning object.
  */
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(path = "bookgenres")
+@RequestMapping(path = "book_genres")
 @RestController
 public class BookGenreRestController extends AbstractRestController<BookGenreEntity, BookGenreDTO, String> {
     /**

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 // TODO Try to add something that guaranties that the service is never null, if possible.
-// TODO What information do I specify in the HttpHeaders?
 /**
  * Parent controller responsible for the interaction between service and user. Obtains data from the services and
  * returns a {@link ResponseEntity} that contains the Data Transfer Object (DTO) of the entity and the status of the
@@ -59,13 +58,12 @@ public abstract class AbstractRestController<Entity, EntityDTO, EntityID> {
      */
     @PostMapping
     public ResponseEntity<EntityDTO> saveInstance(@RequestBody Entity instance){
-        EntityDTO itemDTO = service.saveInstance(instance);
+        EntityDTO instanceDTO = service.saveInstance(instance);
 
-        if (itemDTO == null) {
+        if (instanceDTO == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return ResponseEntity.ok(itemDTO);
-            // return new ResponseEntity<>(itemDTO, HttpStatus.CREATED);
+            return ResponseEntity.ok(instanceDTO);
         }
     }
 
@@ -79,7 +77,6 @@ public abstract class AbstractRestController<Entity, EntityDTO, EntityID> {
     @PutMapping("/{id}")
     public ResponseEntity<EntityDTO> updateInstance(@PathVariable EntityID id, @RequestBody Entity instance){
         return ResponseEntity.ok(service.saveInstance(instance));
-        //return new ResponseEntity<>(service.updateInstance(id, instance), HttpStatus.OK);
     }
 
     // TODO What kind of ResponseEntity do I return if an instance is deleted?
@@ -89,7 +86,6 @@ public abstract class AbstractRestController<Entity, EntityDTO, EntityID> {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteItem(@PathVariable EntityID id){
-        // TODO Try - catch with HibernateException/SQLException?
         service.deleteInstance(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
