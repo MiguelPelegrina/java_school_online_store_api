@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Table(name = "book_parameters", schema = "public", catalog = "online_store")
 public class BookParameterEntity {
+    // TODO Use composite key instead of unique id, embeddable?
     @Id
     @Column(name = "id")
     @GeneratedValue

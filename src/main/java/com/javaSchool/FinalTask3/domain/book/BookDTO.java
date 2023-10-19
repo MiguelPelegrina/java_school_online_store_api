@@ -20,5 +20,5 @@ public class BookDTO {
     private BookParameterDTO parameters;
     private int stock;
     private boolean isActive;
-    private byte[] image;
+    private String image;
 }

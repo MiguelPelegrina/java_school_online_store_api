@@ -58,7 +58,7 @@ public class BookEntity {
     @JoinColumn(name = "genre", referencedColumnName = "name", nullable = false)
     private BookGenreEntity genre;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "parameters_id", referencedColumnName = "id", nullable = false)
     private BookParameterEntity parameters;
 
@@ -70,6 +70,5 @@ public class BookEntity {
 
     @Column(name = "image")
     @Lob
-    // TODO Not sure if right
-    private byte[] image;
+    private String image;
 }
