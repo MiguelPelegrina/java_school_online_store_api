@@ -42,7 +42,7 @@ public class UserEntity {
     @Column(name = "email_address", nullable = false, length = 45, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 45)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "is_active", nullable = false)
@@ -51,9 +51,10 @@ public class UserEntity {
     @Column(name = "phone_number", nullable = false, length = 45)
     private String phoneNumber;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY)
     private UserAddressEntity address;
 
-    @OneToMany(mappedBy = "user")
+    // TODO Not sure if right
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private Set<UserRoleEntity> roles;
 }

@@ -20,6 +20,7 @@ import java.io.Serializable;
 @Embeddable
 @RequiredArgsConstructor
 public class OrderBookId implements Serializable {
+    // TODO Not sure if right
     @Column(name = "order_id", nullable = false)
     private int orderId;
 
