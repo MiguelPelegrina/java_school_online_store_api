@@ -11,8 +11,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The {@code JwtUtil} class is a utility component responsible for managing JSON Web Tokens (JWT) in a Spring
+ * application. JWTs are used for user authentication and authorization within the application.
+ */
 @Component
 public class JwtUtil {
+    // Fields
     private final String secret_key = "mysecretkey";
     private long accessTokenValidity = 60*60*1000;
 
@@ -21,10 +26,18 @@ public class JwtUtil {
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
+    /**
+     * Default constructor.
+     */
     public JwtUtil(){
         this.jwtParser = Jwts.parser().setSigningKey(secret_key);
     }
 
+    /**
+     * Creates a JWT token for a user.
+     * @param user The user entity for which the token is created.
+     * @return A JWT token as a string.
+     */
     public String createToken(UserEntity user) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
         claims.put("name",user.getName());
@@ -38,10 +51,21 @@ public class JwtUtil {
                 .compact();
     }
 
+    /**
+     * Parses the claims from a JWT token.
+     * @param token The JWT token as a string.
+     * @return Claims extracted from the token.
+     */
     private Claims parseJwtClaims(String token) {
         return jwtParser.parseClaimsJws(token).getBody();
     }
 
+    /**
+     * Resolves and extracts JWT claims from an HTTP request.
+     * @param req The HTTP request from which the JWT is extracted.
+     * @return JWT claims as extracted from the token.
+     * @throws AuthenticationException If an exception occurs while resolving and parsing the token.
+     */
     public Claims resolveClaims(HttpServletRequest req) {
         try {
             String token = resolveToken(req);
@@ -58,27 +82,45 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * Resolves and extracts a JWT token from an HTTP request.
+     * @param request The HTTP request.
+     * @return The JWT token as a string or null if not found.
+     */
     public String resolveToken(HttpServletRequest request) {
-
         String bearerToken = request.getHeader(TOKEN_HEADER);
+
         if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
             return bearerToken.substring(TOKEN_PREFIX.length());
         }
+
         return null;
     }
 
+    /**
+     * Validates the expiration time of JWT claims.
+     * @param claims The JWT claims to be validated.
+     * @return True if the JWT is not expired, false otherwise.
+     * @throws AuthenticationException - If an exception occurs during validation.
+     */
     public boolean validateClaims(Claims claims) throws AuthenticationException {
-        try {
-            return claims.getExpiration().after(new Date());
-        } catch (Exception e) {
-            throw e;
-        }
+        return claims.getExpiration().after(new Date());
     }
 
+    /**
+     * Retrieves the email from JWT claims.
+     * @param claims The JWT claims from which to extract the email.
+     * @return The email address stored in the JWT claims.
+     */
     public String getEmail(Claims claims) {
         return claims.getSubject();
     }
 
+    /**
+     * Retrieves the roles from JWT claims.
+     * @param claims The JWT claims from which to extract the roles.
+     * @return A list of role names stored in the JWT claims.
+     */
     private List<String> getRoles(Claims claims) {
         return (List<String>) claims.get("roles");
     }

@@ -2,6 +2,14 @@ package com.javaSchool.FinalTask3.utils;
 
 import java.util.List;
 
+/**
+ * The {@code AbstractService} interface defines common service methods for managing instances of an entity. It is designed
+ * to handle various HTTP request operations, such as GET, POST, and DELETE, for interacting with entity instances in the
+ * application's data source.
+ * @param <Entity>    The entity type that this service manages.
+ * @param <EntityDTO> The Data Transfer Object (DTO) representing the entity.
+ * @param <EntityID>  The type used as the unique identifier for entity instances.
+ */
 public interface AbstractService<Entity, EntityDTO, EntityID> {
     /**
      * Handles the GET request. Obtains all instances of the entity from the database and returns them as a collection

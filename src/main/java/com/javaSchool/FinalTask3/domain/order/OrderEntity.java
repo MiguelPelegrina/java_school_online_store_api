@@ -1,10 +1,10 @@
 package com.javaSchool.FinalTask3.domain.order;
 
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
-import com.javaSchool.FinalTask3.domain.deliveryMethod.DeliveryMethodEntity;
-import com.javaSchool.FinalTask3.domain.orderStatus.OrderStatusEntity;
-import com.javaSchool.FinalTask3.domain.paymentMethod.PaymentMethodEntity;
-import com.javaSchool.FinalTask3.domain.paymentStatus.PaymentStatusEntity;
+import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodEntity;
+import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusEntity;
+import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodEntity;
+import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

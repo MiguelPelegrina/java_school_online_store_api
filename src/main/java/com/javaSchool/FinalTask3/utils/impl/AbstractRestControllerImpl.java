@@ -17,9 +17,10 @@ import java.util.List;
 // TODO Try to add something that guaranties that the service is never null, if possible.
 
 /**
- * Parent controller responsible for the interaction between service and user. Obtains data from the services and
- * returns a {@link ResponseEntity} that contains the Data Transfer Object (DTO) of the entity and the status of the
- * operation. Used for entities that only have one attribute and therefore can't be updated.
+ * The {@code AbstractRestController} class is a parent controller responsible for the interaction between service and
+ * user. Obtains data from the services and returns a {@link ResponseEntity} that contains the Data Transfer Object
+ * (DTO) of the entity and the status of the operation. Used for entities that only have one attribute and therefore
+ * can't be updated.
  * @param <Entity> Entity instance that will be managed.
  * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
  * @param <EntityID> Identifier of the entity instance.

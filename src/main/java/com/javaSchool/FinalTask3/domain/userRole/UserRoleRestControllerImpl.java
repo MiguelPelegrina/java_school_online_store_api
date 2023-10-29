@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.userRole;
 
-import com.javaSchool.FinalTask3.domain.userAddress.UserAddressDTO;
-import com.javaSchool.FinalTask3.domain.userAddress.UserAddressEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressDTO;
+import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;

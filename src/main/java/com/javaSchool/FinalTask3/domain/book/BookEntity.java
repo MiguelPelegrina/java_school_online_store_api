@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.book;
 
-import com.javaSchool.FinalTask3.domain.bookGenre.BookGenreEntity;
-import com.javaSchool.FinalTask3.domain.bookParameter.BookParameterEntity;
+import com.javaSchool.FinalTask3.domain.book.genre.BookGenreEntity;
+import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

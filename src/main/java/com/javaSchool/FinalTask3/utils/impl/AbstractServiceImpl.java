@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 // TODO Try to add something that guaranties that the modelMapper and the repository are never null, if possible.
 /**
- * Parent service responsible for the interaction between repositories and controller. Obtains data from the
- * repository and returns the instance(s) of the entity as Data Transfer Object(s) (DTO) to the related controller.
- * Used for entities that only have one attribute and therefore can't be updated.
+ * The {@code AbstractServiceImpl} is a parent service responsible for the interaction between repositories and controller.
+ * Obtains data from the repository and returns the instance(s) of the entity as Data Transfer Object(s) (DTO) to the
+ * related controller. Used for entities that only have one attribute and therefore can't be updated.
  * @param <Entity> Entity instance that will be managed.
  * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
  * @param <EntityID> Identifier of the entity instance.

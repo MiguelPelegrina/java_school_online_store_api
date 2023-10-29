@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.user;
 
-import com.javaSchool.FinalTask3.domain.userAddress.UserAddressEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressEntity;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

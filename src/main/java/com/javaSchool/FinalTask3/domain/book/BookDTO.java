@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.book;
 
-import com.javaSchool.FinalTask3.domain.bookGenre.BookGenreDTO;
-import com.javaSchool.FinalTask3.domain.bookParameter.BookParameterDTO;
+import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
+import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;

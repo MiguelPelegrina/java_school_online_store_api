@@ -16,13 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Arrays;
 
 // TODO Need to differentiate between:
 //  - not logged in users (unauthorized) --> GET with Book
@@ -32,14 +27,28 @@ import java.util.Arrays;
 //  Not sure how much of this applies to backend and how much to frontend
 // TODO Don't use deprecated methods?
 
+/**
+ * The {@code WebConfig} class is responsible for configuring various aspects of the application's web security. It defines
+ * security-related beans and settings, including user authentication, authorization, CORS (Cross-Origin Resource Sharing)
+ * configuration, and JWT (JSON Web Token) authorization filters.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebConfig {
+    // Fields
     private final CustomUserDetailsService userDetailsService;
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
+    /**
+     * Configures and provides an {@link AuthenticationManager} that is used for user authentication and authorization.
+     * It specifies the user details service and password encoder for managing user authentication.
+     * @param http            The {@link HttpSecurity} configuration.
+     * @param passwordEncoder The password encoder for secure authentication.
+     * @return An {@link AuthenticationManager} configured for the application.
+     * @throws Exception If an exception occurs during configuration.
+     */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
             throws Exception {
@@ -48,6 +57,11 @@ public class WebConfig {
         return authenticationManagerBuilder.build();
     }
 
+    /**
+     * Provides a password encoder bean, specifically a {@link BCryptPasswordEncoder}, for securely encoding and
+     * verifying passwords.
+     * @return A {@link PasswordEncoder} bean.
+     */
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -64,6 +78,14 @@ public class WebConfig {
         return source;
     }*/
 
+    /**
+     * Configures the security filter chain for the application. It specifies various security settings, including CORS,
+     * (Cross-Origin Resource Sharing), CSRF (Cross-Site Request Forgery) protection, URL authorization, and JWT
+     * authorization filter.
+     * @param http The {@link HttpSecurity} configuration.
+     * @return A {@link SecurityFilterChain} for the application's security.
+     * @throws Exception If an exception occurs during configuration.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // TODO Try some way that is not deprecated?
@@ -83,6 +105,11 @@ public class WebConfig {
                 .build();
     }
 
+    /**
+     * Configures CORS settings for the application, allowing cross-origin requests from the specified origin
+     * (http://localhost:4200).
+     * @return A {@link WebMvcConfigurer} for configuring CORS settings.
+     */
     @Bean
     public WebMvcConfigurer corsConfig() {
         // TODO Not sure if right, might be missing something

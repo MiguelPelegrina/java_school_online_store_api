@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.user;
 
-import com.javaSchool.FinalTask3.domain.userAddress.UserAddressDTO;
+import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressDTO;
 import lombok.Data;
 
 import java.time.LocalDate;

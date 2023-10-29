@@ -5,6 +5,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * The {@code AbstractRestController} interface serves as a contract for defining common RESTful operations for managing
+ * instances of an entity. These operations include retrieving all instances, fetching details of a specific instance,
+ * creating new instances, updating existing instances, and deleting instances.
+ * @param <Entity>    The entity type for which RESTful operations are defined.
+ * @param <EntityDTO> The Data Transfer Object (DTO) representing the entity.
+ * @param <EntityID>  The identifier type used for entity instances.
+ */
 public interface AbstractRestController<Entity, EntityDTO, EntityID> {
     /**
      * Submits a GET request to obtain all instance of the entity from the database.
