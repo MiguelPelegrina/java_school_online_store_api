@@ -5,6 +5,7 @@ import com.javaSchool.FinalTask3.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * configuration, and JWT (JSON Web Token) authorization filters.
  */
 @Configuration
+@EnableSpringDataWebSupport
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebConfig {
