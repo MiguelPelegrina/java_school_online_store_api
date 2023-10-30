@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The {@code AbstractRestController} interface serves as a contract for defining common RESTful operations for managing
@@ -19,7 +20,14 @@ public interface AbstractRestController<Entity, EntityDTO, EntityID> {
      * @return Returns a ResponseEntity with all the DTOs of the instances and the status of the GET request.
      * If successful, the code is 200.
      */
-    ResponseEntity<List<EntityDTO>> getAllInstances();
+    ResponseEntity<List<EntityDTO>> getAllInstances(
+            /*@RequestParam("id") Optional<EntityID> id,
+            @RequestParam("name") Optional<String> name,
+            @RequestParam("active") Optional<Boolean> active,
+            @RequestParam("sort") Optional<String> sort,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size*/
+    );
 
     /**
      * Submits a GET request to get details of a specified instance of the entity from the database.

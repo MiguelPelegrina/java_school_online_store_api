@@ -6,11 +6,16 @@ import com.javaSchool.FinalTask3.utils.StringValues;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 // TODO Try to add something that guaranties that the modelMapper and the repository are never null, if possible.
@@ -26,13 +31,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public abstract class AbstractServiceImpl<Entity, EntityDTO, EntityID> implements AbstractService<Entity, EntityDTO, EntityID> {
+public abstract class AbstractServiceImpl<Entity, EntityDTO, EntityID>
+        implements AbstractService<Entity, EntityDTO, EntityID> {
     protected final JpaRepository<Entity, EntityID> repository;
 
     protected final ModelMapper modelMapper;
 
     @Override
-    public List<EntityDTO> getAllInstances() {
+    public List<EntityDTO> getAllInstances(
+                /*@RequestParam("id") Optional<EntityID> id,
+                @RequestParam("name") Optional<String> name,
+                @RequestParam("active") Optional<Boolean> active,
+                @RequestParam("sort") Optional<String> sort,
+                @RequestParam("page") Optional<Integer> page,
+                @RequestParam("size") Optional<Integer> size*/
+            ) {
+
         return repository.findAll()
                 .stream()
                 .map(entity ->

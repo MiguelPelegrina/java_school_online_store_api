@@ -97,6 +97,21 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<scope>provided</scope>
+			<classifier>jakarta</classifier>
+			<version>5.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+			<classifier>jakarta</classifier>
+			<version>5.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

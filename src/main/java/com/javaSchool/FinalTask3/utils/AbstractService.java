@@ -1,6 +1,9 @@
 package com.javaSchool.FinalTask3.utils;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The {@code AbstractService} interface defines common service methods for managing instances of an entity. It is designed
@@ -16,7 +19,14 @@ public interface AbstractService<Entity, EntityDTO, EntityID> {
      * of DTOs.
      * @return Returns a {@link List} of all DTOs.
      */
-    List<EntityDTO> getAllInstances();
+    List<EntityDTO> getAllInstances(
+            /*@RequestParam("id") Optional<EntityID> id,
+            @RequestParam("name") Optional<String> name,
+            @RequestParam("active") Optional<Boolean> active,
+            @RequestParam("sort") Optional<String> sort,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size*/
+    );
 
     /**
      * Handles the GET request with a specified ID. Obtains the instance of the entity with the specified ID from the

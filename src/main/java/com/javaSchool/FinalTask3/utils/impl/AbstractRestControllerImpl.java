@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 // TODO Try to add something that guaranties that the service is never null, if possible.
 
@@ -40,8 +41,17 @@ public abstract class AbstractRestControllerImpl<Entity, EntityDTO, EntityID>
     @GetMapping
     @Operation(summary = "Get all instances of an entity")
     @Override
-    public ResponseEntity<List<EntityDTO>> getAllInstances(){
-        return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
+    public ResponseEntity<List<EntityDTO>> getAllInstances(
+            /*@RequestParam("id") Optional<EntityID> id,
+           @RequestParam("name") Optional<String> name,
+           @RequestParam("active") Optional<Boolean> active,
+           @RequestParam("sort") Optional<String> sort,
+           @RequestParam("page") Optional<Integer> page,
+           @RequestParam("size") Optional<Integer> size*/
+    ){
+        return new ResponseEntity<>(service.getAllInstances(
+                //id, name, active, sort, page, size
+        ), HttpStatus.OK);
     }
 
     @ApiResponses(value = {

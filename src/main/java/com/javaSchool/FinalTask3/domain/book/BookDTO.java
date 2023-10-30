@@ -16,7 +16,6 @@ public class BookDTO {
     private BigDecimal price;
     private BookGenreDTO genre;
     private String isbn;
-    // TODO Not sure if right
     private BookParameterDTO parameters;
     private int stock;
     private boolean isActive;
