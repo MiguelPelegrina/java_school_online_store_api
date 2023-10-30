@@ -68,19 +68,16 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
         // Variables
         final BookRepository bookRepository = (BookRepository) repository;
         final QBookEntity qBook = QBookEntity.bookEntity;
-        final BooleanBuilder where = new BooleanBuilder();
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         // Check which parameters are present
-        // TODO IMPORTANT Finds all, not only active ones
-        active.ifPresent(aBoolean -> {
-            System.out.println(aBoolean);
-            where.and(qBook.isActive.eq(aBoolean));
-        });
-        where.and(qBook.title.containsIgnoreCase(name));
-        where.or(qBook.parameters.author.containsIgnoreCase(name));
+        active.ifPresent(aBoolean -> queryBuilder.and(qBook.isActive.eq(aBoolean)));
+        queryBuilder.and(qBook.title.containsIgnoreCase(name));
+        // TODO Works like ('active' AND 'name') OR ('name') instead of 'active' AND ('title' OR 'author')
+        // queryBuilder.or(qBook.parameters.author.containsIgnoreCase(name));
 
         // Find the data in the repository
-        Page<BookEntity> pageEntities = bookRepository.findAll(where, pageRequest);
+        Page<BookEntity> pageEntities = bookRepository.findAll(queryBuilder, pageRequest);
 
         // Convert 'bookList' to 'books' using DTO mapping
         // Add the converted books to the 'books' list
