@@ -4,15 +4,15 @@ import com.javaSchool.FinalTask3.domain.book.BookDTO;
 import com.javaSchool.FinalTask3.domain.book.BookEntity;
 import com.javaSchool.FinalTask3.domain.book.BookRepository;
 import com.javaSchool.FinalTask3.domain.book.QBookEntity;
-import com.javaSchool.FinalTask3.domain.book.impl.BookRestControllerImpl;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
+import org.apache.commons.collections4.IterableUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,14 +49,17 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
     }
 
     // TODO
+    //  Using a RequestBody
     //  Add paging and sorting
     //  Abstractable?
-    //  Differentiate between filtering with AND (requires advanced filter in FE) and OR (searching by title, or
+    //  Scalable by
+    //  - Differentiating between filtering with AND (requires advanced filter in FE) and OR (searching by title, or
     //  author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
+    //  - Adding a Array of String for the sorting
     public List<BookDTO> getAllInstances(
                 @RequestParam(name = "name", defaultValue = "") String name,
                 @RequestParam("active") Optional<Boolean> active,
-                @RequestParam("sort") Optional<String> sort,
+                @RequestParam(value = "sort", defaultValue = "desc") String sort,
                 @RequestParam("page") Optional<Integer> page,
                 @RequestParam("size") Optional<Integer> size
     ) {
@@ -64,14 +67,22 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
         final BookRepository bookRepository = (BookRepository) repository;
         final QBookEntity qBook = QBookEntity.bookEntity;
         final BooleanBuilder where = new BooleanBuilder();
+        List<BookEntity> bookList;
 
         // Check which parameters are present
+        // TODO FIX Finds all, not only active ones
         active.ifPresent(aBoolean -> where.and(qBook.isActive.eq(aBoolean)));
         where.and(qBook.title.containsIgnoreCase(name));
         where.or(qBook.parameters.author.containsIgnoreCase(name));
 
         // Find the data in the repository
-        List<BookEntity> bookList = bookRepository.findAll(where);
+        // TODO Not scalable
+        //  - Does not allow several sortings
+        if(sort.equalsIgnoreCase("ASC")){
+            bookList = IterableUtils.toList(bookRepository.findAll(where, Sort.by(Sort.Direction.ASC, "title")));
+        } else {
+            bookList = IterableUtils.toList(bookRepository.findAll(where, Sort.by(Sort.Direction.DESC, "title")));
+        }
 
         // Convert 'bookList' to 'books' using DTO mapping
         // Add the converted books to the 'books' list

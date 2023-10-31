@@ -33,11 +33,14 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntit
     public ResponseEntity<List<BookDTO>> getAllInstances(
             @RequestParam(name = "name", defaultValue = "") String name,
             @RequestParam(name = "active") Optional<Boolean> active,
-            @RequestParam(name = "sort") Optional<String> sort,
+            @RequestParam(name = "sort", defaultValue = "desc") String sort,
             @RequestParam(name = "page") Optional<Integer> page,
             @RequestParam(name = "size") Optional<Integer> size
     ) {
         BookServiceImpl bookService = (BookServiceImpl) this.service;
+
+        // TODO Create pageable
+
 
         return ResponseEntity.ok(bookService.getAllInstances(name, active, sort, page, size));
     }

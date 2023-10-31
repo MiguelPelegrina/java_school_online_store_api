@@ -15,9 +15,5 @@ import java.util.List;
  */
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, Integer>, QuerydslPredicateExecutor<BookEntity> {
-    // TODO Not sure if right, should be abstracted into several instances
-    //  - Entities that are active
-    //  - Entities that have a name
-    //  - Entities that have a title
     List<BookEntity> findAll(Predicate predicate);
 }
