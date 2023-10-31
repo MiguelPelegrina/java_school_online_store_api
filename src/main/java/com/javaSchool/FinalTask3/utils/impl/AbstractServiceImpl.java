@@ -38,15 +38,7 @@ public abstract class AbstractServiceImpl<Entity, EntityDTO, EntityID>
     protected final ModelMapper modelMapper;
 
     @Override
-    public List<EntityDTO> getAllInstances(
-                /*@RequestParam("id") Optional<EntityID> id,
-                @RequestParam("name") Optional<String> name,
-                @RequestParam("active") Optional<Boolean> active,
-                @RequestParam("sort") Optional<String> sort,
-                @RequestParam("page") Optional<Integer> page,
-                @RequestParam("size") Optional<Integer> size*/
-            ) {
-
+    public List<EntityDTO> getAllInstances() {
         return repository.findAll()
                 .stream()
                 .map(entity ->

@@ -62,14 +62,7 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
     //  - Differentiating between filtering with AND (requires advanced filter in FE) and OR (searching by title, or
     //  author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
     //  - Adding a Array of String for the sorting
-    public List<BookDTO> getAllInstances(
-            // TODO Optional or default values?
-                @RequestParam("name") String name,
-                @RequestParam("active") Optional<Boolean> active,
-                @RequestParam("sortType") String sortType,
-                @RequestParam("sortProperty") String sortProperty,
-                @RequestParam("page") Integer page,
-                @RequestParam("size") Integer size
+    public List<BookDTO> getAllInstances(String name, Optional<Boolean> active, PageRequest pageRequest
     ) {
         // Variables
         final BookRepository bookRepository = (BookRepository) repository;
@@ -83,13 +76,8 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
         where.and(qBook.title.containsIgnoreCase(name));
         where.or(qBook.parameters.author.containsIgnoreCase(name));
 
-        // TODO Not scalable
-        //  - Does not allow sorting more than one time
-        // Check the sorting direction
-        Sort.Direction direction = ASC.toString().equalsIgnoreCase(sortType)? ASC : DESC;
-
         // Find the data in the repository
-        bookList = IterableUtils.toList(bookRepository.findAll(where, PageRequest.of(page, size, direction, sortProperty)));
+        bookList = IterableUtils.toList(bookRepository.findAll(where, pageRequest));
 
         // Convert 'bookList' to 'books' using DTO mapping
         // Add the converted books to the 'books' list
