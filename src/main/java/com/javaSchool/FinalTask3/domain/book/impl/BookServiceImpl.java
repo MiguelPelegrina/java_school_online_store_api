@@ -50,7 +50,7 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
 
     // TODO
     //  Add paging and sorting
-    //  Try to abstract this
+    //  Abstractable?
     //  Differentiate between filtering with AND (requires advanced filter in FE) and OR (searching by title, or
     //  author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
     public List<BookDTO> getAllInstances(
@@ -68,6 +68,7 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
         // Check which parameters are present
         active.ifPresent(aBoolean -> where.and(qBook.isActive.eq(aBoolean)));
         where.and(qBook.title.containsIgnoreCase(name));
+        where.or(qBook.parameters.author.containsIgnoreCase(name));
 
         // Find the data in the repository
         List<BookEntity> bookList = bookRepository.findAll(where);

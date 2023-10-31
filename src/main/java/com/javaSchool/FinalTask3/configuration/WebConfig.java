@@ -40,7 +40,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig {
     // Fields
     private final CustomUserDetailsService userDetailsService;
-
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     /**
