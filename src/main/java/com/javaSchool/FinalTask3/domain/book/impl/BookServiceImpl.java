@@ -72,8 +72,14 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
 
         // Check which parameters are present and build a query
         active.ifPresent(aBoolean -> queryBuilder.and(qBook.isActive.eq(aBoolean)));
-        queryBuilder.and(qBook.title.containsIgnoreCase(name).or(qBook.parameters.author.containsIgnoreCase(name)));
-        genre.ifPresent(s -> queryBuilder.and(qBook.genre.name.containsIgnoreCase(s)));
+        if(!name.isEmpty()){
+            queryBuilder.and(qBook.title.containsIgnoreCase(name).or(qBook.parameters.author.containsIgnoreCase(name)));
+        }
+        genre.ifPresent(s -> {
+            if (!s.isEmpty()) {
+                queryBuilder.and(qBook.genre.name.containsIgnoreCase(s));
+            }
+        });
 
         // Find the data in the repository
         Page<BookEntity> pageEntities = bookRepository.findAll(queryBuilder, pageRequest);
