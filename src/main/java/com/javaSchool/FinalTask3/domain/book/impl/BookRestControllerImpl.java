@@ -41,6 +41,7 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntit
     public ResponseEntity<Page<BookDTO>> getAllInstances(
             @RequestParam(name = "name", defaultValue = "") String name,
             @RequestParam("active") Optional<Boolean> active,
+            @RequestParam("genre") Optional<String> genre,
             @RequestParam("sortType") String sortType,
             @RequestParam(value = "sortProperty", defaultValue = "title") String sortProperty,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -54,6 +55,6 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntit
 
         PageRequest pageRequest = PageRequest.of(page, size, direction, sortProperty);
 
-        return ResponseEntity.ok(bookService.getAllInstances(name, active, pageRequest));
+        return ResponseEntity.ok(bookService.getAllInstances(name, active, genre, pageRequest));
     }
 }

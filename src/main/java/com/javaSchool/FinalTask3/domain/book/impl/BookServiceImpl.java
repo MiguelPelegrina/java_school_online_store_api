@@ -63,18 +63,17 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
     //  - Differentiating between filtering with AND (requires to be advanced filter in FE) and OR (searching by title,
     //  or author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
     //  - Adding an Array of String for the sorting
-    public Page<BookDTO> getAllInstances(String name, Optional<Boolean> active, PageRequest pageRequest
+    public Page<BookDTO> getAllInstances(String name, Optional<Boolean> active, Optional<String> genre, PageRequest pageRequest
     ) {
         // Variables
         final BookRepository bookRepository = (BookRepository) repository;
         final QBookEntity qBook = QBookEntity.bookEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
-        // Check which parameters are present
+        // Check which parameters are present and build a query
         active.ifPresent(aBoolean -> queryBuilder.and(qBook.isActive.eq(aBoolean)));
-        queryBuilder.and(qBook.title.containsIgnoreCase(name));
-        // TODO Works like ('active' AND 'name') OR ('name') instead of 'active' AND ('title' OR 'author')
-        // queryBuilder.or(qBook.parameters.author.containsIgnoreCase(name));
+        queryBuilder.and(qBook.title.containsIgnoreCase(name).or(qBook.parameters.author.containsIgnoreCase(name)));
+        genre.ifPresent(s -> queryBuilder.and(qBook.genre.name.containsIgnoreCase(s)));
 
         // Find the data in the repository
         Page<BookEntity> pageEntities = bookRepository.findAll(queryBuilder, pageRequest);
