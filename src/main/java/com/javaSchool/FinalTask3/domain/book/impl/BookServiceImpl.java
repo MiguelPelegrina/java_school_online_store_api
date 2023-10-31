@@ -8,6 +8,8 @@ import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.apache.commons.collections4.IterableUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 /**
  * Service class responsible for the interaction between the {@link BookRepository} and the
@@ -49,19 +54,22 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
     }
 
     // TODO
-    //  Using a RequestBody
-    //  Add paging and sorting
-    //  Abstractable?
+    //  Add paging
+    //  Use RequestBody and DTOs
+
+    //  Abstract?
     //  Scalable by
     //  - Differentiating between filtering with AND (requires advanced filter in FE) and OR (searching by title, or
     //  author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
     //  - Adding a Array of String for the sorting
     public List<BookDTO> getAllInstances(
-                @RequestParam(name = "name", defaultValue = "") String name,
+            // TODO Optional or default values?
+                @RequestParam("name") String name,
                 @RequestParam("active") Optional<Boolean> active,
-                @RequestParam(value = "sort", defaultValue = "desc") String sort,
-                @RequestParam("page") Optional<Integer> page,
-                @RequestParam("size") Optional<Integer> size
+                @RequestParam("sortType") String sortType,
+                @RequestParam("sortProperty") String sortProperty,
+                @RequestParam("page") Integer page,
+                @RequestParam("size") Integer size
     ) {
         // Variables
         final BookRepository bookRepository = (BookRepository) repository;
@@ -70,19 +78,18 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
         List<BookEntity> bookList;
 
         // Check which parameters are present
-        // TODO FIX Finds all, not only active ones
+        // TODO IMPORTANT Finds all, not only active ones
         active.ifPresent(aBoolean -> where.and(qBook.isActive.eq(aBoolean)));
         where.and(qBook.title.containsIgnoreCase(name));
         where.or(qBook.parameters.author.containsIgnoreCase(name));
 
-        // Find the data in the repository
         // TODO Not scalable
-        //  - Does not allow several sortings
-        if(sort.equalsIgnoreCase("ASC")){
-            bookList = IterableUtils.toList(bookRepository.findAll(where, Sort.by(Sort.Direction.ASC, "title")));
-        } else {
-            bookList = IterableUtils.toList(bookRepository.findAll(where, Sort.by(Sort.Direction.DESC, "title")));
-        }
+        //  - Does not allow sorting more than one time
+        // Check the sorting direction
+        Sort.Direction direction = ASC.toString().equalsIgnoreCase(sortType)? ASC : DESC;
+
+        // Find the data in the repository
+        bookList = IterableUtils.toList(bookRepository.findAll(where, PageRequest.of(page, size, direction, sortProperty)));
 
         // Convert 'bookList' to 'books' using DTO mapping
         // Add the converted books to the 'books' list

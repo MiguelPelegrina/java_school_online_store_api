@@ -32,16 +32,17 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntit
     @GetMapping("/search")
     public ResponseEntity<List<BookDTO>> getAllInstances(
             @RequestParam(name = "name", defaultValue = "") String name,
-            @RequestParam(name = "active") Optional<Boolean> active,
-            @RequestParam(name = "sort", defaultValue = "desc") String sort,
-            @RequestParam(name = "page") Optional<Integer> page,
-            @RequestParam(name = "size") Optional<Integer> size
+            @RequestParam("active") Optional<Boolean> active,
+            @RequestParam("sortType") String sortType,
+            @RequestParam(value = "sortProperty", defaultValue = "title") String sortProperty,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") Integer size
     ) {
         BookServiceImpl bookService = (BookServiceImpl) this.service;
 
         // TODO Create pageable
 
 
-        return ResponseEntity.ok(bookService.getAllInstances(name, active, sort, page, size));
+        return ResponseEntity.ok(bookService.getAllInstances(name, active, sortType, sortProperty, page, size));
     }
 }
