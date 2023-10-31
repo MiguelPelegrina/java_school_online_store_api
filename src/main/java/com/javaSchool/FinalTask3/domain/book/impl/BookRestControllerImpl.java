@@ -36,7 +36,7 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntit
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BookDTO>> getAllInstances(
+    public ResponseEntity<Page<BookDTO>> getAllInstances(
             @RequestParam(name = "name", defaultValue = "") String name,
             @RequestParam("active") Optional<Boolean> active,
             @RequestParam("sortType") String sortType,
@@ -48,6 +48,7 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntit
 
         // TODO Not scalable
         //  - Does not allow sorting more than one time
+        // TODO Not sure if this should be here or in the service
         // Check the sorting direction
         Sort.Direction direction = ASC.toString().equalsIgnoreCase(sortType)? ASC : DESC;
 

@@ -8,6 +8,7 @@ import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.apache.commons.collections4.IterableUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -59,28 +60,32 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
 
     //  Abstract?
     //  Scalable by
-    //  - Differentiating between filtering with AND (requires advanced filter in FE) and OR (searching by title, or
-    //  author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
-    //  - Adding a Array of String for the sorting
-    public List<BookDTO> getAllInstances(String name, Optional<Boolean> active, PageRequest pageRequest
+    //  - Differentiating between filtering with AND (requires to be advanced filter in FE) and OR (searching by title,
+    //  or author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
+    //  - Adding an Array of String for the sorting
+    public Page<BookDTO> getAllInstances(String name, Optional<Boolean> active, PageRequest pageRequest
     ) {
         // Variables
         final BookRepository bookRepository = (BookRepository) repository;
         final QBookEntity qBook = QBookEntity.bookEntity;
         final BooleanBuilder where = new BooleanBuilder();
-        List<BookEntity> bookList;
 
         // Check which parameters are present
         // TODO IMPORTANT Finds all, not only active ones
-        active.ifPresent(aBoolean -> where.and(qBook.isActive.eq(aBoolean)));
+        active.ifPresent(aBoolean -> {
+            System.out.println(aBoolean);
+            where.and(qBook.isActive.eq(aBoolean));
+        });
         where.and(qBook.title.containsIgnoreCase(name));
         where.or(qBook.parameters.author.containsIgnoreCase(name));
 
         // Find the data in the repository
-        bookList = IterableUtils.toList(bookRepository.findAll(where, pageRequest));
+        Page<BookEntity> pageEntities = bookRepository.findAll(where, pageRequest);
 
         // Convert 'bookList' to 'books' using DTO mapping
         // Add the converted books to the 'books' list
-        return bookList.stream().map(book -> modelMapper.map(book, this.getDTOClass())).collect(Collectors.toList());
+        return pageEntities.map(book ->
+            modelMapper.map(book, this.getDTOClass())
+        );
     }
 }
