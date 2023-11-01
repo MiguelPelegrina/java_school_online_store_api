@@ -49,12 +49,14 @@ public class CountryServiceImpl extends AbstractServiceImpl<CountryEntity, Count
     }
 
     public List<CountryDTO> getAllInstances(Optional<Boolean> active){
-       final CountryRepository countryRepository = (CountryRepository) this.repository;
-       final QCountryEntity qCountry = QCountryEntity.countryEntity;
-       final BooleanBuilder queryBuilder = new BooleanBuilder();
+        // Variables
+        final CountryRepository countryRepository = (CountryRepository) this.repository;
+        final QCountryEntity qCountry = QCountryEntity.countryEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
 
-       active.ifPresent(aBoolean -> queryBuilder.and(qCountry.isActive.eq(aBoolean)));
+        // Check which parameters are present and build a query
+        active.ifPresent(aBoolean -> queryBuilder.and(qCountry.isActive.eq(aBoolean)));
 
-       return countryRepository.findAll(queryBuilder).stream().map(country -> modelMapper.map(country, getDTOClass())).collect(Collectors.toList());
+        return countryRepository.findAll(queryBuilder).stream().map(country -> modelMapper.map(country, getDTOClass())).collect(Collectors.toList());
     }
 }

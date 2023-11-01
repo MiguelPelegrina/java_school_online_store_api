@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
@@ -35,8 +34,7 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntit
         super(service);
     }
 
-
-    // TODO Not scalable, does not allow sorting more than one time
+    // TODO Not scalable, does not allow sorting more than one time or filtering more than one genre
     @GetMapping("/search")
     public ResponseEntity<Page<BookDTO>> getAllInstances(
             @RequestParam(name = "name", defaultValue = "") String name,

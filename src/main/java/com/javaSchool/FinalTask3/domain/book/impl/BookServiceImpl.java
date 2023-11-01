@@ -6,22 +6,12 @@ import com.javaSchool.FinalTask3.domain.book.BookRepository;
 import com.javaSchool.FinalTask3.domain.book.QBookEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
-import org.apache.commons.collections4.IterableUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.springframework.data.domain.Sort.Direction.ASC;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 /**
  * Service class responsible for the interaction between the {@link BookRepository} and the
@@ -55,18 +45,18 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
     }
 
     // TODO
-    //  Add paging
     //  Use RequestBody and DTOs
 
     //  Abstract?
     //  Scalable by
     //  - Differentiating between filtering with AND (requires to be advanced filter in FE) and OR (searching by title,
     //  or author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
-    //  - Adding an Array of String for the sorting
+    //  - Adding an Array of String for sorting
+    //  - Adding an Array of Genres for filtering
     public Page<BookDTO> getAllInstances(String name, Optional<Boolean> active, Optional<String> genre, PageRequest pageRequest
     ) {
         // Variables
-        final BookRepository bookRepository = (BookRepository) repository;
+        final BookRepository bookRepository = (BookRepository) this.repository;
         final QBookEntity qBook = QBookEntity.bookEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 

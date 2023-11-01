@@ -28,13 +28,13 @@ public class CityRestControllerImpl extends AbstractRestControllerImpl<CityEntit
 
     @GetMapping("/search")
     public ResponseEntity<List<CityDTO>> getAllInstances(
-            @RequestParam(value = "name", defaultValue = "") String name,
+            @RequestParam(name = "country_name", defaultValue = "") String countryName,
             @RequestParam("active") Optional<Boolean> active
     ){
         CityServiceImpl cityService = (CityServiceImpl) this.service;
 
         // TODO Check if active
 
-        return ResponseEntity.ok(cityService.getAllInstances(name, active));
+        return ResponseEntity.ok(cityService.getAllInstances(countryName, active));
     }
 }

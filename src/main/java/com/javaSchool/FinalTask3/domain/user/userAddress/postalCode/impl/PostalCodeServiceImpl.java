@@ -1,9 +1,18 @@
-package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode;
+package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.impl;
 
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeDTO;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeRepository;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.QPostalCodeEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
+import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service class responsible for the interaction between the {@link PostalCodeRepository} and the {@link PostalCodeRestControllerImpl}.
@@ -34,5 +43,20 @@ public class PostalCodeServiceImpl extends AbstractServiceImpl<PostalCodeEntity,
     @Override
     protected String getEntityId(PostalCodeEntity instance) {
         return instance.getCode();
+    }
+
+    public List<PostalCodeDTO> getAllInstances(String cityName, Optional<Boolean> active){
+        // Variables
+        final PostalCodeRepository postalCodeRepository = (PostalCodeRepository) this.repository;
+        final QPostalCodeEntity qPostalCode = QPostalCodeEntity.postalCodeEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+        // Check which parameters are present and build a query
+        active.ifPresent(aBoolean -> queryBuilder.and(qPostalCode.isActive.eq(aBoolean)));
+        if(!cityName.isEmpty()){
+            queryBuilder.and(qPostalCode.city.name.containsIgnoreCase(cityName));
+        }
+
+        return postalCodeRepository.findAll(queryBuilder).stream().map(postalCode -> modelMapper.map(postalCode, getDTOClass())).collect(Collectors.toList());
     }
 }

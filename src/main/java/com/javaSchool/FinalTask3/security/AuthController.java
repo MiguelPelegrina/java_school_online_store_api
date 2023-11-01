@@ -38,6 +38,10 @@ public class AuthController {
             String email = loginRequestBodyDto.getEmail();
             UserEntity user = userRepository.findUserByEmail(email).orElseThrow();
 
+            if(!user.isActive()){
+                throw new RuntimeException("User is not active");
+            }
+
             // Check the password
             if(!passwordEncoder.matches(loginRequestBodyDto.getPassword(), user.getPassword())){
                 throw new RuntimeException("User password does not match");

@@ -67,7 +67,7 @@ public class CityServiceImpl extends AbstractServiceImpl<CityEntity, CityDTO, St
         return instance.getName();
     }
 
-    public List<CityDTO> getAllInstances(String name, Optional<Boolean> active) {
+    public List<CityDTO> getAllInstances(String countryName, Optional<Boolean> active) {
         // Variables
         final CityRepository cityRepository = (CityRepository) this.repository;
         final QCityEntity qCity = QCityEntity.cityEntity;
@@ -75,8 +75,8 @@ public class CityServiceImpl extends AbstractServiceImpl<CityEntity, CityDTO, St
 
         // Check which parameters are present and build a query
         active.ifPresent(aBoolean -> queryBuilder.and(qCity.isActive.eq(aBoolean)));
-        if(!name.isEmpty()){
-            queryBuilder.and(qCity.countryName.name.containsIgnoreCase(name));
+        if(!countryName.isEmpty()){
+            queryBuilder.and(qCity.countryName.name.containsIgnoreCase(countryName));
         }
 
         return cityRepository.findAll(queryBuilder).stream().map(city -> modelMapper.map(city, getDTOClass())).collect(Collectors.toList());

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * {@link UserAddressDTO} as returning object.
  */
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(path = "useraddresses")
+@RequestMapping(path = "user_addresses")
 @RestController
 public class UserAddressRestControllerImpl extends AbstractRestControllerImpl<UserAddressEntity, UserAddressDTO, Integer> {
     /**
