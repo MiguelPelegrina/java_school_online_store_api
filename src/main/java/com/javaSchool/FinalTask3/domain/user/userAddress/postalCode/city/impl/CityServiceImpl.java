@@ -1,11 +1,22 @@
-package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city;
+package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.impl;
 
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityDTO;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityRepository;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.QCityEntity;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryRepository;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.QCountryEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
+import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service class responsible for the interaction between the {@link CityRepository} and the
@@ -15,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
+@Secured("ROLE_ADMIN")
 public class CityServiceImpl extends AbstractServiceImpl<CityEntity, CityDTO, String> {
     // TODO Not sure if necessary
     private final CountryRepository countryRepository;
@@ -53,5 +65,20 @@ public class CityServiceImpl extends AbstractServiceImpl<CityEntity, CityDTO, St
     @Override
     protected String getEntityId(CityEntity instance) {
         return instance.getName();
+    }
+
+    public List<CityDTO> getAllInstances(String name, Optional<Boolean> active) {
+        // Variables
+        final CityRepository cityRepository = (CityRepository) this.repository;
+        final QCityEntity qCity = QCityEntity.cityEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+        // Check which parameters are present and build a query
+        active.ifPresent(aBoolean -> queryBuilder.and(qCity.isActive.eq(aBoolean)));
+        if(!name.isEmpty()){
+            queryBuilder.and(qCity.countryName.name.containsIgnoreCase(name));
+        }
+
+        return cityRepository.findAll(queryBuilder).stream().map(city -> modelMapper.map(city, getDTOClass())).collect(Collectors.toList());
     }
 }
