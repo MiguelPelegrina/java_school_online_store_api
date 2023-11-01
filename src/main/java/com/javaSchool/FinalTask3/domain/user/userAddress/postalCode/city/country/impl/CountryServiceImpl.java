@@ -1,9 +1,18 @@
-package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country;
+package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.impl;
 
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryDTO;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryRepository;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.QCountryEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
+import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 // TODO Not sure if I should try to implement the Spring transaction routing mentioned in
 //  https://vladmihalcea.com/read-write-read-only-transaction-routing-spring/
@@ -37,5 +46,15 @@ public class CountryServiceImpl extends AbstractServiceImpl<CountryEntity, Count
     @Override
     protected String getEntityId(CountryEntity instance) {
         return instance.getName();
+    }
+
+    public List<CountryDTO> getAllInstances(Optional<Boolean> active){
+       final CountryRepository countryRepository = (CountryRepository) this.repository;
+       final QCountryEntity qCountry = QCountryEntity.countryEntity;
+       final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+       active.ifPresent(aBoolean -> queryBuilder.and(qCountry.isActive.eq(aBoolean)));
+
+       return countryRepository.findAll(queryBuilder).stream().map(country -> modelMapper.map(country, getDTOClass())).collect(Collectors.toList());
     }
 }
