@@ -1,5 +1,7 @@
-package com.javaSchool.FinalTask3.domain.book.parameter.format;
+package com.javaSchool.FinalTask3.domain.book.parameter.format.impl;
 
+import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersFormatDTO;
+import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersFormatEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;

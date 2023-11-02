@@ -51,6 +51,7 @@ public class UserEntity {
     @Column(name = "phone_number", nullable = false, length = 45)
     private String phoneNumber;
 
+    // TODO Change OneToMAny
     @OneToOne(fetch = FetchType.LAZY)
     private UserAddressEntity address;
 

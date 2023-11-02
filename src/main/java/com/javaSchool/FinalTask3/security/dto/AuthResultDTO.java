@@ -1,4 +1,4 @@
-package com.javaSchool.FinalTask3.security;
+package com.javaSchool.FinalTask3.security.dto;
 
 import lombok.Data;
 

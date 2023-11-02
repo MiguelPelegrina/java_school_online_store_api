@@ -1,5 +1,7 @@
-package com.javaSchool.FinalTask3.domain.book.genre;
+package com.javaSchool.FinalTask3.domain.book.genre.impl;
 
+import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
+import com.javaSchool.FinalTask3.domain.book.genre.BookGenreEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import org.springframework.security.access.annotation.Secured;

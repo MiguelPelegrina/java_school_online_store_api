@@ -1,5 +1,8 @@
-package com.javaSchool.FinalTask3.domain.book.genre;
+package com.javaSchool.FinalTask3.domain.book.genre.impl;
 
+import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
+import com.javaSchool.FinalTask3.domain.book.genre.BookGenreEntity;
+import com.javaSchool.FinalTask3.domain.book.genre.BookGenreRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

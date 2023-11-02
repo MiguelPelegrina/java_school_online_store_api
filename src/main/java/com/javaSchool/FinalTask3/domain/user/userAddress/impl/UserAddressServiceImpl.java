@@ -1,5 +1,8 @@
-package com.javaSchool.FinalTask3.domain.user.userAddress;
+package com.javaSchool.FinalTask3.domain.user.userAddress.impl;
 
+import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressDTO;
+import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

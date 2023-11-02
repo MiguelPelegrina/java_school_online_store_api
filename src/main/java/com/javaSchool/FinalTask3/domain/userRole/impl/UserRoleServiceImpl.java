@@ -1,5 +1,8 @@
-package com.javaSchool.FinalTask3.domain.userRole;
+package com.javaSchool.FinalTask3.domain.userRole.impl;
 
+import com.javaSchool.FinalTask3.domain.userRole.UserRoleDTO;
+import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
+import com.javaSchool.FinalTask3.domain.userRole.UserRoleRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

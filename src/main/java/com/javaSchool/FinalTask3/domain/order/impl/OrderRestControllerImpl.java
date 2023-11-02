@@ -1,5 +1,7 @@
-package com.javaSchool.FinalTask3.domain.order;
+package com.javaSchool.FinalTask3.domain.order.impl;
 
+import com.javaSchool.FinalTask3.domain.order.OrderDTO;
+import com.javaSchool.FinalTask3.domain.order.OrderEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;

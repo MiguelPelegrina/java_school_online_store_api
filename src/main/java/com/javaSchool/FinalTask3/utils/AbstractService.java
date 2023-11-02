@@ -19,14 +19,7 @@ public interface AbstractService<Entity, EntityDTO, EntityID> {
      * of DTOs.
      * @return Returns a {@link List} of all DTOs.
      */
-    List<EntityDTO> getAllInstances(
-            /*@RequestParam("id") Optional<EntityID> id,
-            @RequestParam("name") Optional<String> name,
-            @RequestParam("active") Optional<Boolean> active,
-            @RequestParam("sort") Optional<String> sort,
-            @RequestParam("page") Optional<Integer> page,
-            @RequestParam("size") Optional<Integer> size*/
-    );
+    List<EntityDTO> getAllInstances();
 
     /**
      * Handles the GET request with a specified ID. Obtains the instance of the entity with the specified ID from the

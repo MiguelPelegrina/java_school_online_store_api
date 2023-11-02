@@ -1,5 +1,7 @@
-package com.javaSchool.FinalTask3.domain.role;
+package com.javaSchool.FinalTask3.domain.role.impl;
 
+import com.javaSchool.FinalTask3.domain.role.RoleDTO;
+import com.javaSchool.FinalTask3.domain.role.RoleEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;

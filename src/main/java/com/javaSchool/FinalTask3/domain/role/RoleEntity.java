@@ -23,7 +23,4 @@ public class RoleEntity {
     @Id
     @Column(name = "name", length = 45)
     private String name;
-
-    @OneToMany(mappedBy = "role")
-    private Set<UserRoleEntity> userRoles;
 }

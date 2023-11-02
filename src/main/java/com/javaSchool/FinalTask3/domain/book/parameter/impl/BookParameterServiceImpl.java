@@ -1,5 +1,8 @@
-package com.javaSchool.FinalTask3.domain.book.parameter;
+package com.javaSchool.FinalTask3.domain.book.parameter.impl;
 
+import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterDTO;
+import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterEntity;
+import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

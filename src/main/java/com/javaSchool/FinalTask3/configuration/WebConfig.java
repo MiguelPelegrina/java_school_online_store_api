@@ -96,6 +96,7 @@ public class WebConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login",
+                                "/auth/register",
                                 "/api-docs",
                                 "/api-docs.yaml").permitAll()
                         .anyRequest().authenticated()
