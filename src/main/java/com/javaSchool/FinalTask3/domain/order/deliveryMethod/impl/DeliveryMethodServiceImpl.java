@@ -1,6 +1,9 @@
-package com.javaSchool.FinalTask3.domain.order.deliveryMethod;
+package com.javaSchool.FinalTask3.domain.order.deliveryMethod.impl;
 
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
+import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodDTO;
+import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodEntity;
+import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -14,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class DeliveryMethodServiceImpl extends AbstractServiceImpl<DeliveryMethodEntity, DeliveryMethodDTO, String> {
+public class DeliveryMethodServiceImpl
+        extends AbstractServiceImpl<DeliveryMethodRepository, DeliveryMethodEntity, DeliveryMethodDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link DeliveryMethodRepository} of the {@link DeliveryMethodEntity} entity.

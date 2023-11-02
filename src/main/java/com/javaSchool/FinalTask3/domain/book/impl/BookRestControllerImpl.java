@@ -2,8 +2,8 @@ package com.javaSchool.FinalTask3.domain.book.impl;
 
 import com.javaSchool.FinalTask3.domain.book.BookDTO;
 import com.javaSchool.FinalTask3.domain.book.BookEntity;
+import com.javaSchool.FinalTask3.domain.book.BookRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
-import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,12 +25,12 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @RequestMapping(path = "books")
 @RestController
 @Secured("ROLE_ADMIN")
-public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntity, BookDTO, Integer> {
+public class BookRestControllerImpl extends AbstractRestControllerImpl<BookServiceImpl, BookRepository, BookEntity, BookDTO, Integer> {
     /**
      * All arguments constructor.
      * @param service {@link BookServiceImpl} of the {@link BookEntity} entity.
      */
-    public BookRestControllerImpl(AbstractServiceImpl<BookEntity, BookDTO, Integer> service) {
+    public BookRestControllerImpl(BookServiceImpl service) {
         super(service);
     }
 
@@ -45,14 +45,12 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookEntit
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "20") Integer size
     ) {
-        BookServiceImpl bookService = (BookServiceImpl) this.service;
-
         // TODO Not sure if this should be here or in the service
         // Check the sorting direction
-        Sort.Direction direction = ASC.toString().equalsIgnoreCase(sortType)? ASC : DESC;
+        Sort.Direction direction = DESC.toString().equalsIgnoreCase(sortType) ? DESC : ASC;
 
         PageRequest pageRequest = PageRequest.of(page, size, direction, sortProperty);
 
-        return ResponseEntity.ok(bookService.getAllInstances(name, active, genre, pageRequest));
+        return ResponseEntity.ok(this.service.getAllInstances(name, active, genre, pageRequest));
     }
 }

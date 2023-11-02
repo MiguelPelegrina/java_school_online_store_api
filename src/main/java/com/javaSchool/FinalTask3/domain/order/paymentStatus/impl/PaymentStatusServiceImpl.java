@@ -1,8 +1,11 @@
-package com.javaSchool.FinalTask3.domain.order.paymentStatus;
+package com.javaSchool.FinalTask3.domain.order.paymentStatus.impl;
 
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreEntity;
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreRepository;
+import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusDTO;
+import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
+import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class PaymentStatusServiceImpl extends AbstractServiceImpl<PaymentStatusEntity, PaymentStatusDTO, String> {
+public class PaymentStatusServiceImpl
+        extends AbstractServiceImpl<PaymentStatusRepository, PaymentStatusEntity, PaymentStatusDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link BookGenreRepository} of the {@link BookGenreEntity} entity.

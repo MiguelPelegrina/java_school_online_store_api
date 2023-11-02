@@ -11,5 +11,5 @@ import java.util.List;
 public class AuthResultDTO {
     private String accessToken;
     private int id;
-    private List<String> role;
+    private List<String> roles;
 }

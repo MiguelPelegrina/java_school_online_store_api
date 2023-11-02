@@ -6,7 +6,6 @@ import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityRep
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.QCityEntity;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryRepository;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.QCountryEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
@@ -27,7 +26,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @Secured("ROLE_ADMIN")
-public class CityServiceImpl extends AbstractServiceImpl<CityEntity, CityDTO, String> {
+public class CityServiceImpl
+        extends AbstractServiceImpl<CityRepository, CityEntity, CityDTO, String> {
     // TODO Not sure if necessary
     private final CountryRepository countryRepository;
 
@@ -69,7 +69,6 @@ public class CityServiceImpl extends AbstractServiceImpl<CityEntity, CityDTO, St
 
     public List<CityDTO> getAllInstances(String countryName, Optional<Boolean> active) {
         // Variables
-        final CityRepository cityRepository = (CityRepository) this.repository;
         final QCityEntity qCity = QCityEntity.cityEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
@@ -79,6 +78,6 @@ public class CityServiceImpl extends AbstractServiceImpl<CityEntity, CityDTO, St
             queryBuilder.and(qCity.countryName.name.containsIgnoreCase(countryName));
         }
 
-        return cityRepository.findAll(queryBuilder).stream().map(city -> modelMapper.map(city, getDTOClass())).collect(Collectors.toList());
+        return this.repository.findAll(queryBuilder).stream().map(city -> modelMapper.map(city, getDTOClass())).collect(Collectors.toList());
     }
 }

@@ -1,5 +1,8 @@
-package com.javaSchool.FinalTask3.domain.order.orderStatus;
+package com.javaSchool.FinalTask3.domain.order.orderStatus.impl;
 
+import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusDTO;
+import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusEntity;
+import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -13,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class OrderStatusServiceImpl extends AbstractServiceImpl<OrderStatusEntity, OrderStatusDTO, String> {
+public class OrderStatusServiceImpl
+        extends AbstractServiceImpl<OrderStatusRepository, OrderStatusEntity, OrderStatusDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link OrderStatusRepository} of the {@link OrderStatusEntity} entity.

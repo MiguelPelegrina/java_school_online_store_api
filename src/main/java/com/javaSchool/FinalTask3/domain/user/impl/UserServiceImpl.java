@@ -16,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class UserServiceImpl extends AbstractServiceImpl<UserEntity, UserDTO, Integer> {
+public class UserServiceImpl
+        extends AbstractServiceImpl<UserRepository, UserEntity, UserDTO, Integer> {
     /**
      * All arguments constructor.
      * @param repository {@link UserRepository} of the {@link UserEntity} entity.

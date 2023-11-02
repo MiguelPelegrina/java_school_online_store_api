@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional(readOnly = true)
-public class PostalCodeServiceImpl extends AbstractServiceImpl<PostalCodeEntity, PostalCodeDTO, String> {
+public class PostalCodeServiceImpl
+        extends AbstractServiceImpl<PostalCodeRepository, PostalCodeEntity, PostalCodeDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link PostalCodeRepository} of the {@link PostalCodeEntity}.
@@ -47,7 +48,6 @@ public class PostalCodeServiceImpl extends AbstractServiceImpl<PostalCodeEntity,
 
     public List<PostalCodeDTO> getAllInstances(String cityName, Optional<Boolean> active){
         // Variables
-        final PostalCodeRepository postalCodeRepository = (PostalCodeRepository) this.repository;
         final QPostalCodeEntity qPostalCode = QPostalCodeEntity.postalCodeEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
@@ -57,6 +57,6 @@ public class PostalCodeServiceImpl extends AbstractServiceImpl<PostalCodeEntity,
             queryBuilder.and(qPostalCode.city.name.containsIgnoreCase(cityName));
         }
 
-        return postalCodeRepository.findAll(queryBuilder).stream().map(postalCode -> modelMapper.map(postalCode, getDTOClass())).collect(Collectors.toList());
+        return this.repository.findAll(queryBuilder).stream().map(postalCode -> modelMapper.map(postalCode, getDTOClass())).collect(Collectors.toList());
     }
 }

@@ -8,12 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 // TODO Try to add something that guaranties that the service is never null, if possible.
 
@@ -29,9 +29,12 @@ import java.util.Optional;
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @RestController
-public abstract class AbstractRestControllerImpl<Entity, EntityDTO, EntityID>
+public abstract class AbstractRestControllerImpl
+        <ServiceClass extends AbstractServiceImpl<RepositoryClass, Entity, EntityDTO, EntityID>,
+                RepositoryClass extends JpaRepository<Entity, EntityID>,
+                Entity, EntityDTO, EntityID>
         implements AbstractRestController<Entity, EntityDTO, EntityID> {
-    protected final AbstractServiceImpl<Entity, EntityDTO, EntityID> service;
+    protected final ServiceClass service;
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all instances",

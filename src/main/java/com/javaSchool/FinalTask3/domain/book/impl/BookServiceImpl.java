@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Service
 @Transactional(readOnly = true)
-public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, Integer>{
+public class BookServiceImpl extends AbstractServiceImpl<BookRepository, BookEntity, BookDTO, Integer>{
     /**
      * All arguments constructor.
      * @param repository {@link BookRepository} of the {@link BookEntity} entity.
@@ -56,7 +56,6 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
     public Page<BookDTO> getAllInstances(String name, Optional<Boolean> active, Optional<String> genre, PageRequest pageRequest
     ) {
         // Variables
-        final BookRepository bookRepository = (BookRepository) this.repository;
         final QBookEntity qBook = QBookEntity.bookEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
@@ -72,7 +71,7 @@ public class BookServiceImpl extends AbstractServiceImpl<BookEntity, BookDTO, In
         });
 
         // Find the data in the repository
-        Page<BookEntity> pageEntities = bookRepository.findAll(queryBuilder, pageRequest);
+        Page<BookEntity> pageEntities = this.repository.findAll(queryBuilder, pageRequest);
 
         // Convert 'bookList' to 'books' using DTO mapping
         // Add the converted books to the 'books' list

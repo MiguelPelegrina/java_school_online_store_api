@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional(readOnly = true)
-public class CountryServiceImpl extends AbstractServiceImpl<CountryEntity, CountryDTO, String> {
+public class CountryServiceImpl
+        extends AbstractServiceImpl<CountryRepository, CountryEntity, CountryDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link CountryRepository} of the {@link CountryEntity} entity.
@@ -48,15 +49,17 @@ public class CountryServiceImpl extends AbstractServiceImpl<CountryEntity, Count
         return instance.getName();
     }
 
-    public List<CountryDTO> getAllInstances(Optional<Boolean> active){
+    public List<CountryDTO> getAllInstances(Optional<Boolean> active, String countryName){
         // Variables
-        final CountryRepository countryRepository = (CountryRepository) this.repository;
         final QCountryEntity qCountry = QCountryEntity.countryEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         // Check which parameters are present and build a query
         active.ifPresent(aBoolean -> queryBuilder.and(qCountry.isActive.eq(aBoolean)));
+        if(!countryName.isEmpty()){
+            queryBuilder.and(qCountry.name.containsIgnoreCase(countryName));
+        }
 
-        return countryRepository.findAll(queryBuilder).stream().map(country -> modelMapper.map(country, getDTOClass())).collect(Collectors.toList());
+        return this.repository.findAll(queryBuilder).stream().map(country -> modelMapper.map(country, getDTOClass())).collect(Collectors.toList());
     }
 }

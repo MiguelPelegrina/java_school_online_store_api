@@ -2,8 +2,8 @@ package com.javaSchool.FinalTask3.domain.book.parameter.impl;
 
 import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterDTO;
 import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterEntity;
+import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
-import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(path = "bookparameters")
 @RestController
-public class BookParameterRestControllerImpl extends AbstractRestControllerImpl<BookParameterEntity, BookParameterDTO, Integer> {
+public class BookParameterRestControllerImpl
+        extends AbstractRestControllerImpl<BookParameterServiceImpl, BookParameterRepository, BookParameterEntity, BookParameterDTO, Integer> {
     /**
      * All arguments constructor.
      * @param service {@link BookParameterServiceImpl} of the {@link BookParameterEntity} entity.
      */
-    public BookParameterRestControllerImpl(AbstractServiceImpl<BookParameterEntity, BookParameterDTO, Integer> service) {
+    public BookParameterRestControllerImpl(BookParameterServiceImpl service) {
         super(service);
     }
 }

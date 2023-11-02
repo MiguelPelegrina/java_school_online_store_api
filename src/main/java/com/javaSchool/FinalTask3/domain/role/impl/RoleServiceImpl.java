@@ -15,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class RoleServiceImpl extends AbstractServiceImpl<RoleEntity, RoleDTO, String> {
+public class RoleServiceImpl
+        extends AbstractServiceImpl<RoleRepository, RoleEntity, RoleDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link RoleRepository} of the {@link RoleEntity} instance.

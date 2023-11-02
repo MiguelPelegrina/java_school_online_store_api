@@ -4,12 +4,10 @@ import com.javaSchool.FinalTask3.domain.role.RoleEntity;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
-import com.javaSchool.FinalTask3.domain.userRole.UserRoleRepository;
 import com.javaSchool.FinalTask3.security.dto.AuthResultDTO;
 import com.javaSchool.FinalTask3.security.dto.LoginRequestBodyDTO;
 import com.javaSchool.FinalTask3.security.dto.RegisterRequestBodyDTO;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -113,7 +110,7 @@ public class AuthController {
         AuthResultDTO resultDto = new AuthResultDTO();
         resultDto.setAccessToken(token);
         resultDto.setId(user.getId());
-        resultDto.setRole(user.getRoles().stream().map(userRole -> userRole.getRole().getName()).collect(Collectors.toList()));
+        resultDto.setRoles(user.getRoles().stream().map(userRole -> userRole.getRole().getName()).collect(Collectors.toList()));
 
         return resultDto;
     }

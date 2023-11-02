@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class BookGenreServiceImpl extends AbstractServiceImpl<BookGenreEntity, BookGenreDTO, String> {
+public class BookGenreServiceImpl extends AbstractServiceImpl<BookGenreRepository, BookGenreEntity, BookGenreDTO, String> {
     // TODO I can't figure out which annotations to use to make lombok work with the parent constructor. Tried with
     //  @RequiredArgsConstructor in this class and @NoArgsConstructor(force = true) in parent class but then the
     //  repository is null. I assumed that lombok automatically calls the corresponding super constructor of the parent

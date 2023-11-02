@@ -1,7 +1,10 @@
-package com.javaSchool.FinalTask3.domain.order.paymentMethod;
+package com.javaSchool.FinalTask3.domain.order.paymentMethod.impl;
 
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreEntity;
+import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodDTO;
+import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodEntity;
+import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -15,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class PaymentMethodServiceImpl extends AbstractServiceImpl<PaymentMethodEntity, PaymentMethodDTO, String> {
+public class PaymentMethodServiceImpl
+        extends AbstractServiceImpl<PaymentMethodRepository, PaymentMethodEntity, PaymentMethodDTO, String> {
     /**
      * All arguments constructor.
      * @param repository {@link PaymentMethodRepository} of the {@link BookGenreEntity} entity.
