@@ -2,14 +2,7 @@ package com.javaSchool.FinalTask3.domain.user;
 
 import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressEntity;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -55,7 +48,7 @@ public class UserEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private UserAddressEntity address;
 
-    // TODO Not sure if right
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    // TODO Should have cascade
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<UserRoleEntity> roles;
 }

@@ -1,7 +1,6 @@
 package com.javaSchool.FinalTask3.security;
 
 import com.javaSchool.FinalTask3.domain.role.RoleEntity;
-import com.javaSchool.FinalTask3.domain.user.UserDTO;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
@@ -18,16 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The {@code AuthController} class is responsible for handling user authentication via a login endpoint.
  * It processes login requests, validates user credentials, and generates JWT tokens upon successful authentication.
  */
-@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 @RequestMapping("auth")
 @RestController
@@ -38,8 +36,6 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
-
-    private final UserRoleRepository userRoleRepository;
 
     /**
      * Processes user login by validating the provided credentials, and if successful, generates and returns a JWT token.
@@ -64,12 +60,7 @@ public class AuthController {
                 ResponseEntity.status(401).body("User password does not match");
             }
 
-            // Generate the token
-            String token = jwtUtil.createToken(user);
-            AuthResultDTO resultDto = new AuthResultDTO();
-            resultDto.setAccessToken(token);
-
-            return ResponseEntity.ok(resultDto);
+            return ResponseEntity.ok(this.generateAuthResultDTO(user));
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username or password");
         } catch (Exception e){
@@ -90,8 +81,6 @@ public class AuthController {
                 ResponseEntity.status(401).body("A user with that email already exists");
             }
 
-            final ModelMapper modelMapper = new ModelMapper();
-
             UserEntity newUser = UserEntity.builder()
                     .dateOfBirth(registerRequestBodyDTO.getDateOfBirth())
                     .email(registerRequestBodyDTO.getEmail())
@@ -100,6 +89,7 @@ public class AuthController {
                     .password(passwordEncoder.encode(registerRequestBodyDTO.getPassword()))
                     .surname(registerRequestBodyDTO.getSurname())
                     .phoneNumber(registerRequestBodyDTO.getPhone())
+                    .roles(new HashSet<>())
                     .build();
 
             UserRoleEntity newUserRole = UserRoleEntity.builder()
@@ -108,9 +98,23 @@ public class AuthController {
                     .role(new RoleEntity("CLIENT"))
                     .build();
 
-            return ResponseEntity.ok(modelMapper.map(userRoleRepository.save(newUserRole), UserDTO.class));
+            newUser.getRoles().add(newUserRole);
+
+            userRepository.save(newUser);
+
+            return ResponseEntity.ok(this.generateAuthResultDTO(newUser));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    private AuthResultDTO generateAuthResultDTO(UserEntity user){
+        String token = jwtUtil.createToken(user);
+        AuthResultDTO resultDto = new AuthResultDTO();
+        resultDto.setAccessToken(token);
+        resultDto.setId(user.getId());
+        resultDto.setRole(user.getRoles().stream().map(userRole -> userRole.getRole().getName()).collect(Collectors.toList()));
+
+        return resultDto;
     }
 }
