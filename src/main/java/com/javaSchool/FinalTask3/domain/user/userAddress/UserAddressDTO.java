@@ -4,6 +4,9 @@ import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeDT
 import com.javaSchool.FinalTask3.domain.user.UserDTO;
 import lombok.Data;
 
+/**
+ * Data Transfer Object (DTO) of {@link UserAddressEntity}.
+ */
 @Data
 public class UserAddressDTO {
     private int id;

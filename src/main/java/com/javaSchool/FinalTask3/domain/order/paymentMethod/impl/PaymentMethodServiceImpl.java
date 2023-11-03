@@ -29,18 +29,13 @@ public class PaymentMethodServiceImpl
         super(repository, modelMapper);
     }
 
-
-    /**
-     * Returns the DTO class of the {@link PaymentMethodEntity} entity.
-     * @return Returns the {@link PaymentMethodDTO} class.
-     */
     @Override
-    protected Class<PaymentMethodDTO> getDTOClass() {
+    public Class<PaymentMethodDTO> getDTOClass() {
         return PaymentMethodDTO.class;
     }
 
     @Override
-    protected String getEntityId(PaymentMethodEntity instance) {
+    public String getEntityId(PaymentMethodEntity instance) {
         return instance.getName();
     }
 }

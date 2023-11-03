@@ -5,6 +5,9 @@ import com.javaSchool.FinalTask3.domain.order.OrderDTO;
 import com.javaSchool.FinalTask3.domain.orderBook.embedabble.OrderBookId;
 import lombok.Data;
 
+/**
+ * Data Transfer Object (DTO) of {@link OrderBookEntity}.
+ */
 @Data
 public class OrderBookDTO {
     private OrderBookId id;

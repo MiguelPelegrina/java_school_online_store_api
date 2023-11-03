@@ -4,7 +4,6 @@ import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterDTO;
 import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterEntity;
 import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * RestController of the {@link BookParameterEntity} entity. Handles the REST methods. Uses {@link BookParameterDTO} as
  * returning object.
  */
-@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(path = "bookparameters")
+@RequestMapping(path = "book_parameters")
 @RestController
 public class BookParameterRestControllerImpl
         extends AbstractRestControllerImpl<BookParameterServiceImpl, BookParameterRepository, BookParameterEntity, BookParameterDTO, Integer> {

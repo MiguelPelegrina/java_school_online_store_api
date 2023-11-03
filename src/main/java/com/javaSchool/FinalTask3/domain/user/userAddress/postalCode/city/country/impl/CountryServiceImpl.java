@@ -1,9 +1,6 @@
 package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.impl;
 
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryRepository;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.QCountryEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
@@ -25,7 +22,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 public class CountryServiceImpl
-        extends AbstractServiceImpl<CountryRepository, CountryEntity, CountryDTO, String> {
+        extends AbstractServiceImpl<CountryRepository, CountryEntity, CountryDTO, String>
+        implements CountryService {
     /**
      * All arguments constructor.
      * @param repository {@link CountryRepository} of the {@link CountryEntity} entity.
@@ -35,20 +33,17 @@ public class CountryServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link CountryEntity} entity.
-     * @return Returns the {@link CountryDTO} class.
-     */
     @Override
-    protected Class<CountryDTO> getDTOClass() {
+    public Class<CountryDTO> getDTOClass() {
         return CountryDTO.class;
     }
 
     @Override
-    protected String getEntityId(CountryEntity instance) {
+    public String getEntityId(CountryEntity instance) {
         return instance.getName();
     }
 
+    @Override
     public List<CountryDTO> getAllInstances(Optional<Boolean> active, String countryName){
         // Variables
         final QCountryEntity qCountry = QCountryEntity.countryEntity;
@@ -60,6 +55,9 @@ public class CountryServiceImpl
             queryBuilder.and(qCountry.name.containsIgnoreCase(countryName));
         }
 
-        return this.repository.findAll(queryBuilder).stream().map(country -> modelMapper.map(country, getDTOClass())).collect(Collectors.toList());
+        // Retrieve a list of countries from the repository, map them to DTOs, and collect them into a List.
+        return this.repository.findAll(queryBuilder).stream().map(
+                country -> modelMapper.map(country, getDTOClass()))
+                .collect(Collectors.toList());
     }
 }

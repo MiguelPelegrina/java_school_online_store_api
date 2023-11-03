@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 // TODO And employee
 @Secured("ROLE_ADMIN")
-public class BookGenreRestControllerImpl extends AbstractRestControllerImpl<BookGenreServiceImpl, BookGenreRepository, BookGenreEntity, BookGenreDTO, String> {
+public class BookGenreRestControllerImpl
+        extends AbstractRestControllerImpl<BookGenreServiceImpl, BookGenreRepository, BookGenreEntity, BookGenreDTO, String> {
     /**
      * All arguments constructor.
      * @param service {@link BookGenreServiceImpl} of the {@link BookGenreEntity} entity.

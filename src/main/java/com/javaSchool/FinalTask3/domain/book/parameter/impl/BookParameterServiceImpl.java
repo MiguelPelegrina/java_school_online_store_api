@@ -26,18 +26,13 @@ public class BookParameterServiceImpl
     public BookParameterServiceImpl(BookParameterRepository repository, ModelMapper modelMapper) {
         super(repository, modelMapper);
     }
-
-    /**
-     * Returns the DTO class of the {@link BookParameterEntity} entity.
-     * @return Returns the {@link BookParameterDTO} class.
-     */
     @Override
-    protected Class<BookParameterDTO> getDTOClass() {
+    public Class<BookParameterDTO> getDTOClass() {
         return null;
     }
 
     @Override
-    protected Integer getEntityId(BookParameterEntity instance) {
+    public Integer getEntityId(BookParameterEntity instance) {
         return instance.getId();
     }
 }

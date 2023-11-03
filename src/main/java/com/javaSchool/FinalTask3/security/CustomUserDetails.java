@@ -25,7 +25,7 @@ public class CustomUserDetails implements UserDetails {
 
     /**
      * Returns a list of authorities (roles) associated with the user.
-     * @return A list with the user's roles.
+     * @return List with the user's roles.
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

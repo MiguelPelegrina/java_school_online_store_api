@@ -1,9 +1,6 @@
 package com.javaSchool.FinalTask3.domain.book.impl;
 
-import com.javaSchool.FinalTask3.domain.book.BookDTO;
-import com.javaSchool.FinalTask3.domain.book.BookEntity;
-import com.javaSchool.FinalTask3.domain.book.BookRepository;
-import com.javaSchool.FinalTask3.domain.book.QBookEntity;
+import com.javaSchool.FinalTask3.domain.book.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
@@ -20,7 +17,9 @@ import java.util.Optional;
  */
 @Service
 @Transactional(readOnly = true)
-public class BookServiceImpl extends AbstractServiceImpl<BookRepository, BookEntity, BookDTO, Integer>{
+public class BookServiceImpl
+        extends AbstractServiceImpl<BookRepository, BookEntity, BookDTO, Integer>
+        implements BookService {
     /**
      * All arguments constructor.
      * @param repository {@link BookRepository} of the {@link BookEntity} entity.
@@ -30,17 +29,13 @@ public class BookServiceImpl extends AbstractServiceImpl<BookRepository, BookEnt
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link BookEntity} entity.
-     * @return Returns the {@link BookDTO} class.
-     */
     @Override
-    protected Class<BookDTO> getDTOClass() {
+    public Class<BookDTO> getDTOClass() {
         return BookDTO.class;
     }
 
     @Override
-    protected Integer getEntityId(BookEntity instance) {
+    public Integer getEntityId(BookEntity instance) {
         return instance.getId();
     }
 
@@ -53,28 +48,27 @@ public class BookServiceImpl extends AbstractServiceImpl<BookRepository, BookEnt
     //  or author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
     //  - Adding an Array of String for sorting
     //  - Adding an Array of Genres for filtering
-    public Page<BookDTO> getAllInstances(String name, Optional<Boolean> active, Optional<String> genre, PageRequest pageRequest
-    ) {
+    @Override
+    public Page<BookDTO> getAllInstances(String name, Optional<Boolean> active, String genre, PageRequest pageRequest) {
         // Variables
         final QBookEntity qBook = QBookEntity.bookEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         // Check which parameters are present and build a query
         active.ifPresent(aBoolean -> queryBuilder.and(qBook.isActive.eq(aBoolean)));
+
         if(!name.isEmpty()){
             queryBuilder.and(qBook.title.containsIgnoreCase(name).or(qBook.parameters.author.containsIgnoreCase(name)));
         }
-        genre.ifPresent(s -> {
-            if (!s.isEmpty()) {
-                queryBuilder.and(qBook.genre.name.containsIgnoreCase(s));
-            }
-        });
+
+        if (!genre.isEmpty()) {
+            queryBuilder.and(qBook.genre.name.containsIgnoreCase(genre));
+        }
 
         // Find the data in the repository
         Page<BookEntity> pageEntities = this.repository.findAll(queryBuilder, pageRequest);
 
-        // Convert 'bookList' to 'books' using DTO mapping
-        // Add the converted books to the 'books' list
+        // Convert the book page to a bookDTO page
         return pageEntities.map(book ->
             modelMapper.map(book, this.getDTOClass())
         );

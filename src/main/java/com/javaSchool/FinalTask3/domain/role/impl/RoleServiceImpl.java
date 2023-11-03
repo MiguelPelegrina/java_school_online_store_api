@@ -26,17 +26,13 @@ public class RoleServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link RoleEntity}.
-     * @return Returns the {@link RoleDTO} class.
-     */
     @Override
-    protected Class<RoleDTO> getDTOClass() {
+    public Class<RoleDTO> getDTOClass() {
         return RoleDTO.class;
     }
 
     @Override
-    protected String getEntityId(RoleEntity instance) {
+    public String getEntityId(RoleEntity instance) {
         return instance.getName();
     }
 }

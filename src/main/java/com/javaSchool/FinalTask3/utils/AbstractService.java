@@ -39,4 +39,17 @@ public interface AbstractService<Entity, EntityDTO, EntityID> {
      * @param id ID of the instance that will be deleted.
      */
     void deleteInstance(EntityID id);
+
+    /**
+     * Needs to be implemented by subclasses to specify the DTO class that will be used.
+     * @return Returns the DTO class of the entity
+     */
+    Class<EntityDTO> getDTOClass();
+
+    /**
+     * Needs to be implemented by subclasses to obtain the Identifier of the entity.
+     * @param instance Instance of the entity.
+     * @return Returns the Identifier of the entity.
+     */
+    EntityID getEntityId(Entity instance);
 }

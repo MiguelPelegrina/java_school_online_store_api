@@ -19,9 +19,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 
-/**
- * Entity of the Book that is stored in the "books" table in the database.
- */
 @AllArgsConstructor
 @Builder
 @Data

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+// TODO Review this: Either implement it properly or just remove.
 @RestControllerAdvice
 public class BusinessLogicExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)

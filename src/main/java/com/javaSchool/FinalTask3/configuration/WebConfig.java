@@ -26,12 +26,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //  - employees --> POST AND PUT of Book
 //  - admin --> management of employees?
 //  Not sure how much of this applies to backend and how much to frontend
-// TODO Don't use deprecated methods?
 
 /**
- * The {@code WebConfig} class is responsible for configuring various aspects of the application's web security. It defines
- * security-related beans and settings, including user authentication, authorization, CORS (Cross-Origin Resource Sharing)
- * configuration, and JWT (JSON Web Token) authorization filters.
+ * The {@code WebConfig} class is responsible for configuring various aspects of the application's web security. It
+ * defines security-related beans and settings, including user authentication, authorization, CORS (Cross-Origin
+ * Resource Sharing) configuration, and JWT (JSON Web Token) authorization filters.
  */
 @Configuration
 @EnableSpringDataWebSupport
@@ -47,21 +46,23 @@ public class WebConfig {
      * It specifies the user details service and password encoder for managing user authentication.
      * @param http            The {@link HttpSecurity} configuration.
      * @param passwordEncoder The password encoder for secure authentication.
-     * @return An {@link AuthenticationManager} configured for the application.
+     * @return {@link AuthenticationManager} configured for the application.
      * @throws Exception If an exception occurs during configuration.
      */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
             throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+
         return authenticationManagerBuilder.build();
     }
 
     /**
      * Provides a password encoder bean, specifically a {@link BCryptPasswordEncoder}, for securely encoding and
      * verifying passwords.
-     * @return A {@link PasswordEncoder} bean.
+     * @return {@link PasswordEncoder} bean.
      */
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -84,7 +85,7 @@ public class WebConfig {
      * (Cross-Origin Resource Sharing), CSRF (Cross-Site Request Forgery) protection, URL authorization, and JWT
      * authorization filter.
      * @param http The {@link HttpSecurity} configuration.
-     * @return A {@link SecurityFilterChain} for the application's security.
+     * @return {@link SecurityFilterChain} for the application's security.
      * @throws Exception If an exception occurs during configuration.
      */
     @Bean
@@ -110,7 +111,7 @@ public class WebConfig {
     /**
      * Configures CORS settings for the application, allowing cross-origin requests from the specified origin
      * (http://localhost:4200).
-     * @return A {@link WebMvcConfigurer} for configuring CORS settings.
+     * @return {@link WebMvcConfigurer} for configuring CORS settings.
      */
     @Bean
     public WebMvcConfigurer corsConfig() {

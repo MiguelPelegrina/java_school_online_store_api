@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * RestController of the {@link OrderEntity} entity. Handles the REST methods. Uses
- * {@link OrderDTO} as returning object.
+ * RestController of the {@link OrderEntity} entity. Handles the REST methods. Uses {@link OrderDTO} as returning object.
  */
 @RequestMapping(path = "orders")
 @RestController

@@ -30,17 +30,13 @@ public class PaymentStatusServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link PaymentStatusEntity} entity.
-     * @return Returns the {@link PaymentStatusDTO} class.
-     */
     @Override
-    protected Class<PaymentStatusDTO> getDTOClass() {
+    public Class<PaymentStatusDTO> getDTOClass() {
         return PaymentStatusDTO.class;
     }
 
     @Override
-    protected String getEntityId(PaymentStatusEntity instance) {
+    public String getEntityId(PaymentStatusEntity instance) {
         return instance.getName();
     }
 }

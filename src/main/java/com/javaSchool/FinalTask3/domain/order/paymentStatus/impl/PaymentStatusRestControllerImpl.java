@@ -4,7 +4,6 @@ import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusDTO;
 import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
 import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * Data Transfer Object (DTO) of {@link UserRoleEntity}.
+ */
 @Data
 public class UserRoleDTO {
     private int id;

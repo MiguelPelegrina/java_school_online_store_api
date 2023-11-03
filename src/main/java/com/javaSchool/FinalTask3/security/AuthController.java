@@ -7,6 +7,7 @@ import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
 import com.javaSchool.FinalTask3.security.dto.AuthResultDTO;
 import com.javaSchool.FinalTask3.security.dto.LoginRequestBodyDTO;
 import com.javaSchool.FinalTask3.security.dto.RegisterRequestBodyDTO;
+import com.javaSchool.FinalTask3.utils.StringValues;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +30,13 @@ import java.util.stream.Collectors;
 public class AuthController {
     // Fields
     private final JwtUtil jwtUtil;
-
     private final PasswordEncoder passwordEncoder;
-
     private final UserRepository userRepository;
 
     /**
      * Processes user login by validating the provided credentials, and if successful, generates and returns a JWT token.
      * @param loginRequestBodyDto The request body containing the user's email and password.
-     * @return A ResponseEntity containing the JWT access token upon successful login, or an error response in case of failure.
+     * @return ResponseEntity containing the JWT access token upon successful login, or an error response in case of failure.
      */
     @ResponseBody
     @RequestMapping("/login")
@@ -49,33 +48,36 @@ public class AuthController {
             UserEntity user = userRepository.findUserByEmail(email).orElseThrow();
 
             if(!user.isActive()){
-                throw new RuntimeException("User is not active");
+                throw new RuntimeException(StringValues.INACTIVE_USER);
             }
 
             // Check the password
             if(!passwordEncoder.matches(loginRequestBodyDto.getPassword(), user.getPassword())){
-                ResponseEntity.status(401).body("User password does not match");
+                ResponseEntity.status(401).body(StringValues.PASSWORD_NOT_MATCHING);
             }
 
             return ResponseEntity.ok(this.generateAuthResultDTO(user));
         } catch (BadCredentialsException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StringValues.INVALID_CREDENTIALS);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
+    /**
+     * Handles user registration by creating a new user account.
+     * @param registerRequestBodyDTO The request body containing user registration data.
+     * @return ResponseEntity containing the result of the registration process, including authentication information.
+     */
     @ResponseBody
     @RequestMapping("/register")
     @PostMapping
     public ResponseEntity register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO){
         try{
-            // Get the user
-            final String email = registerRequestBodyDTO.getEmail();
-            final Optional<UserEntity> userInRepository = userRepository.findUserByEmail(email);
-
+            // Check if a user with the same email already exists in the repository.
+            final Optional<UserEntity> userInRepository = userRepository.findUserByEmail(registerRequestBodyDTO.getEmail());
             if(userInRepository.isPresent()){
-                ResponseEntity.status(401).body("A user with that email already exists");
+                ResponseEntity.status(401).body(StringValues.EMAIL_ALREADY_IN_USE);
             }
 
             UserEntity newUser = UserEntity.builder()
@@ -105,10 +107,14 @@ public class AuthController {
         }
     }
 
+    /**
+     * Generates an AuthResultDTO object based on a UserEntity, including an access token, user ID, and user roles.
+     * @param user The UserEntity for which to generate the AuthResultDTO.
+     * @return An AuthResultDTO containing the access token, user ID, and user roles.
+     */
     private AuthResultDTO generateAuthResultDTO(UserEntity user){
-        String token = jwtUtil.createToken(user);
         AuthResultDTO resultDto = new AuthResultDTO();
-        resultDto.setAccessToken(token);
+        resultDto.setAccessToken(jwtUtil.createToken(user));
         resultDto.setId(user.getId());
         resultDto.setRoles(user.getRoles().stream().map(userRole -> userRole.getRole().getName()).collect(Collectors.toList()));
 

@@ -3,6 +3,7 @@ package com.javaSchool.FinalTask3.domain.book.impl;
 import com.javaSchool.FinalTask3.domain.book.BookDTO;
 import com.javaSchool.FinalTask3.domain.book.BookEntity;
 import com.javaSchool.FinalTask3.domain.book.BookRepository;
+import com.javaSchool.FinalTask3.domain.book.BookRestController;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,9 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @RequestMapping(path = "books")
 @RestController
 @Secured("ROLE_ADMIN")
-public class BookRestControllerImpl extends AbstractRestControllerImpl<BookServiceImpl, BookRepository, BookEntity, BookDTO, Integer> {
+public class BookRestControllerImpl
+        extends AbstractRestControllerImpl<BookServiceImpl, BookRepository, BookEntity, BookDTO, Integer>
+        implements BookRestController {
     /**
      * All arguments constructor.
      * @param service {@link BookServiceImpl} of the {@link BookEntity} entity.
@@ -36,16 +39,16 @@ public class BookRestControllerImpl extends AbstractRestControllerImpl<BookServi
 
     // TODO Not scalable, does not allow sorting more than one time or filtering more than one genre
     @GetMapping("/search")
+    @Override
     public ResponseEntity<Page<BookDTO>> getAllInstances(
             @RequestParam(name = "name", defaultValue = "") String name,
             @RequestParam("active") Optional<Boolean> active,
-            @RequestParam("genre") Optional<String> genre,
+            @RequestParam(name = "genre", defaultValue = "") String genre,
             @RequestParam("sortType") String sortType,
-            @RequestParam(value = "sortProperty", defaultValue = "title") String sortProperty,
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "20") Integer size
+            @RequestParam(name = "sortProperty", defaultValue = "title") String sortProperty,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "20") Integer size
     ) {
-        // TODO Not sure if this should be here or in the service
         // Check the sorting direction
         Sort.Direction direction = DESC.toString().equalsIgnoreCase(sortType) ? DESC : ASC;
 

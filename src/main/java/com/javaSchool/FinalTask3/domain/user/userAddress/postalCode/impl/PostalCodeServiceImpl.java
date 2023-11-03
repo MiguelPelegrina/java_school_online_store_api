@@ -1,9 +1,6 @@
 package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.impl;
 
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeEntity;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeRepository;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.QPostalCodeEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
@@ -22,7 +19,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 public class PostalCodeServiceImpl
-        extends AbstractServiceImpl<PostalCodeRepository, PostalCodeEntity, PostalCodeDTO, String> {
+        extends AbstractServiceImpl<PostalCodeRepository, PostalCodeEntity, PostalCodeDTO, String>
+        implements PostalCodeService {
     /**
      * All arguments constructor.
      * @param repository {@link PostalCodeRepository} of the {@link PostalCodeEntity}.
@@ -31,21 +29,17 @@ public class PostalCodeServiceImpl
     public PostalCodeServiceImpl(PostalCodeRepository repository, ModelMapper modelMapper) {
         super(repository, modelMapper);
     }
-
-    /**
-     * Returns the DTO class of the {@link PostalCodeEntity}.
-     * @return Returns the {@link PostalCodeDTO} class.
-     */
     @Override
-    protected Class<PostalCodeDTO> getDTOClass() {
+    public Class<PostalCodeDTO> getDTOClass() {
         return PostalCodeDTO.class;
     }
 
     @Override
-    protected String getEntityId(PostalCodeEntity instance) {
+    public String getEntityId(PostalCodeEntity instance) {
         return instance.getCode();
     }
 
+    @Override
     public List<PostalCodeDTO> getAllInstances(String cityName, Optional<Boolean> active){
         // Variables
         final QPostalCodeEntity qPostalCode = QPostalCodeEntity.postalCodeEntity;
@@ -57,6 +51,8 @@ public class PostalCodeServiceImpl
             queryBuilder.and(qPostalCode.city.name.containsIgnoreCase(cityName));
         }
 
-        return this.repository.findAll(queryBuilder).stream().map(postalCode -> modelMapper.map(postalCode, getDTOClass())).collect(Collectors.toList());
+        return this.repository.findAll(queryBuilder).stream().map(
+                postalCode -> modelMapper.map(postalCode, getDTOClass()))
+                .collect(Collectors.toList());
     }
 }

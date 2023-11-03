@@ -26,17 +26,13 @@ public class OrderServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link OrderEntity}.
-     * @return Returns the {@link OrderDTO} class.
-     */
     @Override
-    protected Class<OrderDTO> getDTOClass() {
+    public Class<OrderDTO> getDTOClass() {
         return OrderDTO.class;
     }
 
     @Override
-    protected Integer getEntityId(OrderEntity instance) {
+    public Integer getEntityId(OrderEntity instance) {
         return instance.getId();
     }
 }

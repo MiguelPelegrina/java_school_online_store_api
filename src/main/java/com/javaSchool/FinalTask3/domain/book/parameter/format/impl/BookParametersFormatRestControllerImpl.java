@@ -4,7 +4,6 @@ import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersForm
 import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersFormatEntity;
 import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersFormatRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

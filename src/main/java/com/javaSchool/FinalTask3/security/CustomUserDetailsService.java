@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * Loads user details by their unique email address. This method retrieves user information from the data source,
      * including the user's roles, and returns a {@link UserDetails} object for authentication and authorization.
      * @param email The unique email address for which user details are requested.
-     * @return A {@link UserDetails} object containing the user's details, including username, password, and roles.
+     * @return {@link UserDetails} object containing the user's details, including username, password, and roles.
      * @throws UsernameNotFoundException If the specified username is not found in the data source.
      */
     @Override

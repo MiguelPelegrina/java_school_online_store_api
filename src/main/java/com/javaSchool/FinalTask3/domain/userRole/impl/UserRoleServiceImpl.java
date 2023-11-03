@@ -27,17 +27,13 @@ public class UserRoleServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link UserRoleEntity} entity.
-     * @return Returns the {@link UserRoleDTO} class.
-     */
     @Override
-    protected Class<UserRoleDTO> getDTOClass() {
+    public Class<UserRoleDTO> getDTOClass() {
         return UserRoleDTO.class;
     }
 
     @Override
-    protected Integer getEntityId(UserRoleEntity instance) {
+    public Integer getEntityId(UserRoleEntity instance) {
         return instance.getId();
     }
 }

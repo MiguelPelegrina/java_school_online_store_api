@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.Set;
 
+/**
+ * Data Transfer Object (DTO) of {@link RoleEntity}.
+ */
 @Data
 public class RoleDTO {
     private String name;

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  * The {@code AbstractServiceImpl} is a parent service responsible for the interaction between repositories and controller.
  * Obtains data from the repository and returns the instance(s) of the entity as Data Transfer Object(s) (DTO) to the
  * related controller. Used for entities that only have one attribute and therefore can't be updated.
+ * @param <RepositoryClass> Repository of the entity.
  * @param <Entity> Entity instance that will be managed.
  * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
  * @param <EntityID> Identifier of the entity instance.
@@ -26,12 +27,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public abstract class AbstractServiceImpl<RepositoryClass
-        extends JpaRepository<Entity, EntityID>,
-        Entity, EntityDTO, EntityID>
+public abstract class AbstractServiceImpl<RepositoryClass extends JpaRepository<Entity, EntityID>, Entity, EntityDTO, EntityID>
         implements AbstractService<Entity, EntityDTO, EntityID> {
+    // Fields
     protected final RepositoryClass repository;
-
     protected final ModelMapper modelMapper;
 
     @Override
@@ -60,17 +59,4 @@ public abstract class AbstractServiceImpl<RepositoryClass
     public void deleteInstance(EntityID id){
         repository.deleteById(id);
     }
-
-    /**
-     * Abstract method to be implemented by subclasses to specify the DTO class that will be used.
-     * @return Returns the DTO class of the entity
-     */
-    protected abstract Class<EntityDTO> getDTOClass();
-
-    /**
-     * Abstract method to be implemented by subclasses to obtain the Identifier of the entity.
-     * @param instance Instance of the entity.
-     * @return Returns the Identifier of the entity.
-     */
-    protected abstract EntityID getEntityId(Entity instance);
 }

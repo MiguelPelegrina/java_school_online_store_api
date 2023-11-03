@@ -28,17 +28,13 @@ public class DeliveryMethodServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link DeliveryMethodEntity} entity.
-     * @return Returns the {@link DeliveryMethodDTO} class.
-     */
     @Override
-    protected Class<DeliveryMethodDTO> getDTOClass() {
+    public Class<DeliveryMethodDTO> getDTOClass() {
         return DeliveryMethodDTO.class;
     }
 
     @Override
-    protected String getEntityId(DeliveryMethodEntity instance) {
+    public String getEntityId(DeliveryMethodEntity instance) {
         return instance.getName();
     }
 }

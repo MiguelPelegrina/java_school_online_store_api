@@ -27,17 +27,13 @@ public class UserAddressServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link UserAddressEntity} entity.
-     * @return Returns the {@link UserAddressDTO} class.
-     */
     @Override
-    protected Class<UserAddressDTO> getDTOClass() {
+    public Class<UserAddressDTO> getDTOClass() {
         return UserAddressDTO.class;
     }
 
     @Override
-    protected Integer getEntityId(UserAddressEntity instance) {
+    public Integer getEntityId(UserAddressEntity instance) {
         return instance.getId();
     }
 }

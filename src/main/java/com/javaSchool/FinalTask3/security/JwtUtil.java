@@ -20,9 +20,7 @@ public class JwtUtil {
     // Fields
     private final String secret_key = "mysecretkey";
     private long accessTokenValidity = 60*60*1000;
-
     private final JwtParser jwtParser;
-
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
@@ -36,7 +34,7 @@ public class JwtUtil {
     /**
      * Creates a JWT token for a user.
      * @param user The user entity for which the token is created.
-     * @return A JWT token as a string.
+     * @return JWT token as a string.
      */
     public String createToken(UserEntity user) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
@@ -119,7 +117,7 @@ public class JwtUtil {
     /**
      * Retrieves the roles from JWT claims.
      * @param claims The JWT claims from which to extract the roles.
-     * @return A list of role names stored in the JWT claims.
+     * @return List of role names stored in the JWT claims.
      */
     private List<String> getRoles(Claims claims) {
         return (List<String>) claims.get("roles");

@@ -27,17 +27,13 @@ public class OrderBookServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link OrderBookEntity} entity.
-     * @return Returns the {@link OrderBookDTO} class.
-     */
     @Override
-    protected Class<OrderBookDTO> getDTOClass() {
+    public Class<OrderBookDTO> getDTOClass() {
         return OrderBookDTO.class;
     }
 
     @Override
-    protected OrderBookId getEntityId(OrderBookEntity instance) {
+    public OrderBookId getEntityId(OrderBookEntity instance) {
         return instance.getId();
     }
 }

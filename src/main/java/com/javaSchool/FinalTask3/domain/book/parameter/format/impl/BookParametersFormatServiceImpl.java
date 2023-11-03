@@ -28,17 +28,13 @@ public class BookParametersFormatServiceImpl
         super(repository, modelMapper);
     }
 
-    /**
-     * Returns the DTO class of the {@link BookParametersFormatEntity} entity.
-     * @return Returns the {@link BookParametersFormatDTO} class.
-     */
     @Override
-    protected Class<BookParametersFormatDTO> getDTOClass() {
+    public Class<BookParametersFormatDTO> getDTOClass() {
         return BookParametersFormatDTO.class;
     }
 
     @Override
-    protected String getEntityId(BookParametersFormatEntity instance) {
+    public String getEntityId(BookParametersFormatEntity instance) {
         return instance.getName();
     }
 }

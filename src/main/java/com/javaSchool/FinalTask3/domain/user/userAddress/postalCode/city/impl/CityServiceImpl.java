@@ -1,9 +1,6 @@
 package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.impl;
 
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityDTO;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityEntity;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityRepository;
-import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.QCityEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.*;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryRepository;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
@@ -27,7 +24,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Secured("ROLE_ADMIN")
 public class CityServiceImpl
-        extends AbstractServiceImpl<CityRepository, CityEntity, CityDTO, String> {
+        extends AbstractServiceImpl<CityRepository, CityEntity, CityDTO, String>
+        implements CityService {
     // TODO Not sure if necessary
     private final CountryRepository countryRepository;
 
@@ -53,20 +51,17 @@ public class CityServiceImpl
         return modelMapper.map(repository.save(instance), getDTOClass());
     }
 
-    /**
-     * Returns the DTO class of the {@link CityEntity} entity.
-     * @return Returns the {@link CityDTO} class.
-     */
     @Override
-    protected Class<CityDTO> getDTOClass() {
+    public Class<CityDTO> getDTOClass() {
         return CityDTO.class;
     }
 
     @Override
-    protected String getEntityId(CityEntity instance) {
+    public String getEntityId(CityEntity instance) {
         return instance.getName();
     }
 
+    @Override
     public List<CityDTO> getAllInstances(String countryName, Optional<Boolean> active) {
         // Variables
         final QCityEntity qCity = QCityEntity.cityEntity;
@@ -78,6 +73,7 @@ public class CityServiceImpl
             queryBuilder.and(qCity.countryName.name.containsIgnoreCase(countryName));
         }
 
+        // Retrieve a list of city instances from the repository, map them to DTOs, and collect them into a List.
         return this.repository.findAll(queryBuilder).stream().map(city -> modelMapper.map(city, getDTOClass())).collect(Collectors.toList());
     }
 }

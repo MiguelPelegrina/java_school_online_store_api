@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * Data Transfer Object (DTO) of {@link OrderEntity}.
+ */
 @Data
 public class OrderDTO {
     private int id;

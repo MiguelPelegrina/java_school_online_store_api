@@ -16,15 +16,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 // TODO Try to add something that guaranties that the service is never null, if possible.
-
 /**
  * The {@code AbstractRestController} class is a parent controller responsible for the interaction between service and
  * user. Obtains data from the services and returns a {@link ResponseEntity} that contains the Data Transfer Object
  * (DTO) of the entity and the status of the operation. Used for entities that only have one attribute and therefore
  * can't be updated.
- * @param <Entity> Entity instance that will be managed.
- * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
- * @param <EntityID> Identifier of the entity instance.
+ * @param <ServiceClass>     The service class that manages the entity.
+ * @param <RepositoryClass>  The repository class associated with the entity.
+ * @param <Entity>           The entity being managed.
+ * @param <EntityDTO>        The Data Transfer Object (DTO) of the entity.
+ * @param <EntityID>         The identifier type of the entity.
  */
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public abstract class AbstractRestControllerImpl
                 RepositoryClass extends JpaRepository<Entity, EntityID>,
                 Entity, EntityDTO, EntityID>
         implements AbstractRestController<Entity, EntityDTO, EntityID> {
+    // Fields
     protected final ServiceClass service;
 
     @ApiResponses(value = {
@@ -68,6 +70,7 @@ public abstract class AbstractRestControllerImpl
             @ApiResponse(responseCode = "401", description = "Not authorized",
                     content = @Content)
     })
+
     @PostMapping
     @Operation(summary = "Saves an instance of an entity into the repository or updates it, if already exists.")
     @Override

@@ -3,6 +3,7 @@ package com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.impl;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityDTO;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityEntity;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityRepository;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.CityRestController;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,8 @@ import java.util.Optional;
 @RequestMapping(path = "cities")
 @RestController
 public class CityRestControllerImpl
-        extends AbstractRestControllerImpl<CityServiceImpl, CityRepository, CityEntity, CityDTO, String> {
+        extends AbstractRestControllerImpl<CityServiceImpl, CityRepository, CityEntity, CityDTO, String>
+        implements CityRestController {
     /**
      * All arguments constructor.
      * @param service {@link CityServiceImpl} of the {@link CityEntity} entity.
@@ -26,7 +28,15 @@ public class CityRestControllerImpl
         super(service);
     }
 
+    /**
+     * Retrieves a list of CityDTO objects from the database based on specified parameters.
+     *
+     * @param countryName   The name of the country associated with the cities (case-insensitive). Default is an empty string.
+     * @param active        An optional flag indicating whether cities should be active or not.
+     * @return              ResponseEntity containing a list of CityDTO objects matching the specified criteria.
+     */
     @GetMapping("/search")
+    @Override
     public ResponseEntity<List<CityDTO>> getAllInstances(
             @RequestParam(name = "country_name", defaultValue = "") String countryName,
             @RequestParam("active") Optional<Boolean> active
