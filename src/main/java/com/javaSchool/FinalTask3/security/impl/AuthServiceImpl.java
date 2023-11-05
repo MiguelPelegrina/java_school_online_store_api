@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Generate a role. The registered user is assigned the default of CLIENT. In case an employee registers
         // themselves, the ADMIN can assign a new role to them (EMPLOYEE) to them afterward. Might create a page for it
-        // in frontend, but right now its not part of the requirements
+        // in frontend, but right now it's not part of the requirements
         UserRoleEntity newUserRole = UserRoleEntity.builder()
                 .assignedDate(LocalDate.now())
                 .user(newUser)

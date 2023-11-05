@@ -38,8 +38,11 @@ public class JwtUtil {
      */
     public String createToken(UserEntity user) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
-        claims.put("name",user.getName());
-        claims.put("surName",user.getSurname());
+        claims.put("id", user.getId());
+        // TODO Cant send the roles neither as Set, nor HashSet, nor Array, nor List.
+        //  Leads to "Unable to serialize claims object to json." on frontend
+        //  Need it to restrict access in frontend? Work around would be to only send the "highest" role
+        // claims.put("roles", user.getRoles().stream().toList());
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()
@@ -47,6 +50,24 @@ public class JwtUtil {
                 .setExpiration(tokenValidity)
                 .signWith(SignatureAlgorithm.HS256, secret_key)
                 .compact();
+    }
+
+    /**
+     * Decodes a JSON Web Token (JWT) to extract its claims.
+     * @param token The JWT to decode.
+     * @return A Claims object containing the decoded claims from the JWT. Returns null if the token is invalid or an
+     *          exception occurs during decoding.
+     */
+    public Claims decodeToken(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secret_key) // Replace with your secret key
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            // TODO Handle exceptions (e.g., token expired, invalid signature, etc.)
+            return null;
+        }
     }
 
     /**

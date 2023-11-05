@@ -26,7 +26,6 @@ public class UserRoleEntity {
     @GeneratedValue
     private int id;
 
-    // TODO Should not have cascade
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore

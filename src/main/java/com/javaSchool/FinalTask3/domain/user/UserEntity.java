@@ -18,6 +18,19 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Table(name = "users", schema = "public", catalog = "online_store")
 public class UserEntity {
+    // Class methods
+    /**
+     * Checks if the user's role allows them to update another user.
+     * @param activeUser User that attempts to update another user.
+     * @param userToBeUpdated User that will be updated.
+     * @return true if the activeUser is allowed to update the userToBeUpdated, otherwise false.
+     */
+    public static boolean isAllowedToUpdate(UserEntity activeUser, UserEntity userToBeUpdated){
+        return activeUser.isAdmin() && (userToBeUpdated.isClient() || userToBeUpdated.isEmployee()) ||
+                activeUser.isEmployee() && userToBeUpdated.isClient();
+    }
+
+    // Fields
     @Id
     @Column(name = "id")
     @GeneratedValue
@@ -49,4 +62,57 @@ public class UserEntity {
 
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<UserRoleEntity> roles;
+
+    // Instance methods
+    // Auxiliary methods
+    /**
+     * Checks if the current user is a "ADMIN" by iterating through the user's roles.
+     * @return true if the user has the "ADMIN" role, otherwise false.
+     */
+    private boolean isAdmin(){
+        boolean isAdmin = false;
+
+        for(UserRoleEntity userRole : roles){
+            if (userRole.getRole().getName().equals("ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+
+        return isAdmin;
+    }
+
+    /**
+     * Checks if the current user is a "CLIENT" by iterating through the user's roles.
+     * @return true if the user has the "CLIENT" role, otherwise false.
+     */
+    private boolean isClient(){
+        boolean isClient = false;
+
+        for(UserRoleEntity userRole : roles){
+            if (userRole.getRole().getName().equals("CLIENT")) {
+                isClient = true;
+                break;
+            }
+        }
+
+        return isClient;
+    }
+
+    /**
+     * Checks if the current user is a "EMPLOYEE" by iterating through the user's roles.
+     * @return true if the user has the "EMPLOYEE" role, otherwise false.
+     */
+    private boolean isEmployee(){
+        boolean isEmployee = false;
+
+        for(UserRoleEntity userRole : roles){
+            if (userRole.getRole().getName().equals("EMPLOYEE")) {
+                isEmployee = true;
+                break;
+            }
+        }
+
+        return isEmployee;
+    }
 }
