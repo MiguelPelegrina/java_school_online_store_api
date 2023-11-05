@@ -8,7 +8,6 @@ import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Base64;
 import java.util.Optional;
 
 /**
@@ -42,9 +40,20 @@ public class UserServiceImpl
     }
 
     /**
-     *
-     * @param instance Instance of the entity that will be saved.
-     * @return
+     * Saves a UserEntity instance based on authorization and permission checks.
+     * This method first retrieves the user's authorization token from the request's headers.
+     * It then decodes the token to obtain the user's ID. The method checks if the user exists in the
+     * database and is active. If the user is both present and active, it performs the following checks:
+     * - If the user is attempting to update themselves, the method allows the update.
+     * - If the user is not updating themselves, it checks if the active user has permission to update
+     *   the target UserEntity instance based on their role:
+     *   - Admins can update employees and clients but not other admins.
+     *   - Employees can update clients.
+     * If any of these checks fail, an InsufficientPermissions exception is thrown. If the user is not
+     * present in the database or is not active, an InsufficientPermissions exception is also thrown.
+     * @param instance The UserEntity instance to be saved.
+     * @return The saved UserDTO instance if the operation is allowed.
+     * @throws InsufficientPermissions If the user does not have sufficient permissions to perform the update.
      */
     @Override
     public UserDTO saveInstance(UserEntity instance) {

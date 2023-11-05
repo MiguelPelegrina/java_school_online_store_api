@@ -77,8 +77,6 @@ public class AuthControllerImpl implements AuthController {
     private AuthResultDTO generateAuthResultDTO(UserEntity user){
         AuthResultDTO resultDto = new AuthResultDTO();
         resultDto.setAccessToken(jwtUtil.createToken(user));
-        // TODO Not sure if right, or I should decode in frontend as well
-        resultDto.setId(user.getId());
 
         return resultDto;
     }

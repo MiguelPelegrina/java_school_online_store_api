@@ -61,7 +61,7 @@ public class JwtUtil {
     public Claims decodeToken(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(secret_key) // Replace with your secret key
+                    .setSigningKey(secret_key)
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
