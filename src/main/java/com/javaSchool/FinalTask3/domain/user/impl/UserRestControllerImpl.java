@@ -4,7 +4,6 @@ import com.javaSchool.FinalTask3.domain.user.UserDTO;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

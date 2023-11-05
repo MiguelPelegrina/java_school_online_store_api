@@ -1,7 +1,6 @@
 package com.javaSchool.FinalTask3.domain.user.userAddress;
 
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.javaSchool.FinalTask3.domain.user.UserDTO;
 import lombok.Data;
 
 /**

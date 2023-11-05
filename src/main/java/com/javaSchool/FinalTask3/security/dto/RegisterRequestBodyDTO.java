@@ -1,7 +1,5 @@
 package com.javaSchool.FinalTask3.security.dto;
 
-import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressEntity;
-import com.thoughtworks.qdox.model.expression.Add;
 import lombok.Data;
 
 import java.time.LocalDate;
