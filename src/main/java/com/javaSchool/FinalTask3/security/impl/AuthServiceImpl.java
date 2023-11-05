@@ -3,6 +3,9 @@ package com.javaSchool.FinalTask3.security.impl;
 import com.javaSchool.FinalTask3.domain.role.RoleEntity;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
+import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeEntity;
+import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeRepository;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
 import com.javaSchool.FinalTask3.exception.EmailAlreadyUsedException;
 import com.javaSchool.FinalTask3.security.AuthService;
@@ -25,41 +28,61 @@ import java.util.Optional;
 public class AuthServiceImpl implements AuthService {
     // Fields
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final PostalCodeRepository postalCodeRepository;
 
     /**
      * Registers a new user based on the provided registration data.
+     *
      * @param registerRequestBodyDTO The registration data, including user details.
      * @return The registered user entity.
      * @throws EmailAlreadyUsedException if user's email is already being used.
      */
     @Override
     public UserEntity register(RegisterRequestBodyDTO registerRequestBodyDTO) throws EmailAlreadyUsedException {
-         // Check if a user with the same email already exists in the repository.
-         final Optional<UserEntity> userInRepository = repository.findUserByEmail(registerRequestBodyDTO.getEmail());
-         if(userInRepository.isPresent()){
-             throw new EmailAlreadyUsedException();
-         }
+        // Check if a user with the same email already exists in the repository.
+        final Optional<UserEntity> userInRepository = userRepository.findUserByEmail(registerRequestBodyDTO.getEmail());
+        if (userInRepository.isPresent()) {
+            throw new EmailAlreadyUsedException();
+        }
 
-         UserEntity newUser = UserEntity.builder()
+        // Build an user
+        UserEntity newUser = UserEntity.builder()
                 .dateOfBirth(registerRequestBodyDTO.getDateOfBirth())
                 .email(registerRequestBodyDTO.getEmail())
                 .isActive(true)
                 .name(registerRequestBodyDTO.getName())
                 .password(passwordEncoder.encode(registerRequestBodyDTO.getPassword()))
                 .surname(registerRequestBodyDTO.getSurname())
-                .phoneNumber(registerRequestBodyDTO.getPhone())
+                .phone(registerRequestBodyDTO.getPhone())
                 .roles(new HashSet<>())
                 .build();
 
-         UserRoleEntity newUserRole = UserRoleEntity.builder()
+        // Generate a role. The registered user is assigned the default of CLIENT. In case an employee registers
+        // themselves, the ADMIN can assign a new role to them (EMPLOYEE) to them afterward. Might create a page for it
+        // in frontend, but right now its not part of the requirements
+        UserRoleEntity newUserRole = UserRoleEntity.builder()
                 .assignedDate(LocalDate.now())
                 .user(newUser)
                 .role(new RoleEntity("CLIENT"))
                 .build();
 
-         newUser.getRoles().add(newUserRole);
+        newUser.getRoles().add(newUserRole);
 
-         return repository.save(newUser);
+        // TODO Not sure if right, other error?
+        // Get the postal code from the repository
+        PostalCodeEntity postalCode = postalCodeRepository.findById(registerRequestBodyDTO.getAddress().getPostalCode()).orElseThrow();
+
+        // Generate an user address
+        UserAddressEntity newUserAddress = UserAddressEntity.builder()
+                .postalCode(postalCode)
+                .number(registerRequestBodyDTO.getAddress().getNumber())
+                .street(registerRequestBodyDTO.getAddress().getStreet())
+                .isActive(true)
+                .build();
+
+        newUser.setAddress(newUserAddress);
+
+        return userRepository.save(newUser);
     }
 }

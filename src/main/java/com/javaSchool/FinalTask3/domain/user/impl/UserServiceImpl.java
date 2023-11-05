@@ -5,6 +5,7 @@ import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  * {@link UserRepository} and returns the object(s) of the entity {@link UserEntity} as
  * {@link UserDTO} to the {@link UserRestControllerImpl}.
  */
+@Secured("ROLE_ADMIN")
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl

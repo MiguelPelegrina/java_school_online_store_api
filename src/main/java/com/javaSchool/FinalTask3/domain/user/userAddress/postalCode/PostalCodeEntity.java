@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Table(name = "postal_codes", schema = "public", catalog = "online_store")
 public class PostalCodeEntity {
+    // TODO Should maybe have either an composite key with city or an unique id
     @Id
     @Column(name = "code", length = 45)
     private String code;

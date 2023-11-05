@@ -32,14 +32,11 @@ public class UserAddressEntity {
     @JoinColumn(name = "postal_code", referencedColumnName = "code", nullable = false)
     private PostalCodeEntity postalCode;
 
-    @OneToOne(mappedBy = "address", optional = false)
-    private UserEntity userId;
-
     @Column(name = "street", nullable = false, length = 60)
     private String street;
 
     @Column(name = "number", nullable = false)
-    private int number;
+    private String number;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = false;

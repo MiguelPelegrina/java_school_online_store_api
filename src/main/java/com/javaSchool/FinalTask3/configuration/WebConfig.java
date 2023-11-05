@@ -99,7 +99,14 @@ public class WebConfig {
                         .requestMatchers("/auth/login",
                                 "/auth/register",
                                 "/api-docs",
-                                "/api-docs.yaml").permitAll()
+                                "/api-docs.yaml",
+                                // TODO correct approach?
+                                "/books/search",
+                                "/book_genres",
+                                "/countries/search",
+                                "/cities/search",
+                                "/postal_codes/search"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

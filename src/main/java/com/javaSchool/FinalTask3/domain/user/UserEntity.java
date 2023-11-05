@@ -42,13 +42,11 @@ public class UserEntity {
     private boolean isActive;
 
     @Column(name = "phone_number", nullable = false, length = 45)
-    private String phoneNumber;
+    private String phone;
 
-    // TODO Change OneToMAny
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserAddressEntity address;
 
-    // TODO Should have cascade
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<UserRoleEntity> roles;
 }

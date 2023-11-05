@@ -13,13 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
  * {@link UserDTO} as returning object.
  */
 @RequestMapping(path = "users")
-@RequiredArgsConstructor
 @RestController
 public class UserRestControllerImpl
         extends AbstractRestControllerImpl<UserServiceImpl, UserRepository, UserEntity, UserDTO, Integer> {
     /**
      * All arguments constructor.
-     *
      * @param service         {@link UserServiceImpl} of the {@link UserEntity} entity.
      */
     public UserRestControllerImpl(UserServiceImpl service) {

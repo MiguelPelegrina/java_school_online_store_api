@@ -1,6 +1,7 @@
 package com.javaSchool.FinalTask3.domain.user;
 
 import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressDTO;
+import com.javaSchool.FinalTask3.domain.userRole.UserRoleDTO;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,7 +17,8 @@ public class UserDTO {
     private LocalDate dateOfBirth;
     private String email;
     private boolean isActive;
-    private String phoneNumber;
+    private String phone;
     // TODO Not sure if right
     private UserAddressDTO address;
+    private UserRoleDTO role;
 }
