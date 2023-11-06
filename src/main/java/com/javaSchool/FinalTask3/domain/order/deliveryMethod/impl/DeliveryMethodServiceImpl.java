@@ -1,13 +1,16 @@
 package com.javaSchool.FinalTask3.domain.order.deliveryMethod.impl;
 
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
-import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodDTO;
-import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodEntity;
-import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodRepository;
+import com.javaSchool.FinalTask3.domain.order.deliveryMethod.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
+import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service class responsible for the interaction between the {@link DeliveryMethodRepository} and the
@@ -18,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class DeliveryMethodServiceImpl
-        extends AbstractServiceImpl<DeliveryMethodRepository, DeliveryMethodEntity, DeliveryMethodDTO, String> {
+        extends AbstractServiceImpl<DeliveryMethodRepository, DeliveryMethodEntity, DeliveryMethodDTO, String>
+implements DeliveryMethodService {
     /**
      * All arguments constructor.
      * @param repository {@link DeliveryMethodRepository} of the {@link DeliveryMethodEntity} entity.
@@ -36,5 +40,20 @@ public class DeliveryMethodServiceImpl
     @Override
     public String getEntityId(DeliveryMethodEntity instance) {
         return instance.getName();
+    }
+
+    @Override
+    public List<DeliveryMethodDTO> getAllInstances(Optional<Boolean> active) {
+        // Variables
+        final QDeliveryMethodEntity qDeliveryMethod = QDeliveryMethodEntity.deliveryMethodEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+        // Check which parameters are present and build a query
+        active.ifPresent(aBoolean -> queryBuilder.and(qDeliveryMethod.isActive.eq(aBoolean)));
+
+        // Retrieve a list of delivery methods from the repository, map them to DTOs, and collect them into a List.
+        return this.repository.findAll(queryBuilder).stream().map(
+                deliveryMethod -> modelMapper.map(deliveryMethod, getDTOClass()))
+                .collect(Collectors.toList());
     }
 }

@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * ID with the embeddable {@link OrderBookId}.
  */
 @Repository
-public interface OrderBookRepository extends JpaRepository<OrderBookEntity, OrderBookId> {
+public interface OrderBookRepository extends JpaRepository<OrderBookEntity, Integer> {
 }

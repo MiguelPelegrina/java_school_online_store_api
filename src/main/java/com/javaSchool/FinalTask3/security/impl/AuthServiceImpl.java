@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
             throw new EmailAlreadyUsedException();
         }
 
-        // Build an user
+        // Build a user
         UserEntity newUser = UserEntity.builder()
                 .dateOfBirth(registerRequestBodyDTO.getDateOfBirth())
                 .email(registerRequestBodyDTO.getEmail())
@@ -73,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
         // Get the postal code from the repository
         PostalCodeEntity postalCode = postalCodeRepository.findById(registerRequestBodyDTO.getAddress().getPostalCode()).orElseThrow();
 
-        // Generate an user address
+        // Generate a user address
         UserAddressEntity newUserAddress = UserAddressEntity.builder()
                 .postalCode(postalCode)
                 .number(registerRequestBodyDTO.getAddress().getNumber())

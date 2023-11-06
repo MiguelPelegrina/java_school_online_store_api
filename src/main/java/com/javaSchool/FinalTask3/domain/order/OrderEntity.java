@@ -1,24 +1,19 @@
 package com.javaSchool.FinalTask3.domain.order;
 
+import com.javaSchool.FinalTask3.domain.orderBook.OrderBookEntity;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodEntity;
 import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusEntity;
 import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodEntity;
 import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @Builder
@@ -51,6 +46,9 @@ public class OrderEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "payment_status", referencedColumnName = "name", nullable = false)
     private PaymentStatusEntity paymentStatus;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+    private List<OrderBookEntity> orderedBooks;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;

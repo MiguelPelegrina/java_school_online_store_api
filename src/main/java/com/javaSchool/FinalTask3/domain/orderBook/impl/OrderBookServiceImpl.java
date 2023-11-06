@@ -3,7 +3,6 @@ package com.javaSchool.FinalTask3.domain.orderBook.impl;
 import com.javaSchool.FinalTask3.domain.orderBook.OrderBookDTO;
 import com.javaSchool.FinalTask3.domain.orderBook.OrderBookEntity;
 import com.javaSchool.FinalTask3.domain.orderBook.OrderBookRepository;
-import com.javaSchool.FinalTask3.domain.orderBook.embedabble.OrderBookId;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class OrderBookServiceImpl
-        extends AbstractServiceImpl<OrderBookRepository, OrderBookEntity, OrderBookDTO, OrderBookId> {
+        extends AbstractServiceImpl<OrderBookRepository, OrderBookEntity, OrderBookDTO, Integer> {
     /**
      * All arguments constructor.
      * @param repository {@link OrderBookRepository} of the {@link OrderBookEntity} entity.
@@ -33,7 +32,7 @@ public class OrderBookServiceImpl
     }
 
     @Override
-    public OrderBookId getEntityId(OrderBookEntity instance) {
+    public Integer getEntityId(OrderBookEntity instance) {
         return instance.getId();
     }
 }

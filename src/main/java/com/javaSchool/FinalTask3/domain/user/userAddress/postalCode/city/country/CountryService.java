@@ -13,11 +13,10 @@ import java.util.Optional;
  */
 public interface CountryService {
     /**
-     * Retrieves a list of CountryDTO objects from the database based on specified parameters.
-     *
+     * Retrieves a list of CountryDTOs from the database based on specified parameters.
      * @param active        An optional flag indicating whether countries should be active or not.
      * @param countryName   The name of the country (case-insensitive).
-     * @return              List of CountryDTO objects matching the specified criteria.
+     * @return              List of CountryDTOs matching the specified criteria.
      */
     List<CountryDTO> getAllInstances(Optional<Boolean> active, String countryName);
 }

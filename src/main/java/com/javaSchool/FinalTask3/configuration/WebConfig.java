@@ -105,6 +105,10 @@ public class WebConfig {
                                 "/book_genres",
                                 "/countries/search",
                                 "/cities/search",
+                                "/delivery_methods/search",
+                                "/order_statuses/search",
+                                "/payment_methods/search",
+                                "/payment_statuses/search",
                                 "/postal_codes/search"
                         ).permitAll()
                         .anyRequest().authenticated()

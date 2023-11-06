@@ -1,5 +1,6 @@
-package com.javaSchool.FinalTask3.domain.order;
+package com.javaSchool.FinalTask3.domain.order.dto;
 
+import com.javaSchool.FinalTask3.domain.order.OrderEntity;
 import com.javaSchool.FinalTask3.domain.user.UserDTO;
 import lombok.Data;
 

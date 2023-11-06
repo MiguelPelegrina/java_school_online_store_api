@@ -20,5 +20,6 @@ public class UserDTO {
     private String phone;
     // TODO Not sure if right
     private UserAddressDTO address;
+    // TODO Turning this into a set breaks the any user request
     private UserRoleDTO role;
 }
