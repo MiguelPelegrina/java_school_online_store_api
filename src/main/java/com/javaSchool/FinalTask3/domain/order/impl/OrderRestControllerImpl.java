@@ -2,17 +2,21 @@ package com.javaSchool.FinalTask3.domain.order.impl;
 
 import com.javaSchool.FinalTask3.domain.order.OrderRestController;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
+import com.javaSchool.FinalTask3.domain.order.dto.OrderSearchDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.order.OrderEntity;
 import com.javaSchool.FinalTask3.domain.order.OrderRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 /**
  * RestController of the {@link OrderEntity} entity. Handles the REST methods. Uses {@link OrderDTO} as returning object.
@@ -28,6 +32,16 @@ public class OrderRestControllerImpl
      */
     public OrderRestControllerImpl(OrderServiceImpl service) {
         super(service);
+    }
+
+    @Override
+    public ResponseEntity<Page<OrderDTO>> getAllInstances(@RequestBody OrderSearchDTO orderSearchDTO) {
+        // Check the sorting direction
+        Sort.Direction direction = DESC.toString().equalsIgnoreCase(orderSearchDTO.getSortType()) ? DESC : ASC;
+
+        PageRequest pageRequest = PageRequest.of(orderSearchDTO.getPage(), orderSearchDTO.getSize(), direction, orderSearchDTO.getSortProperty());
+
+        return ResponseEntity.ok(this.service.getAllInstances(orderSearchDTO, pageRequest));
     }
 
     // TODO This might not be the right approach, but I can't figure out how to create an JSON object with a circular

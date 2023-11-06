@@ -6,6 +6,7 @@ import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.Optional;
  * {@link BookRestControllerImpl}. Obtains data from the {@link BookRepository} and returns
  * the object(s) of the entity {@link BookEntity} as {@link BookDTO} to the {@link BookRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN","ROLE_EMPLOYEE"})
 @Service
 @Transactional(readOnly = true)
 public class BookServiceImpl

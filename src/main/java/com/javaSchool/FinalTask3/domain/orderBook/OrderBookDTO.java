@@ -1,8 +1,7 @@
 package com.javaSchool.FinalTask3.domain.orderBook;
 
 import com.javaSchool.FinalTask3.domain.book.BookDTO;
-import com.javaSchool.FinalTask3.domain.order.OrderDTO;
-import com.javaSchool.FinalTask3.domain.orderBook.embedabble.OrderBookId;
+import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
 import lombok.Data;
 
 /**
@@ -10,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class OrderBookDTO {
-    private OrderBookId id;
+    private int id;
     // TODO Not sure if right
     private OrderDTO order;
     // TODO Not sure if right

@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class OrderBookServiceImpl
-        extends AbstractServiceImpl<OrderBookRepository, OrderBookEntity, OrderBookDTO, Integer> {
+        extends AbstractServiceImpl<OrderBookRepository, OrderBookEntity, OrderBookDTO, Integer>{
     /**
      * All arguments constructor.
      * @param repository {@link OrderBookRepository} of the {@link OrderBookEntity} entity.
