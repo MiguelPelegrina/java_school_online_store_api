@@ -60,7 +60,7 @@ public class UserEntity {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserAddressEntity address;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<UserRoleEntity> roles;
 
     // Instance methods

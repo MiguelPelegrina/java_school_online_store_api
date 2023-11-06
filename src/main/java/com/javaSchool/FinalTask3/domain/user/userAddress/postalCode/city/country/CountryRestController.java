@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 public interface CountryRestController {
     /**
-     * Retrieves a list of CountryDTO objects from the database based on specified parameters.
+     * Retrieves a list of CountryDTOs from the database based on specified parameters.
      *
      * @param active        An optional flag indicating whether countries should be active or not.
      * @param countryName   The name of the country (case-insensitive). Default is an empty string.

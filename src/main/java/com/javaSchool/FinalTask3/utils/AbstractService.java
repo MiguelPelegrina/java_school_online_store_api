@@ -1,6 +1,5 @@
 package com.javaSchool.FinalTask3.utils;
 
-
 import java.util.List;
 
 /**

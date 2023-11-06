@@ -3,13 +3,16 @@ package com.javaSchool.FinalTask3.domain.order.paymentStatus.impl;
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreEntity;
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreRepository;
-import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusDTO;
-import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
-import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusRepository;
+import com.javaSchool.FinalTask3.domain.order.paymentStatus.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
+import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service class responsible for the interaction between the {@link PaymentStatusRepository} and the
@@ -20,7 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class PaymentStatusServiceImpl
-        extends AbstractServiceImpl<PaymentStatusRepository, PaymentStatusEntity, PaymentStatusDTO, String> {
+        extends AbstractServiceImpl<PaymentStatusRepository, PaymentStatusEntity, PaymentStatusDTO, String>
+        implements PaymentStatusService {
     /**
      * All arguments constructor.
      * @param repository {@link BookGenreRepository} of the {@link BookGenreEntity} entity.
@@ -38,5 +42,20 @@ public class PaymentStatusServiceImpl
     @Override
     public String getEntityId(PaymentStatusEntity instance) {
         return instance.getName();
+    }
+
+    @Override
+    public List<PaymentStatusDTO> getAllInstances(Optional<Boolean> active) {
+        // Variables
+        final QPaymentStatusEntity qPaymentStatus = QPaymentStatusEntity.paymentStatusEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+        // Check which parameters are present and build a query
+        active.ifPresent(aBoolean -> queryBuilder.and(qPaymentStatus.isActive.eq(aBoolean)));
+
+        // Retrieve a list of payment statuses from the repository, map them to DTOs, and collect them into a List.
+        return this.repository.findAll(queryBuilder).stream().map(
+                        paymentStatus -> modelMapper.map(paymentStatus, getDTOClass()))
+                .collect(Collectors.toList());
     }
 }

@@ -21,7 +21,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Table(name = "user_roles", schema = "public", catalog = "online_store")
 public class UserRoleEntity {
-    // TODO should have embedded id
     @Id
     @GeneratedValue
     private int id;

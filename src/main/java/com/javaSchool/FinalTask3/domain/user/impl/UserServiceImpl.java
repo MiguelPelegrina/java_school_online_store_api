@@ -60,7 +60,6 @@ public class UserServiceImpl
         // Get the token
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        System.out.println(request.getHeader("Authorization"));
 
         // Parse the token to get the id
         Claims claims = new JwtUtil().decodeToken(request.getHeader("Authorization").substring(7));
