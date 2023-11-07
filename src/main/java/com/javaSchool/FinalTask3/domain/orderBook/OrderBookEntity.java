@@ -18,21 +18,17 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Table(name = "order_books", schema = "public", catalog = "online_store")
 public class OrderBookEntity {
-    /*@EmbeddedId
-    private OrderBookId id;*/
     @Id
+    @Column
     @GeneratedValue
     private int id;
 
-    // TODO Not sure if right
-    //@MapsId("orderId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
     @JsonIgnore
     @ToString.Exclude
     private OrderEntity order;
 
-    //@MapsId("bookId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "book_id", nullable = false)
     @ToString.Exclude

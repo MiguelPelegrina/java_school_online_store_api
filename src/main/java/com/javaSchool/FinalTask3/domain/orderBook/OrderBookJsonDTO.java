@@ -2,16 +2,12 @@ package com.javaSchool.FinalTask3.domain.orderBook;
 
 import com.javaSchool.FinalTask3.domain.book.BookDTO;
 import lombok.Data;
-
 /**
- * Data Transfer Object (DTO) of {@link OrderBookEntity}.
+ * Data Transfer Object (DTO) of {@link OrderBookEntity}, without reference to order, to not create recursive JSON.
  */
 @Data
-public class OrderBookDTO {
+public class OrderBookJsonDTO {
     private int id;
-    // TODO Not sure if right
-    //private OrderDTO order;
-    // TODO Not sure if right
     private BookDTO book;
     private int amount;
 }
