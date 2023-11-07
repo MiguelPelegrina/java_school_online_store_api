@@ -1,12 +1,8 @@
 package com.javaSchool.FinalTask3.domain.order;
 
-import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodEntity;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.order.impl.OrderRestControllerImpl;
-import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusEntity;
-import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodEntity;
-import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

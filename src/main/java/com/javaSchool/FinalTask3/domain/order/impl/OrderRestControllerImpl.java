@@ -1,14 +1,10 @@
 package com.javaSchool.FinalTask3.domain.order.impl;
 
 import com.javaSchool.FinalTask3.domain.order.OrderRestController;
-import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodEntity;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.order.OrderEntity;
 import com.javaSchool.FinalTask3.domain.order.OrderRepository;
-import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusEntity;
-import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodEntity;
-import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;

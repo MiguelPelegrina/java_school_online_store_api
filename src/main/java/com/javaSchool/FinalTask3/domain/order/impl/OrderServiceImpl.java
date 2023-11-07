@@ -2,15 +2,10 @@ package com.javaSchool.FinalTask3.domain.order.impl;
 
 import com.javaSchool.FinalTask3.domain.order.OrderService;
 import com.javaSchool.FinalTask3.domain.order.QOrderEntity;
-import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodEntity;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
-import com.javaSchool.FinalTask3.domain.order.dto.OrderSearchDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.order.OrderEntity;
 import com.javaSchool.FinalTask3.domain.order.OrderRepository;
-import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusEntity;
-import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodEntity;
-import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
@@ -19,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 
