@@ -42,9 +42,6 @@ public class BookServiceImpl
     }
 
     // TODO
-    //  Use RequestBody and DTOs
-
-    //  Abstract?
     //  Scalable by
     //  - Differentiating between filtering with AND (requires to be advanced filter in FE) and OR (searching by title,
     //  or author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?

@@ -2,11 +2,15 @@ package com.javaSchool.FinalTask3.domain.order.impl;
 
 import com.javaSchool.FinalTask3.domain.order.OrderService;
 import com.javaSchool.FinalTask3.domain.order.QOrderEntity;
+import com.javaSchool.FinalTask3.domain.order.deliveryMethod.DeliveryMethodEntity;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderSearchDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.order.OrderEntity;
 import com.javaSchool.FinalTask3.domain.order.OrderRepository;
+import com.javaSchool.FinalTask3.domain.order.orderStatus.OrderStatusEntity;
+import com.javaSchool.FinalTask3.domain.order.paymentMethod.PaymentMethodEntity;
+import com.javaSchool.FinalTask3.domain.order.paymentStatus.PaymentStatusEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
@@ -15,6 +19,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 
 /**
  * Service class responsible for the interaction between the {@link OrderRepository} and the {@link OrderRestControllerImpl}.
@@ -47,36 +54,37 @@ public class OrderServiceImpl
     }
 
     @Override
-    public Page<OrderDTO> getAllInstances(OrderSearchDTO orderSearchDTO, PageRequest pageRequest) {
+    public Page<OrderDTO> getAllInstances(LocalDate date, String deliveryMethod, String orderStatus,
+                                          String paymentMethod, String paymentStatus, String name, PageRequest pageRequest) {
         // Variables
         final QOrderEntity qOrder = QOrderEntity.orderEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         // Check which parameters are present and build a query
-        if(!orderSearchDTO.getName().isEmpty()){
-            queryBuilder.and(qOrder.user.name.containsIgnoreCase(orderSearchDTO.getName())
-                    .or(qOrder.user.surname.containsIgnoreCase(orderSearchDTO.getName()))
-                    .or(qOrder.user.id.eq(Integer.parseInt(orderSearchDTO.getName()))));
+        if(!name.isEmpty()){
+            queryBuilder.and(qOrder.user.name.containsIgnoreCase(name)
+                    .or(qOrder.user.surname.containsIgnoreCase(name))
+                    .or(qOrder.user.id.eq(Integer.parseInt(name))));
         }
 
-        if(orderSearchDTO.getDeliveryMethod() != null){
-            queryBuilder.and(qOrder.deliveryMethod.eq(orderSearchDTO.getDeliveryMethod()));
+        if(!deliveryMethod.isEmpty()){
+            queryBuilder.and(qOrder.deliveryMethod.name.containsIgnoreCase(deliveryMethod));
         }
 
-        if(orderSearchDTO.getOrderStatus() != null){
-            queryBuilder.and(qOrder.orderStatus.eq(orderSearchDTO.getOrderStatus()));
+        if(!orderStatus.isEmpty()){
+            queryBuilder.and(qOrder.orderStatus.name.containsIgnoreCase(orderStatus));
         }
 
-        if(orderSearchDTO.getPaymentMethod() != null){
-            queryBuilder.and(qOrder.paymentMethod.eq(orderSearchDTO.getPaymentMethod()));
+        if(!paymentMethod.isEmpty()){
+            queryBuilder.and(qOrder.paymentMethod.name.containsIgnoreCase(paymentMethod));
         }
 
-        if(orderSearchDTO.getPaymentStatus() != null){
-            queryBuilder.and(qOrder.paymentStatus.eq(orderSearchDTO.getPaymentStatus()));
+        if(!paymentStatus.isEmpty()){
+            queryBuilder.and(qOrder.paymentStatus.name.containsIgnoreCase(paymentStatus));
         }
 
-        if(orderSearchDTO.getDate() != null){
-            queryBuilder.and(qOrder.date.eq(orderSearchDTO.getDate()));
+        if(date != null){
+            queryBuilder.and(qOrder.date.eq(date));
         }
 
         // Find the data in the repository

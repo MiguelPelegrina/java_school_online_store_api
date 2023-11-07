@@ -10,15 +10,15 @@ import java.util.Optional;
  */
 public interface BookRestController {
     /**
-     * Retrieves a page of BookDTOs from the database based on specified parameters and sorting criteria.
-     * @param name          The name or title to search for (case-insensitive). Default is an empty string.
+     * Retrieves a page of {@link BookDTO}s from the database based on specified parameters and sorting criteria.
+     * @param name          The name or title to search for.
      * @param active        An optional flag indicating whether books should be active or not.
-     * @param genre         The genre of the books to search for (case-insensitive). Default is an empty string.
-     * @param sortType      The sorting direction (either "ASC" or "DESC"). Default is "ASC".
-     * @param sortProperty  The property by which to sort the results. Default is "title".
-     * @param page          The page number to retrieve. Default is 0.
-     * @param size          The number of items per page. Default is 20.
-     * @return              ResponseEntity containing a Page of BookDTOs based on the specified criteria.
+     * @param genre         The genre of the books to search for.
+     * @param sortType      The sorting direction.
+     * @param sortProperty  The property by which to sort the results.
+     * @param page          The page number to retrieve.
+     * @param size          The number of items per page.
+     * @return              ResponseEntity containing a Page of {@link BookDTO}s based on the specified criteria.
      */
      ResponseEntity<Page<BookDTO>> getAllInstances(
             String name,
