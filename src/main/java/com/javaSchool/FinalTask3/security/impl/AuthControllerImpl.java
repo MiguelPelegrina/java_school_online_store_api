@@ -16,8 +16,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
-
 /**
  * The {@code AuthController} class is responsible for handling user authentication via a login endpoint.
  * It processes login requests, validates user credentials, and generates JWT tokens upon successful authentication.
@@ -75,9 +73,10 @@ public class AuthControllerImpl implements AuthController {
      * @return An AuthResultDTO containing the access token, user ID, and user roles.
      */
     private AuthResultDTO generateAuthResultDTO(UserEntity user){
+        System.out.println(user);
         AuthResultDTO resultDto = new AuthResultDTO();
         resultDto.setAccessToken(jwtUtil.createToken(user));
-
+        System.out.println(resultDto);
         return resultDto;
     }
 }

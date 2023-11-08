@@ -8,5 +8,4 @@ import lombok.Data;
 @Data
 public class AuthResultDTO {
     private String accessToken;
-    private int id;
 }

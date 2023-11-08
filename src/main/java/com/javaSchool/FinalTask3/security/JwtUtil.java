@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * The {@code JwtUtil} class is a utility component responsible for managing JSON Web Tokens (JWT) in a Spring
@@ -41,10 +42,10 @@ public class JwtUtil {
     public String createToken(UserEntity user) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
         claims.put("id", user.getId());
-        // TODO Cant send the roles neither as Set, nor HashSet, nor Array, nor List.
-        //  Leads to "Unable to serialize claims object to json." on frontend
-        //  Need it to restrict access in frontend? Work around would be to only send the "highest" role
-        // claims.put("roles", user.getRoles().stream().toList());
+        claims.put("roles", user.getRoles().stream().map(
+                userRoleEntity -> userRoleEntity.getRole().getName())
+                .collect(Collectors.toList())
+        );
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()
