@@ -15,6 +15,6 @@ public abstract class AbstractPageableSortableRequest {
     private int size;
 
     public void setSortType(String sortType) {
-        this.sortType = String.valueOf(DESC.toString().equalsIgnoreCase(this.getSortType()) ? DESC : ASC);
+        this.sortType = String.valueOf(DESC.toString().equalsIgnoreCase(sortType) ? DESC : ASC);
     }
 }
