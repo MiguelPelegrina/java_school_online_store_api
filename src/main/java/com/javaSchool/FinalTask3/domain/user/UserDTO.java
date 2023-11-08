@@ -19,8 +19,6 @@ public class UserDTO {
     private String email;
     private boolean isActive;
     private String phone;
-    // TODO Not sure if right
     private UserAddressDTO address;
-    // TODO Turning this into a set breaks the any user request
     private Set<UserRoleJsonDTO> roles;
 }

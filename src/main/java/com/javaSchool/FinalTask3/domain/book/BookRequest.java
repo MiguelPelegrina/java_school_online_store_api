@@ -16,6 +16,6 @@ import java.util.Optional;
 @NoArgsConstructor
 public class BookRequest extends AbstractPageableSortableRequest {
     private String name = "";
-    private Optional<Boolean> active;
+    private Optional<Boolean> active = Optional.empty();
     private String genre = "";
 }

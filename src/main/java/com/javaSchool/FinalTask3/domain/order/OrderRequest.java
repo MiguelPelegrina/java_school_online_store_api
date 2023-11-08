@@ -16,9 +16,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class OrderRequest extends AbstractPageableSortableRequest {
     private LocalDate date;
-    private String deliveryMethod;
-    private String orderStatus;
-    private String paymentMethod;
-    private String paymentStatus;
-    private String name;
+    private String deliveryMethod = "";
+    private String orderStatus = "";
+    private String paymentMethod = "";
+    private String paymentStatus = "";
+    private String name = "";
 }

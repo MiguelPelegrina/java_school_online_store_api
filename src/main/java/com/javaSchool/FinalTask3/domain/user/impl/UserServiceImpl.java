@@ -4,15 +4,15 @@ import com.javaSchool.FinalTask3.domain.user.UserDTO;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
 import com.javaSchool.FinalTask3.exception.InsufficientPermissions;
+import com.javaSchool.FinalTask3.exception.UserDoesNotExist;
 import com.javaSchool.FinalTask3.security.JwtUtil;
+import com.javaSchool.FinalTask3.utils.StringValues;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
-
-import java.util.Optional;
 
 /**
  * Service class responsible for the interaction between the {@link UserRepository} and the
@@ -56,19 +56,21 @@ public class UserServiceImpl
         // Get the token
         int userId = JwtUtil.getIdFromToken(RequestContextHolder.getRequestAttributes());
 
-        // Get the user from the database
-        Optional<UserEntity> existingUser = repository.findById(userId);
+        // Get the user that sends the request from the database
+        UserEntity existingUser = repository.findById(userId).orElseThrow(() -> new UserDoesNotExist(
+                String.format(StringValues.INSTANCE_NOT_FOUND, userId)
+        ));
 
         // Check if the active user exists and is active
-        if(existingUser.isPresent() && existingUser.get().isActive()){
+        if(existingUser.isActive()){
             // Check if the user is trying to update themselves
-            if(existingUser.get().getId() == instance.getId()){
+            if(existingUser.getId() == instance.getId()){
                 return super.saveInstance(instance);
             } else {
                 // Check if the active user is allowed to update others:
                 // - Admin can update employees and clients, but not other admins
                 // - Employee can update clients
-                if(UserEntity.isAllowedToUpdate(existingUser.get(), instance)){
+                if(existingUser.hasMoreRightThen(instance)){
                     return super.saveInstance(instance);
                     // Admins can not update other admins
                     // Employees can not update other employees

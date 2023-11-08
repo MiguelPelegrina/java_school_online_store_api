@@ -23,7 +23,6 @@ public class OrderDTO {
     private OrderStatusDTO orderStatus;
     private PaymentMethodDTO paymentMethod;
     private PaymentStatusDTO paymentStatus;
-    // TODO Not sure if right approach
     private List<OrderBookJsonDTO> orderedBooks;
     private LocalDate date;
 }

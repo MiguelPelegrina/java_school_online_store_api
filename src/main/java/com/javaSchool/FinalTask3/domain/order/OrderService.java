@@ -4,9 +4,6 @@ import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.order.impl.OrderRestControllerImpl;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-
-import java.time.LocalDate;
 
 /**
  * Service interface responsible for the interaction between the {@link OrderRepository} and the
@@ -16,17 +13,9 @@ import java.time.LocalDate;
 public interface OrderService {
     /**
      * Retrieves a page of {@link OrderDTO}s from the database based on specified parameters and sorting criteria.
-     * @param date            The date of the order.
-     * @param deliveryMethod  The delivery method of the order to search for.
-     * @param orderStatus     The order status of the order to search for.
-     * @param paymentMethod   The payment method of the order to search for.
-     * @param paymentStatus   The payment status of the order to search for.
-     * @param name            The part of the name of the user to search for.
      * @return                ResponseEntity containing a Page of {@link OrderDTO}}s based on the specified criteria.
      */
-    Page<OrderDTO> getAllInstances(LocalDate date, String deliveryMethod, String orderStatus,
-                                   String paymentMethod, String paymentStatus, String name,
-                                   PageRequest pageRequest);
+    Page<OrderDTO> getAllInstances(OrderRequest orderRequest);
 
     /**
      * Saves an order in the system based on the provided {@link SaveOrderDTO}.
