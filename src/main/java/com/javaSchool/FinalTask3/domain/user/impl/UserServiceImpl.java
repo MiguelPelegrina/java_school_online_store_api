@@ -6,15 +6,11 @@ import com.javaSchool.FinalTask3.domain.user.UserRepository;
 import com.javaSchool.FinalTask3.exception.InsufficientPermissions;
 import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 
@@ -24,7 +20,7 @@ import java.util.Optional;
  * {@link UserRepository} and returns the object(s) of the entity {@link UserEntity} as
  * {@link UserDTO} to the {@link UserRestControllerImpl}.
  */
-@Secured("ROLE_ADMIN")
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE", "ROLE_CLIENT"})
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl
@@ -58,26 +54,21 @@ public class UserServiceImpl
     @Override
     public UserDTO saveInstance(UserEntity instance) {
         // Get the token
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-
-        // Parse the token to get the id
-        Claims claims = new JwtUtil().decodeToken(request.getHeader("Authorization").substring(7));
-        int userId = claims.get("id", Integer.class);
+        int userId = JwtUtil.getIdFromToken(RequestContextHolder.getRequestAttributes());
 
         // Get the user from the database
-        Optional<UserEntity> activeUser = repository.findById(userId);
+        Optional<UserEntity> existingUser = repository.findById(userId);
 
         // Check if the active user exists and is active
-        if(activeUser.isPresent() && activeUser.get().isActive()){
+        if(existingUser.isPresent() && existingUser.get().isActive()){
             // Check if the user is trying to update themselves
-            if(activeUser.get().getId() == instance.getId()){
+            if(existingUser.get().getId() == instance.getId()){
                 return super.saveInstance(instance);
             } else {
                 // Check if the active user is allowed to update others:
                 // - Admin can update employees and clients, but not other admins
                 // - Employee can update clients
-                if(UserEntity.isAllowedToUpdate(activeUser.get(), instance)){
+                if(UserEntity.isAllowedToUpdate(existingUser.get(), instance)){
                     return super.saveInstance(instance);
                     // Admins can not update other admins
                     // Employees can not update other employees

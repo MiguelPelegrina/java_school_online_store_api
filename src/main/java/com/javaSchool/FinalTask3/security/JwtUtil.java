@@ -6,6 +6,8 @@ import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JwtUtil {
     // Fields
-    private final String secret_key = "mysecretkey";
+    private final static String secret_key = "mysecretkey";
     private long accessTokenValidity = 60*60*1000;
     private final JwtParser jwtParser;
     private final String TOKEN_HEADER = "Authorization";
@@ -58,7 +60,7 @@ public class JwtUtil {
      * @return A Claims object containing the decoded claims from the JWT. Returns null if the token is invalid or an
      *          exception occurs during decoding.
      */
-    public Claims decodeToken(String token) {
+    public static Claims decodeToken(String token) {
         try {
             return Jwts.parser()
                     .setSigningKey(secret_key)
@@ -68,6 +70,16 @@ public class JwtUtil {
             // TODO Handle exceptions (e.g., token expired, invalid signature, etc.)
             return null;
         }
+    }
+
+    public static int getIdFromToken(RequestAttributes requestAttributes){
+        // Get the token
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+
+        // Parse the token to get the id
+        Claims claims = JwtUtil.decodeToken(request.getHeader("Authorization").substring(7));
+
+        return claims.get("id", Integer.class);
     }
 
     /**
