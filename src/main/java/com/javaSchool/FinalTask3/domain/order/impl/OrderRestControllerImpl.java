@@ -1,5 +1,6 @@
 package com.javaSchool.FinalTask3.domain.order.impl;
 
+import com.javaSchool.FinalTask3.domain.order.OrderRequest;
 import com.javaSchool.FinalTask3.domain.order.OrderRestController;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
@@ -13,11 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-
-import static org.springframework.data.domain.Sort.Direction.ASC;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 /**
  * RestController of the {@link OrderEntity} entity. Handles the REST methods. Uses {@link OrderDTO} as returning object.
@@ -37,25 +33,19 @@ public class OrderRestControllerImpl
 
     @GetMapping("/search")
     @Override
-    public ResponseEntity<Page<OrderDTO>> getAllInstances(
-            @RequestParam(name = "date", defaultValue = "") LocalDate date,
-            @RequestParam(name = "deliveryMethod", defaultValue = "") String deliveryMethod,
-            @RequestParam(name = "orderStatus", defaultValue = "") String orderStatus,
-            @RequestParam(name = "paymentMethod", defaultValue = "") String paymentMethod,
-            @RequestParam(name = "paymentStatus", defaultValue = "") String paymentStatus,
-            @RequestParam(name = "name", defaultValue = "") String name,
-            @RequestParam("sortType") String sortType,
-            @RequestParam(name = "sortProperty", defaultValue = "surname") String sortProperty,
-            @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "size", defaultValue = "20") Integer size
-    ) {
-        // Check the sorting direction
-        Sort.Direction direction = DESC.toString().equalsIgnoreCase(sortType) ? DESC : ASC;
-
-        PageRequest pageRequest = PageRequest.of(page, size, direction, sortProperty);
+    public ResponseEntity<Page<OrderDTO>> getAllInstances(OrderRequest orderRequest) {
+        PageRequest pageRequest = PageRequest.of(
+                orderRequest.getPage(),
+                orderRequest.getSize(),
+                Sort.Direction.valueOf(orderRequest.getSortType()),
+                orderRequest.getSortProperty());
 
         return ResponseEntity.ok(this.service.getAllInstances(
-                date, deliveryMethod, orderStatus, paymentMethod, paymentStatus, name, pageRequest
+                orderRequest.getDate(),
+                orderRequest.getDeliveryMethod(),
+                orderRequest.getOrderStatus(), orderRequest.getPaymentMethod(),
+                orderRequest.getPaymentStatus(),
+                orderRequest.getName(), pageRequest
         ));
     }
 
