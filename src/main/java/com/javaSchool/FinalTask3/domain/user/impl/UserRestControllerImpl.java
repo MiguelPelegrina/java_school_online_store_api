@@ -22,8 +22,4 @@ public class UserRestControllerImpl
     public UserRestControllerImpl(UserServiceImpl service) {
         super(service);
     }
-
-    // TODO Override method of saveInstance to encode password?
-    // TODO How to apply Annotation @Secured to methods that are in the parent class properly?
-    // @Secured({"ROLE_ADMIN", "ROLE_USER"})
 }

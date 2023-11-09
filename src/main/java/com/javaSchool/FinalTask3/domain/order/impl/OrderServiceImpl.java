@@ -117,10 +117,11 @@ public class OrderServiceImpl
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public OrderDTO saveInstance(SaveOrderDTO saveOrderDTO)  {
         // Build an order
         OrderEntity newOrder = OrderEntity.builder()
+                .id(saveOrderDTO.getOrder().getId())
                 .date(saveOrderDTO.getOrder().getDate())
                 .orderStatus(saveOrderDTO.getOrder().getOrderStatus())
                 .paymentStatus(saveOrderDTO.getOrder().getPaymentStatus())
