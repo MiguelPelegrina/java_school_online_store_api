@@ -63,7 +63,7 @@ public class BookEntity {
     private int stock;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    private boolean active;
 
     @Column(name = "image")
     @Lob

@@ -54,7 +54,7 @@ public class BookServiceImpl
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         // Check which parameters are present and build a query
-        active.ifPresent(aBoolean -> queryBuilder.and(qBook.isActive.eq(aBoolean)));
+        active.ifPresent(aBoolean -> queryBuilder.and(qBook.active.eq(aBoolean)));
 
         if(!name.isEmpty()){
             queryBuilder.and(qBook.title.containsIgnoreCase(name).or(qBook.parameters.author.containsIgnoreCase(name)));

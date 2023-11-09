@@ -47,7 +47,7 @@ public class OrderEntity {
     @JoinColumn(name = "payment_status", referencedColumnName = "name", nullable = false)
     private PaymentStatusEntity paymentStatus;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER, mappedBy = "order")
     private List<OrderBookEntity> orderedBooks;
 
     @Column(name = "date", nullable = false)
