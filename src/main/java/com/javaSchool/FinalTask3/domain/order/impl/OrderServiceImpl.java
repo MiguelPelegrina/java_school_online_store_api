@@ -95,7 +95,7 @@ public class OrderServiceImpl
                 if(!orderRequest.getName().isEmpty()){
                     queryBuilder.and(qOrder.user.name.containsIgnoreCase(orderRequest.getName())
                     .or(qOrder.user.surname.containsIgnoreCase(orderRequest.getName()))
-                    .or(qOrder.user.id.eq(Integer.parseInt(orderRequest.getName()))));
+                    .or(qOrder.user.email.containsIgnoreCase(orderRequest.getName())));
                 }
             }
 

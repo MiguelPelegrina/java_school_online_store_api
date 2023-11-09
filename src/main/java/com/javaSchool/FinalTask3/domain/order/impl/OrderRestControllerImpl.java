@@ -8,6 +8,7 @@ import com.javaSchool.FinalTask3.domain.order.OrderEntity;
 import com.javaSchool.FinalTask3.domain.order.OrderRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

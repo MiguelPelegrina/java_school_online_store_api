@@ -15,10 +15,10 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class OrderRequest extends AbstractPageableSortableRequest {
+    private String name = "";
     private LocalDate date;
     private String deliveryMethod = "";
     private String orderStatus = "";
     private String paymentMethod = "";
     private String paymentStatus = "";
-    private String name = "";
 }
