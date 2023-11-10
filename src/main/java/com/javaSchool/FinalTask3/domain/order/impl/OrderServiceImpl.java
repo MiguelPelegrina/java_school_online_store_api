@@ -70,16 +70,18 @@ public class OrderServiceImpl
         QOrderEntity qOrder = QOrderEntity.orderEntity;
         QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;
 
-        BigDecimal totalRevenue = BigDecimal.valueOf(queryFactory
-                .select(qOrderBook.amount.multiply(qOrderBook.book.price).sum())
-                .from(qOrderBook)
-                .join(qOrderBook.order, qOrder)
-                .where(
-                        qOrder.date.between(startDate, endDate)
-                )
-                .fetchOne());
-
-        return totalRevenue;
+        try{
+            return BigDecimal.valueOf(queryFactory
+                    .select(qOrderBook.amount.multiply(qOrderBook.book.price).sum())
+                    .from(qOrderBook)
+                    .join(qOrderBook.order, qOrder)
+                    .where(
+                            qOrder.date.between(startDate, endDate)
+                    )
+                    .fetchOne());
+        } catch (NullPointerException e){
+            return BigDecimal.ZERO;
+        }
     }
 
     @Override
