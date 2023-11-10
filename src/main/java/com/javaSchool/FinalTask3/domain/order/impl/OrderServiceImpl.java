@@ -3,6 +3,7 @@ package com.javaSchool.FinalTask3.domain.order.impl;
 import com.javaSchool.FinalTask3.domain.order.*;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
+import com.javaSchool.FinalTask3.domain.orderBook.QOrderBookEntity;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
 import com.javaSchool.FinalTask3.exception.InsufficientPermissions;
@@ -11,6 +12,9 @@ import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.utils.StringValues;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +23,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Service class responsible for the interaction between the {@link OrderRepository} and the {@link OrderRestControllerImpl}.
@@ -32,6 +39,9 @@ public class OrderServiceImpl
         extends AbstractServiceImpl<OrderRepository, OrderEntity, OrderDTO, Integer>
         implements OrderService {
     private final UserRepository userRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * All arguments constructor.
@@ -52,6 +62,24 @@ public class OrderServiceImpl
     @Override
     public Integer getEntityId(OrderEntity instance) {
         return instance.getId();
+    }
+
+    public BigDecimal calculateTotalRevenue(LocalDate startDate, LocalDate endDate) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
+
+        QOrderEntity qOrder = QOrderEntity.orderEntity;
+        QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;
+
+        BigDecimal totalRevenue = BigDecimal.valueOf(queryFactory
+                .select(qOrderBook.amount.multiply(qOrderBook.book.price).sum())
+                .from(qOrderBook)
+                .join(qOrderBook.order, qOrder)
+                .where(
+                        qOrder.date.between(startDate, endDate)
+                )
+                .fetchOne());
+
+        return totalRevenue;
     }
 
     @Override
