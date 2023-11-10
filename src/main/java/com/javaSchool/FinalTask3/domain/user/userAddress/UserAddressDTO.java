@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class UserAddressDTO {
     private int id;
-    // TODO Not sure if right
     private PostalCodeDTO postalCode;
     private String street;
     private int number;

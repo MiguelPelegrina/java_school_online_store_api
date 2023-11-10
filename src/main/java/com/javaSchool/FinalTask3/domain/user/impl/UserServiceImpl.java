@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.util.Optional;
+
 /**
  * Service class responsible for the interaction between the {@link UserRepository} and the
  * {@link UserRestControllerImpl}. Obtains data from the
@@ -50,31 +52,40 @@ public class UserServiceImpl
      *   - Employees can update clients.
      * If any of these checks fail, an InsufficientPermissions exception is thrown. If the user is not
      * present in the database or is not active, an InsufficientPermissions exception is also thrown.
-     * @param instance The UserEntity instance to be saved.
+     * @param toSaveOrUpdateUser The UserEntity instance to be saved.
      * @return The saved UserDTO instance if the operation is allowed.
      * @throws InsufficientPermissions If the user does not have sufficient permissions to perform the update.
      */
     @Override
-    public UserDTO saveInstance(UserEntity instance) {
+    public UserDTO saveInstance(UserEntity toSaveOrUpdateUser) {
         // Get the token
         int userId = JwtUtil.getIdFromToken(RequestContextHolder.getRequestAttributes());
 
         // Get the user that sends the request from the database
-        UserEntity existingUser = repository.findById(userId).orElseThrow(() -> new UserDoesNotExist(
+        UserEntity activeExistingUser = repository.findById(userId).orElseThrow(() -> new UserDoesNotExist(
                 String.format(StringValues.INSTANCE_NOT_FOUND, userId)
         ));
 
+        // Get the roles and the password of the user that is being updated, if they exist.
+        // This is necessary because the password will not always be sent from the frontend (e.g. the current user
+        // updates themselves, a user is being activated/deactivated) and I can't create a JSON with circular reference
+        Optional<UserEntity> existingUser = repository.findById(toSaveOrUpdateUser.getId());
+        existingUser.ifPresent(user -> {
+            toSaveOrUpdateUser.setPassword(user.getPassword());
+            toSaveOrUpdateUser.setRoles(user.getRoles());
+        });
+
         // Check if the active user exists and is active
-        if(existingUser.isActive()){
+        if(activeExistingUser.isActive()){
             // Check if the user is trying to update themselves
-            if(existingUser.getId() == instance.getId()){
-                return super.saveInstance(instance);
+            if(activeExistingUser.getId() == toSaveOrUpdateUser.getId()){
+                return super.saveInstance(toSaveOrUpdateUser);
             } else {
                 // Check if the active user is allowed to update others:
                 // - Admin can update employees and clients, but not other admins
                 // - Employee can update clients
-                if(existingUser.hasMoreRightThen(instance)){
-                    return super.saveInstance(instance);
+                if(activeExistingUser.hasMoreRightThen(toSaveOrUpdateUser)){
+                    return super.saveInstance(toSaveOrUpdateUser);
                     // Admins can not update other admins
                     // Employees can not update other employees
                     // Clients can not update others
