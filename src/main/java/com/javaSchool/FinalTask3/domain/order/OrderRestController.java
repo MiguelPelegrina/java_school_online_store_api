@@ -22,5 +22,5 @@ public interface OrderRestController {
      * @return Returns a ResponseEntity with the {@link OrderDTO} and the status of the POST request.
      * If successful, the code is 200 created successfully, 204 otherwise.
      */
-    ResponseEntity<OrderDTO> saveInstance( SaveOrderDTO saveOrderDTO);
+    ResponseEntity<OrderDTO> saveInstance(SaveOrderDTO saveOrderDTO);
 }

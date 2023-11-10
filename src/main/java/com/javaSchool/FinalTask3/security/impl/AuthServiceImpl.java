@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
         UserEntity newUser = UserEntity.builder()
                 .dateOfBirth(registerRequestBodyDTO.getDateOfBirth())
                 .email(registerRequestBodyDTO.getEmail())
-                .isActive(true)
+                .active(true)
                 .name(registerRequestBodyDTO.getName())
                 .password(passwordEncoder.encode(registerRequestBodyDTO.getPassword()))
                 .surname(registerRequestBodyDTO.getSurname())

@@ -1,9 +1,10 @@
 package com.javaSchool.FinalTask3.domain.user.impl;
 
-import com.javaSchool.FinalTask3.domain.user.UserDTO;
-import com.javaSchool.FinalTask3.domain.user.UserEntity;
-import com.javaSchool.FinalTask3.domain.user.UserRepository;
+import com.javaSchool.FinalTask3.domain.user.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,12 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "users")
 @RestController
 public class UserRestControllerImpl
-        extends AbstractRestControllerImpl<UserServiceImpl, UserRepository, UserEntity, UserDTO, Integer> {
+        extends AbstractRestControllerImpl<UserServiceImpl, UserRepository, UserEntity, UserDTO, Integer>
+        implements UserRestController {
     /**
      * All arguments constructor.
      * @param service         {@link UserServiceImpl} of the {@link UserEntity} entity.
      */
     public UserRestControllerImpl(UserServiceImpl service) {
         super(service);
+    }
+
+
+    @GetMapping("/search")
+    @Override
+    public ResponseEntity<Page<UserDTO>> getAllInstances(UserRequest userRequest) {
+        return ResponseEntity.ok(this.service.getAllInstances(userRequest));
     }
 }

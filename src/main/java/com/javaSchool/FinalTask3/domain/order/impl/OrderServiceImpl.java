@@ -109,7 +109,7 @@ public class OrderServiceImpl
             // Find the data in the repository
             Page<OrderEntity> pageEntities = this.repository.findAll(queryBuilder, pageRequest);
 
-            // Convert the oder page to a orderDTO page
+            // Convert the page to a DTO page
             return pageEntities.map(order -> modelMapper.map(order, this.getDTOClass()));
         } else {
             throw new InsufficientPermissions();

@@ -12,8 +12,9 @@ import org.springframework.data.domain.Page;
  */
 public interface OrderService {
     /**
-     * Retrieves a page of {@link OrderDTO}s from the database based on specified parameters and sorting criteria.
-     * @return                ResponseEntity containing a Page of {@link OrderDTO}}s based on the specified criteria.
+     * Retrieves a page of {@link OrderDTO}s from the database based on {@link OrderRequest}.
+     * @param orderRequest   {@link OrderRequest} that contains all the specified parameters and sorting criteria.
+     * @return               ResponseEntity containing a Page of {@link OrderDTO}}s based on the specified criteria.
      */
     Page<OrderDTO> getAllInstances(OrderRequest orderRequest);
 

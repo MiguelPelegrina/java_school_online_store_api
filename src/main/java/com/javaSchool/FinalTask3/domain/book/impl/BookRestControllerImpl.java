@@ -3,8 +3,6 @@ package com.javaSchool.FinalTask3.domain.book.impl;
 import com.javaSchool.FinalTask3.domain.book.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,16 +28,6 @@ public class BookRestControllerImpl
     @GetMapping("/search")
     @Override
     public ResponseEntity<Page<BookDTO>> getAllInstances(BookRequest bookRequest) {
-        PageRequest pageRequest = PageRequest.of(
-                bookRequest.getPage(),
-                bookRequest.getSize(),
-                Sort.Direction.valueOf(bookRequest.getSortType()),
-                bookRequest.getSortProperty());
-
-        return ResponseEntity.ok(this.service.getAllInstances(
-                bookRequest.getName(),
-                bookRequest.getActive(),
-                bookRequest.getGenre(),
-                pageRequest));
+        return ResponseEntity.ok(this.service.getAllInstances(bookRequest));
     }
 }

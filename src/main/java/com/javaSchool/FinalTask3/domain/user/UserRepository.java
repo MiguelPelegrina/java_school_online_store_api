@@ -1,8 +1,11 @@
 package com.javaSchool.FinalTask3.domain.user;
 
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -10,6 +13,7 @@ import java.util.Optional;
  * with Integer values.
  */
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+public interface UserRepository extends JpaRepository<UserEntity, Integer>, QuerydslPredicateExecutor<UserEntity> {
     Optional<UserEntity> findUserByEmail(String email);
+    List<UserEntity> findAll(Predicate predicate);
 }

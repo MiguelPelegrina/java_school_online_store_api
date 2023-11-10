@@ -6,10 +6,10 @@ import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
 /**
  * Service class responsible for the interaction between the {@link BookRepository} and the
@@ -48,21 +48,28 @@ public class BookServiceImpl
     //  - Adding an Array of String for sorting
     //  - Adding an Array of Genres for filtering
     @Override
-    public Page<BookDTO> getAllInstances(String name, Optional<Boolean> active, String genre, PageRequest pageRequest) {
+    public Page<BookDTO> getAllInstances(BookRequest bookRequest) {
         // Variables
         final QBookEntity qBook = QBookEntity.bookEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         // Check which parameters are present and build a query
-        active.ifPresent(aBoolean -> queryBuilder.and(qBook.active.eq(aBoolean)));
+        bookRequest.getActive().ifPresent(aBoolean -> queryBuilder.and(qBook.active.eq(aBoolean)));
 
-        if(!name.isEmpty()){
-            queryBuilder.and(qBook.title.containsIgnoreCase(name).or(qBook.parameters.author.containsIgnoreCase(name)));
+        if(!bookRequest.getName().isEmpty()){
+            queryBuilder.and(qBook.title.containsIgnoreCase(bookRequest.getName())
+                    .or(qBook.parameters.author.containsIgnoreCase(bookRequest.getName())));
         }
 
-        if (!genre.isEmpty()) {
-            queryBuilder.and(qBook.genre.name.containsIgnoreCase(genre));
+        if (!bookRequest.getGenre().isEmpty()) {
+            queryBuilder.and(qBook.genre.name.containsIgnoreCase(bookRequest.getGenre()));
         }
+
+        PageRequest pageRequest = PageRequest.of(
+                bookRequest.getPage(),
+                bookRequest.getSize(),
+                Sort.Direction.valueOf(bookRequest.getSortType()),
+                bookRequest.getSortProperty());
 
         // Find the data in the repository
         Page<BookEntity> pageEntities = this.repository.findAll(queryBuilder, pageRequest);

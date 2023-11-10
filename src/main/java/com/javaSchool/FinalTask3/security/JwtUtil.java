@@ -20,41 +20,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JwtUtil {
-    // Fields
-    private final static String secret_key = "mysecretkey";
-    private long accessTokenValidity = 60*60*1000;
-    private final JwtParser jwtParser;
-    private final String TOKEN_HEADER = "Authorization";
-    private final String TOKEN_PREFIX = "Bearer ";
-
-    /**
-     * Default constructor.
-     */
-    public JwtUtil(){
-        this.jwtParser = Jwts.parser().setSigningKey(secret_key);
-    }
-
-    /**
-     * Creates a JWT token for a user.
-     * @param user The user entity for which the token is created.
-     * @return JWT token as a string.
-     */
-    public String createToken(UserEntity user) {
-        Claims claims = Jwts.claims().setSubject(user.getEmail());
-        claims.put("id", user.getId());
-        claims.put("roles", user.getRoles().stream().map(
-                userRoleEntity -> userRoleEntity.getRole().getName())
-                .collect(Collectors.toList())
-        );
-        Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
-        return Jwts.builder()
-                .setClaims(claims)
-                .setExpiration(tokenValidity)
-                .signWith(SignatureAlgorithm.HS256, secret_key)
-                .compact();
-    }
-
+    // Class methods
     /**
      * Decodes a JSON Web Token (JWT) to extract its claims.
      * @param token The JWT to decode.
@@ -82,6 +48,44 @@ public class JwtUtil {
 
         return claims.get("id", Integer.class);
     }
+
+    // Fields
+    private final static String secret_key = "mysecretkey";
+    private long accessTokenValidity = 60*60*1000;
+    private final JwtParser jwtParser;
+    private final String TOKEN_HEADER = "Authorization";
+    private final String TOKEN_PREFIX = "Bearer ";
+
+    /**
+     * Default constructor.
+     */
+    public JwtUtil(){
+        this.jwtParser = Jwts.parser().setSigningKey(secret_key);
+    }
+
+    // Instance methods
+    /**
+     * Creates a JWT token for a user.
+     * @param user The user entity for which the token is created.
+     * @return JWT token as a string.
+     */
+    public String createToken(UserEntity user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
+        claims.put("id", user.getId());
+        claims.put("roles", user.getRoles().stream().map(
+                userRoleEntity -> userRoleEntity.getRole().getName())
+                .collect(Collectors.toList())
+        );
+        Date tokenCreateTime = new Date();
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(tokenValidity)
+                .signWith(SignatureAlgorithm.HS256, secret_key)
+                .compact();
+    }
+
+
 
     /**
      * Parses the claims from a JWT token.

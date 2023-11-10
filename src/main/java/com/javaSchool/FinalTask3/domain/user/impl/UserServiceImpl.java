@@ -1,14 +1,16 @@
 package com.javaSchool.FinalTask3.domain.user.impl;
 
-import com.javaSchool.FinalTask3.domain.user.UserDTO;
-import com.javaSchool.FinalTask3.domain.user.UserEntity;
-import com.javaSchool.FinalTask3.domain.user.UserRepository;
+import com.javaSchool.FinalTask3.domain.user.*;
 import com.javaSchool.FinalTask3.exception.InsufficientPermissions;
 import com.javaSchool.FinalTask3.exception.UserDoesNotExist;
 import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.utils.StringValues;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
+import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl
-        extends AbstractServiceImpl<UserRepository, UserEntity, UserDTO, Integer> {
+        extends AbstractServiceImpl<UserRepository, UserEntity, UserDTO, Integer>
+        implements UserService {
 
     /**
      * All arguments constructor.
@@ -92,5 +95,47 @@ public class UserServiceImpl
     @Override
     public Integer getEntityId(UserEntity instance) {
         return instance.getId();
+    }
+
+    // TODO Does not return users with address
+    @Override
+    public Page<UserDTO> getAllInstances(UserRequest userRequest) {
+        // Variables
+        final QUserEntity qUser = QUserEntity.userEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
+        int currentUserId = JwtUtil.getIdFromToken(RequestContextHolder.getRequestAttributes());
+
+        // Get the user that sends the request from the database
+        UserEntity currentUser = repository.findById(currentUserId).orElseThrow(() ->
+                new UserDoesNotExist(String.format(StringValues.INSTANCE_NOT_FOUND, currentUserId))
+        );
+
+        // Check if the current user is active
+        if(currentUser.isActive() && !currentUser.isClient()){
+            userRequest.getActive().ifPresent(aBoolean -> queryBuilder.and(qUser.active.eq(aBoolean)));
+
+            if(!userRequest.getName().isEmpty()){
+                queryBuilder.and(qUser.name.containsIgnoreCase(userRequest.getName())
+                        .or(qUser.surname.containsIgnoreCase(userRequest.getName()))
+                        .or(qUser.email.containsIgnoreCase(userRequest.getName())));
+            }
+
+            queryBuilder.and(qUser.roles.any().role.name.eq("CLIENT"));
+
+            // Generate the page request
+            PageRequest pageRequest = PageRequest.of(
+                    userRequest.getPage(),
+                    userRequest.getSize(),
+                    Sort.Direction.valueOf(userRequest.getSortType()),
+                    userRequest.getSortProperty());
+
+            // Find the data in the repository
+            Page<UserEntity> pageEntities = this.repository.findAll(queryBuilder, pageRequest);
+
+            // Convert the page to a DTO page
+            return pageEntities.map(order -> modelMapper.map(order, this.getDTOClass()));
+        } else {
+            throw new InsufficientPermissions();
+        }
     }
 }
