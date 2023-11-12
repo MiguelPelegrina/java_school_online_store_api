@@ -2,6 +2,7 @@ package com.javaSchool.FinalTask3.domain.book.impl;
 
 import com.javaSchool.FinalTask3.domain.book.*;
 import com.javaSchool.FinalTask3.domain.book.dto.BookDTO;
+import com.javaSchool.FinalTask3.domain.book.dto.NumberedBookDTO;
 import com.javaSchool.FinalTask3.domain.orderBook.QOrderBookEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
@@ -94,7 +95,7 @@ public class BookServiceImpl
     }
 
     @Secured({"ROLE_ADMIN","ROLE_EMPLOYEE"})
-    public List<BookDTO> getTopProducts(int limit
+    public List<NumberedBookDTO> getTopProducts(int limit
             //, int page, int size
     ){
         JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
@@ -104,17 +105,13 @@ public class BookServiceImpl
 
         NumberExpression<Integer> totalAmount = qOrderBook.amount.sum();
 
-        List<BookEntity> mostSoldProducts = queryFactory
-                .select(qBook)
+        return queryFactory
+                .select(Projections.constructor(NumberedBookDTO.class, qBook, totalAmount))
                 .from(qOrderBook)
                 .join(qOrderBook.book, qBook)
                 .groupBy(qBook.id)
                 .orderBy(totalAmount.desc())
                 .limit(limit)
                 .fetch();
-
-        List<BookEntity> bookEntities = repository.findAllById(mostSoldProducts.stream().map(BookEntity::getId).toList());
-
-        return bookEntities.stream().map(book -> modelMapper.map(book, getDTOClass())).collect(Collectors.toList());
     }
 }

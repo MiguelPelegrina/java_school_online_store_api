@@ -2,6 +2,7 @@ package com.javaSchool.FinalTask3.domain.book.impl;
 
 import com.javaSchool.FinalTask3.domain.book.*;
 import com.javaSchool.FinalTask3.domain.book.dto.BookDTO;
+import com.javaSchool.FinalTask3.domain.book.dto.NumberedBookDTO;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class BookRestControllerImpl
     // TODO Add a number to the dto
     // TODO Implement Paging and sorting
     @GetMapping("/top_products")
-    public ResponseEntity<List<BookDTO>> getTopProducts(
+    public ResponseEntity<List<NumberedBookDTO>> getTopProducts(
             @RequestParam("limit") int limit
             //@RequestParam("page") int page,
             //@RequestParam("size") int size

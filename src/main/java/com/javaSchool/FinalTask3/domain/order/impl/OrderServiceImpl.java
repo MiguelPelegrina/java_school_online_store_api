@@ -163,6 +163,9 @@ public class OrderServiceImpl
                 .orderedBooks(saveOrderDTO.getOrderedBooks())
                 .build();
 
+        // TODO The stock of the products needs to be reduced, just when they issue the order
+
+
         // Set the order of the books
         saveOrderDTO.getOrderedBooks().forEach(orderedBook ->
             orderedBook.setOrder(newOrder)
