@@ -39,10 +39,13 @@ public class OrderRestControllerImpl
         return ResponseEntity.ok(this.service.getAllInstances(orderRequest));
     }
 
+    // TODO Not sure if right, or the data type should actually be a string. DateTimeFormat does nothing?
     @GetMapping("/revenue")
     public ResponseEntity<BigDecimal> calculateRevenue(
             @RequestParam("start") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
             @RequestParam("end") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate){
+        System.out.println(startDate);
+        System.out.println(endDate);
         return ResponseEntity.ok(this.service.calculateTotalRevenue(startDate, endDate));
     }
 

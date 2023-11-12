@@ -81,6 +81,7 @@ public class OrderServiceImpl
                     )
                     .fetchOne());
         } catch (NullPointerException e){
+            System.out.println(e);
             return BigDecimal.ZERO;
         }
     }
