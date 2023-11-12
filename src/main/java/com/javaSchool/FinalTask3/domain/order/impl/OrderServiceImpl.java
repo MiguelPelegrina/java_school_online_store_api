@@ -64,6 +64,7 @@ public class OrderServiceImpl
         return instance.getId();
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
     public BigDecimal calculateTotalRevenue(LocalDate startDate, LocalDate endDate) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
 
@@ -148,7 +149,7 @@ public class OrderServiceImpl
 
     @Override
     @Transactional
-    public OrderDTO saveInstance(SaveOrderDTO saveOrderDTO)  {
+    public OrderDTO saveInstance(SaveOrderDTO saveOrderDTO){
         // Build an order
         OrderEntity newOrder = OrderEntity.builder()
                 .id(saveOrderDTO.getOrder().getId())
