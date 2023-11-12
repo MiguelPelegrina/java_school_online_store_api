@@ -102,6 +102,7 @@ public class WebConfig {
                                 "/api-docs.yaml",
                                 // TODO correct approach?
                                 "/books/search",
+                                // TODO Check if saving or deleting is secured
                                 "/book_genres",
                                 "/countries/search",
                                 "/cities/search",

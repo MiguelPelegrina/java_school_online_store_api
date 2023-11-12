@@ -1,5 +1,6 @@
-package com.javaSchool.FinalTask3.domain.book;
+package com.javaSchool.FinalTask3.domain.book.dto;
 
+import com.javaSchool.FinalTask3.domain.book.BookEntity;
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreDTO;
 import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterDTO;
 import lombok.Data;

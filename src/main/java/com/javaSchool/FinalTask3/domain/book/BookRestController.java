@@ -1,5 +1,6 @@
 package com.javaSchool.FinalTask3.domain.book;
 
+import com.javaSchool.FinalTask3.domain.book.dto.BookDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 

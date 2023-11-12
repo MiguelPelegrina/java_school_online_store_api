@@ -1,5 +1,6 @@
 package com.javaSchool.FinalTask3.domain.book;
 
+import com.javaSchool.FinalTask3.domain.book.dto.BookDTO;
 import com.javaSchool.FinalTask3.domain.book.impl.BookRestControllerImpl;
 import org.springframework.data.domain.Page;
 

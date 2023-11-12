@@ -1,12 +1,16 @@
 package com.javaSchool.FinalTask3.domain.book.impl;
 
 import com.javaSchool.FinalTask3.domain.book.*;
+import com.javaSchool.FinalTask3.domain.book.dto.BookDTO;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * RestController of the {@link BookEntity} entity. Handles the REST methods. Uses {@link BookDTO} as returning object.
@@ -29,5 +33,18 @@ public class BookRestControllerImpl
     @Override
     public ResponseEntity<Page<BookDTO>> getAllInstances(BookRequest bookRequest) {
         return ResponseEntity.ok(this.service.getAllInstances(bookRequest));
+    }
+
+    // TODO Add a number to the dto
+    // TODO Implement Paging and sorting
+    @GetMapping("/top_products")
+    public ResponseEntity<List<BookDTO>> getTopProducts(
+            @RequestParam("limit") int limit
+            //@RequestParam("page") int page,
+            //@RequestParam("size") int size
+    ){
+        return ResponseEntity.ok(this.service.getTopProducts(limit
+                //, page, size
+                ));
     }
 }

@@ -1,6 +1,6 @@
 package com.javaSchool.FinalTask3.domain.orderBook;
 
-import com.javaSchool.FinalTask3.domain.book.BookDTO;
+import com.javaSchool.FinalTask3.domain.book.dto.BookDTO;
 import lombok.Data;
 
 /**

@@ -1,8 +1,15 @@
 package com.javaSchool.FinalTask3.domain.book.impl;
 
 import com.javaSchool.FinalTask3.domain.book.*;
+import com.javaSchool.FinalTask3.domain.book.dto.BookDTO;
+import com.javaSchool.FinalTask3.domain.orderBook.QOrderBookEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +17,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service class responsible for the interaction between the {@link BookRepository} and the
@@ -22,6 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookServiceImpl
         extends AbstractServiceImpl<BookRepository, BookEntity, BookDTO, Integer>
         implements BookService {
+    @PersistenceContext
+    private EntityManager entityManager;
+
     /**
      * All arguments constructor.
      * @param repository {@link BookRepository} of the {@link BookEntity} entity.
@@ -78,5 +91,30 @@ public class BookServiceImpl
         return pageEntities.map(book ->
             modelMapper.map(book, this.getDTOClass())
         );
+    }
+
+    @Secured({"ROLE_ADMIN","ROLE_EMPLOYEE"})
+    public List<BookDTO> getTopProducts(int limit
+            //, int page, int size
+    ){
+        JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
+
+        QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;
+        QBookEntity qBook = QBookEntity.bookEntity;
+
+        NumberExpression<Integer> totalAmount = qOrderBook.amount.sum();
+
+        List<BookEntity> mostSoldProducts = queryFactory
+                .select(qBook)
+                .from(qOrderBook)
+                .join(qOrderBook.book, qBook)
+                .groupBy(qBook.id)
+                .orderBy(totalAmount.desc())
+                .limit(limit)
+                .fetch();
+
+        List<BookEntity> bookEntities = repository.findAllById(mostSoldProducts.stream().map(BookEntity::getId).toList());
+
+        return bookEntities.stream().map(book -> modelMapper.map(book, getDTOClass())).collect(Collectors.toList());
     }
 }
