@@ -71,7 +71,12 @@ public class UserServiceImpl
         // updates themselves, a user is being activated/deactivated) and I can't create a JSON with circular reference
         Optional<UserEntity> existingUser = repository.findById(toSaveOrUpdateUser.getId());
         existingUser.ifPresent(user -> {
-            toSaveOrUpdateUser.setPassword(user.getPassword());
+            // Check if the user has set a password.
+            // If they set a password, the old one will be overridden.
+            // If they didn't set a password any other property is being changed.
+            if(user.getPassword().isEmpty()){
+                toSaveOrUpdateUser.setPassword(user.getPassword());
+            }
             toSaveOrUpdateUser.setRoles(user.getRoles());
         });
 
