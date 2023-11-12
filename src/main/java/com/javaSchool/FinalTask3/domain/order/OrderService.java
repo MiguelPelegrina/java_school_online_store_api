@@ -5,6 +5,9 @@ import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.order.impl.OrderRestControllerImpl;
 import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 /**
  * Service interface responsible for the interaction between the {@link OrderRepository} and the
  * {@link OrderRestControllerImpl}. Obtains data from the {@link OrderRepository} and returns
@@ -17,6 +20,14 @@ public interface OrderService {
      * @return               ResponseEntity containing a Page of {@link OrderDTO}}s based on the specified criteria.
      */
     Page<OrderDTO> getAllInstances(OrderRequest orderRequest);
+
+    /**
+     * Calculates the total revenue for orders placed within a specified date range.
+     * @param startDate The start date of the period for which to calculate total revenue.
+     * @param endDate   The end date of the period for which to calculate total revenue.
+     * @return A {@code BigDecimal} representing the total revenue for the specified date range.
+     */
+    BigDecimal calculateTotalRevenue(LocalDate startDate, LocalDate endDate);
 
     /**
      * Saves an order in the system based on the provided {@link SaveOrderDTO}.

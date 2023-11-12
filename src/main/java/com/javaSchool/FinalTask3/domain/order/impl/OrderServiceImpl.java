@@ -64,6 +64,7 @@ public class OrderServiceImpl
         return instance.getId();
     }
 
+    @Override
     @Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
     public BigDecimal calculateTotalRevenue(LocalDate startDate, LocalDate endDate) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
@@ -81,7 +82,6 @@ public class OrderServiceImpl
                     )
                     .fetchOne());
         } catch (NullPointerException e){
-            System.out.println(e);
             return BigDecimal.ZERO;
         }
     }

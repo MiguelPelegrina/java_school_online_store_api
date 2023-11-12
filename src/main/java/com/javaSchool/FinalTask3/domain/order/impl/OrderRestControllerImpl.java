@@ -40,7 +40,8 @@ public class OrderRestControllerImpl
     }
 
     @GetMapping("/revenue")
-    public ResponseEntity<BigDecimal> calculateRevenue(
+    @Override
+    public ResponseEntity<BigDecimal> calculateTotalRevenue(
             @RequestParam("start") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
             @RequestParam("end") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate){
         return ResponseEntity.ok(this.service.calculateTotalRevenue(startDate, endDate));
