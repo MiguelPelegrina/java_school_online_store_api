@@ -1,7 +1,6 @@
 package com.javaSchool.FinalTask3.domain.book.parameter;
 
 import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersFormatDTO;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
