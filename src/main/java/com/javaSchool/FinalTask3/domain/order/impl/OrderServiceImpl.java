@@ -1,13 +1,16 @@
 package com.javaSchool.FinalTask3.domain.order.impl;
 
+import com.javaSchool.FinalTask3.domain.book.BookEntity;
+import com.javaSchool.FinalTask3.domain.book.BookRepository;
 import com.javaSchool.FinalTask3.domain.order.*;
 import com.javaSchool.FinalTask3.domain.order.dto.OrderDTO;
 import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.orderBook.QOrderBookEntity;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
-import com.javaSchool.FinalTask3.exception.InsufficientPermissions;
-import com.javaSchool.FinalTask3.exception.UserDoesNotExist;
+import com.javaSchool.FinalTask3.exception.InsufficientPermissionsException;
+import com.javaSchool.FinalTask3.exception.ProductOutOfStockException;
+import com.javaSchool.FinalTask3.exception.UserDoesNotExistException;
 import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.utils.StringValues;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
@@ -39,19 +42,23 @@ public class OrderServiceImpl
         extends AbstractServiceImpl<OrderRepository, OrderEntity, OrderDTO, Integer>
         implements OrderService {
     private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     /**
      * All arguments constructor.
-     * @param repository      {@link OrderRepository} of the {@link OrderEntity}.
-     * @param modelMapper     ModelMapper that converts the {@link OrderEntity} instance to {@link OrderDTO}
-     * @param userRepository  {@link UserRepository} of the {@link UserEntity}.
+     *
+     * @param repository     {@link OrderRepository} of the {@link OrderEntity}.
+     * @param modelMapper    ModelMapper that converts the {@link OrderEntity} instance to {@link OrderDTO}
+     * @param userRepository {@link UserRepository} of the {@link UserEntity}.
+     * @param bookRepository
      */
-    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserRepository userRepository) {
+    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserRepository userRepository, BookRepository bookRepository) {
         super(repository, modelMapper);
         this.userRepository = userRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -95,7 +102,7 @@ public class OrderServiceImpl
 
         // Get the user that sends the request from the database
         UserEntity currentUser = userRepository.findById(currentUserId).orElseThrow(() ->
-                new UserDoesNotExist(String.format(StringValues.INSTANCE_NOT_FOUND, currentUserId))
+                new UserDoesNotExistException(String.format(StringValues.INSTANCE_NOT_FOUND, currentUserId))
         );
 
         // Check if the current user is active
@@ -144,13 +151,14 @@ public class OrderServiceImpl
             // Convert the page to a DTO page
             return pageEntities.map(order -> modelMapper.map(order, this.getDTOClass()));
         } else {
-            throw new InsufficientPermissions();
+            // TODO Return this to frontend
+            throw new InsufficientPermissionsException();
         }
     }
 
     @Override
     @Transactional
-    public OrderDTO saveInstance(SaveOrderDTO saveOrderDTO){
+    public OrderDTO saveInstance(SaveOrderDTO saveOrderDTO) throws ProductOutOfStockException{
         // Build an order
         OrderEntity newOrder = OrderEntity.builder()
                 .id(saveOrderDTO.getOrder().getId())
@@ -163,8 +171,24 @@ public class OrderServiceImpl
                 .orderedBooks(saveOrderDTO.getOrderedBooks())
                 .build();
 
-        // TODO The stock of the products needs to be reduced, just when they issue the order
+        // Check if the order has an id
+        // If it has no id, it's a new order and therefore the stock remains unchanged
+        if(newOrder.getId() == 0){
+            newOrder.getOrderedBooks().stream().forEach(orderBook -> {
+                int previousAmount = orderBook.getBook().getStock();
 
+                // Check if the product stock is enough to be sold in the issued amount
+                if(previousAmount - orderBook.getAmount() >= 0){
+                    // TODO Not sure if this is the right way, applying CascadeType.MERGE to orderBookEntity does not
+                    //  work, PERSIST does not make sense as then a bookEntity could be created
+                    BookEntity book = orderBook.getBook();
+                    book.setStock(previousAmount - orderBook.getAmount());
+                    bookRepository.save(book);
+                } else {
+                    throw new ProductOutOfStockException(orderBook.getBook());
+                }
+            });
+        }
 
         // Set the order of the books
         saveOrderDTO.getOrderedBooks().forEach(orderedBook ->

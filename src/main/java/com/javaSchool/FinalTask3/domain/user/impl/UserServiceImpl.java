@@ -1,8 +1,8 @@
 package com.javaSchool.FinalTask3.domain.user.impl;
 
 import com.javaSchool.FinalTask3.domain.user.*;
-import com.javaSchool.FinalTask3.exception.InsufficientPermissions;
-import com.javaSchool.FinalTask3.exception.UserDoesNotExist;
+import com.javaSchool.FinalTask3.exception.InsufficientPermissionsException;
+import com.javaSchool.FinalTask3.exception.UserDoesNotExistException;
 import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.utils.StringValues;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
@@ -54,7 +54,7 @@ public class UserServiceImpl
      * present in the database or is not active, an InsufficientPermissions exception is also thrown.
      * @param toSaveOrUpdateUser The UserEntity instance to be saved.
      * @return The saved UserDTO instance if the operation is allowed.
-     * @throws InsufficientPermissions If the user does not have sufficient permissions to perform the update.
+     * @throws InsufficientPermissionsException If the user does not have sufficient permissions to perform the update.
      */
     @Override
     public UserDTO saveInstance(UserEntity toSaveOrUpdateUser) {
@@ -62,7 +62,7 @@ public class UserServiceImpl
         int userId = JwtUtil.getIdFromToken(RequestContextHolder.getRequestAttributes());
 
         // Get the user that sends the request from the database
-        UserEntity activeExistingUser = repository.findById(userId).orElseThrow(() -> new UserDoesNotExist(
+        UserEntity activeExistingUser = repository.findById(userId).orElseThrow(() -> new UserDoesNotExistException(
                 String.format(StringValues.INSTANCE_NOT_FOUND, userId)
         ));
 
@@ -95,11 +95,12 @@ public class UserServiceImpl
                     // Employees can not update other employees
                     // Clients can not update others
                 } else {
-                    throw new InsufficientPermissions();
+                    // TODO Return this to frontend
+                    throw new InsufficientPermissionsException();
                 }
             }
         } else {
-            throw new InsufficientPermissions();
+            throw new InsufficientPermissionsException();
         }
     }
 
@@ -123,7 +124,7 @@ public class UserServiceImpl
 
         // Get the user that sends the request from the database
         UserEntity currentUser = repository.findById(currentUserId).orElseThrow(() ->
-                new UserDoesNotExist(String.format(StringValues.INSTANCE_NOT_FOUND, currentUserId))
+                new UserDoesNotExistException(String.format(StringValues.INSTANCE_NOT_FOUND, currentUserId))
         );
 
         // Check if the current user is active
@@ -151,7 +152,7 @@ public class UserServiceImpl
             // Convert the page to a DTO page
             return pageEntities.map(order -> modelMapper.map(order, this.getDTOClass()));
         } else {
-            throw new InsufficientPermissions();
+            throw new InsufficientPermissionsException();
         }
     }
 }

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
  * Extends the {@link RuntimeException} class.
  */
 @RequiredArgsConstructor
-public class UserDoesNotExist extends RuntimeException{
+public class UserDoesNotExistException extends RuntimeException{
     private final String message;
 
     /**
