@@ -8,6 +8,4 @@ import org.springframework.stereotype.Repository;
  * ID with Integer values.
  */
 @Repository
-public interface OrderBookRepository extends JpaRepository<OrderBookEntity, Integer>{
-
-}
+public interface OrderBookRepository extends JpaRepository<OrderBookEntity, Integer>{}

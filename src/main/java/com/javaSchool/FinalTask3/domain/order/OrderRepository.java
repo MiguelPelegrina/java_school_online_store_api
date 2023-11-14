@@ -13,5 +13,6 @@ import java.util.List;
  */
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Integer>, QuerydslPredicateExecutor<OrderEntity> {
+    // TODO Test Custom Query Methods?
     List<OrderEntity> findAll(Predicate predicate);
 }

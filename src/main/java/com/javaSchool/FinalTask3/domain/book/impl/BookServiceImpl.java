@@ -93,7 +93,7 @@ public class BookServiceImpl
         );
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_EMPLOYEE"})
+    @Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
     public List<NumberedBookDTO> getTopProducts(int limit
             //, int page, int size
     ){

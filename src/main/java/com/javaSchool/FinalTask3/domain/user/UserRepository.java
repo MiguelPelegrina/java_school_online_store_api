@@ -14,6 +14,7 @@ import java.util.Optional;
  */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer>, QuerydslPredicateExecutor<UserEntity> {
+    // TODO Test Custom Query Methods?
     Optional<UserEntity> findUserByEmail(String email);
     List<UserEntity> findAll(Predicate predicate);
 }
