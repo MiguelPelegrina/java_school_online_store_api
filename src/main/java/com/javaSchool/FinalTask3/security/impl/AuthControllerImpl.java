@@ -40,12 +40,11 @@ public class AuthControllerImpl implements AuthController {
             UserEntity user = repository.findUserByEmail(email).orElseThrow();
 
             if(!user.isActive()){
-                ResponseEntity.status(401).body(StringValues.INACTIVE_USER);
+                return ResponseEntity.status(401).body(StringValues.INACTIVE_USER);
             }
 
-            // Check the password
             if(!passwordEncoder.matches(loginRequestBodyDto.getPassword(), user.getPassword())){
-                ResponseEntity.status(401).body(StringValues.PASSWORD_NOT_MATCHING);
+                return ResponseEntity.status(401).body(StringValues.PASSWORD_NOT_MATCHING);
             }
 
             return ResponseEntity.ok(this.generateAuthResultDTO(user));

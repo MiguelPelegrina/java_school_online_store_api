@@ -73,7 +73,7 @@ public class CountryServiceTests {
                 .build();
 
         // TODO Following stubbings are unnecessary (click to navigate to relevant line of code)
-        when(repository.findById("Granada")).thenReturn(Optional.ofNullable(country));
+        //when(repository.findById("Granada")).thenReturn(Optional.ofNullable(country));
 
         // Act
         service.deleteInstance("Granada");

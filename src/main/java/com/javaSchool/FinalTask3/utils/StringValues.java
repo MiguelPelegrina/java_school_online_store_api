@@ -13,7 +13,8 @@ public final class StringValues {
             INSTANCE_NOT_FOUND = "Instance %s not found",
             INVALID_CREDENTIALS = "Invalid username or password",
             PRODUCT_OUT_OF_STOCK = "The following product if out of stock %s",
-            PASSWORD_NOT_MATCHING = "User password does not match",
+            PASSWORD_NOT_MATCHING = "The user credentials (email and password) do not match",
             SAME_ID = "Both IDs are not the same: %s - %s",
-            SERVER_ERROR = "Server error occurred, pleased contact the admin. Error ID is %s";
+            SERVER_ERROR = "Server error occurred, pleased contact the admin. Error ID is %s",
+            USER_DOES_NOT_EXIST = "The user with the email %s is not registered";
 }
