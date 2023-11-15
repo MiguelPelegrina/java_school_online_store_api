@@ -5,16 +5,16 @@ import com.javaSchool.FinalTask3.domain.book.genre.BookGenreEntity;
 import com.javaSchool.FinalTask3.domain.book.genre.BookGenreRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link BookGenreRepository} and the {@link BookGenreRestControllerImpl}.
  * Obtains data from the {@link BookGenreRepository} and returns the object(s) of the entity {@link BookGenreEntity}
  * as {@link BookGenreDTO} to the {@link BookGenreRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class BookGenreServiceImpl extends AbstractServiceImpl<BookGenreRepository, BookGenreEntity, BookGenreDTO, String> {
     /**
      * All arguments constructor.

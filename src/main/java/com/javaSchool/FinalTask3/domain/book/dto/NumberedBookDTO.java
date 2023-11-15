@@ -12,6 +12,7 @@ public class NumberedBookDTO extends BookDTO {
     private int totalAmount;
 
     public NumberedBookDTO(BookEntity book, int totalAmount){
+        super();
         this.setId(book.getId());
         this.setTitle(book.getTitle());
         this.setPrice(book.getPrice());

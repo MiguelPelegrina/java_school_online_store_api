@@ -39,6 +39,7 @@ public class BookRestControllerImpl
     // TODO Add a number to the dto
     // TODO Implement Paging and sorting
     @GetMapping("/top_products")
+    @Override
     public ResponseEntity<List<NumberedBookDTO>> getTopProducts(
             @RequestParam("limit") int limit
             //@RequestParam("page") int page,

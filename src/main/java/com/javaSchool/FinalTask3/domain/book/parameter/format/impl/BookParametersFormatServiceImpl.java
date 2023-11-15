@@ -6,8 +6,8 @@ import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersForm
 import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersFormatRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link BookParametersFormatRepository} and the
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * {@link BookParametersFormatDTO} to the {@link BookParametersFormatRestControllerImpl}.
  */
 @Service
-@Transactional(readOnly = true)
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 public class BookParametersFormatServiceImpl
         extends AbstractServiceImpl<BookParametersFormatRepository, BookParametersFormatEntity, BookParametersFormatDTO, String> {
     /**

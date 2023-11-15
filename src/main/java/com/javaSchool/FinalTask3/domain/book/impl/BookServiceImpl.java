@@ -17,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ import java.util.List;
  */
 @Secured({"ROLE_ADMIN","ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class BookServiceImpl
         extends AbstractServiceImpl<BookRepository, BookEntity, BookDTO, Integer>
         implements BookService {
@@ -93,7 +91,7 @@ public class BookServiceImpl
         );
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
+    @Override
     public List<NumberedBookDTO> getTopProducts(int limit
             //, int page, int size
     ){
