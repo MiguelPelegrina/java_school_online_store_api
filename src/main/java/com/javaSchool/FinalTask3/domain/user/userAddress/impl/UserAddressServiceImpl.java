@@ -5,8 +5,8 @@ import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressEntity;
 import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link UserAddressRepository} and the
@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
  * {@link UserAddressRepository} and returns the object(s) of the entity {@link UserAddressEntity} as
  * {@link UserAddressDTO} to the {@link UserAddressRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE", "ROLE_CLIENT"})
 @Service
-@Transactional(readOnly = true)
 public class UserAddressServiceImpl
         extends AbstractServiceImpl<UserAddressRepository, UserAddressEntity, UserAddressDTO, Integer> {
     /**

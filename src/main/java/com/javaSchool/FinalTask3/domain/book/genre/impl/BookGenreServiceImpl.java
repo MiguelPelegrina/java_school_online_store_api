@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * Obtains data from the {@link BookGenreRepository} and returns the object(s) of the entity {@link BookGenreEntity}
  * as {@link BookGenreDTO} to the {@link BookGenreRestControllerImpl}.
  */
-@Secured({"ROLE_ADMIN", "EMPLOYEE"})
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
 public class BookGenreServiceImpl extends AbstractServiceImpl<BookGenreRepository, BookGenreEntity, BookGenreDTO, String> {
     /**

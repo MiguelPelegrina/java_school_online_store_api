@@ -21,7 +21,7 @@ public interface BookRestController {
     /**
      * Retrieves the top products based on a specified limit.
      * @param limit The maximum number of top products to retrieve.
-     * @return {@link ResponseEntity} containing a list of {@link NumberedBookDTO} representing the top products.
+     * @return      ResponseEntity containing a list of {@link NumberedBookDTO} representing the top products.
      */
      ResponseEntity<List<NumberedBookDTO>> getTopProducts(int limit);
 }

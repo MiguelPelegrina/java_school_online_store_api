@@ -13,6 +13,5 @@ import java.util.List;
  */
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, Integer>, QuerydslPredicateExecutor<BookEntity> {
-    // TODO Test Custom Query Methods?
     List<BookEntity> findAll(Predicate predicate);
 }

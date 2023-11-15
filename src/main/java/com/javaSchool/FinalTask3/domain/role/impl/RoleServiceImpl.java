@@ -5,16 +5,16 @@ import com.javaSchool.FinalTask3.domain.role.RoleEntity;
 import com.javaSchool.FinalTask3.domain.role.RoleRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link RoleRepository} and the {@link RoleRestControllerImpl}.
  * Obtains data from the {@link RoleRepository} and returns the object(s) of the {@link RoleEntity} as
  * {@link RoleDTO} to the {@link RoleRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN"})
 @Service
-@Transactional(readOnly = true)
 public class RoleServiceImpl
         extends AbstractServiceImpl<RoleRepository, RoleEntity, RoleDTO, String> {
     /**

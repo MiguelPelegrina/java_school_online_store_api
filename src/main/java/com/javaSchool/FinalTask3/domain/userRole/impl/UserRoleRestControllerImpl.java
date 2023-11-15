@@ -2,7 +2,7 @@ package com.javaSchool.FinalTask3.domain.userRole.impl;
 
 import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressDTO;
 import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressEntity;
-import com.javaSchool.FinalTask3.domain.userRole.UserRoleDTO;
+import com.javaSchool.FinalTask3.domain.userRole.dto.UserRoleDTO;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractRestControllerImpl;

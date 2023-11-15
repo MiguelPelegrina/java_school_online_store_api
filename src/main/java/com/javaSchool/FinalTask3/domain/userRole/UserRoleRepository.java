@@ -13,6 +13,5 @@ import java.util.Optional;
  */
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Integer> {
-    // TODO Test Custom Query Methods?
     Optional<List<UserRoleEntity>> findByUser(UserEntity user);
 }

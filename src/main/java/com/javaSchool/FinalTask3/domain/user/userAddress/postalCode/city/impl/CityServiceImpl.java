@@ -8,7 +8,6 @@ import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,14 +20,10 @@ import java.util.stream.Collectors;
  * {@link CityDTO} to the {@link CityRestControllerImpl}.
  */
 @Service
-@Transactional(readOnly = true)
-@Secured("ROLE_ADMIN")
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 public class CityServiceImpl
         extends AbstractServiceImpl<CityRepository, CityEntity, CityDTO, String>
         implements CityService {
-    // TODO Not sure if necessary
-    private final CountryRepository countryRepository;
-
     /**
      * All arguments constructor.
      *
@@ -39,16 +34,6 @@ public class CityServiceImpl
      */
     public CityServiceImpl(CityRepository repository, ModelMapper modelMapper, CountryRepository countryRepository) {
         super(repository, modelMapper);
-        // TODO Not sure if necessary
-        this.countryRepository = countryRepository;
-    }
-
-    // TODO Not sure if necessary
-    @Override
-    @Transactional
-    public CityDTO saveInstance(CityEntity instance){
-        instance.setCountryName(countryRepository.getReferenceById(instance.getCountryName().getName()));
-        return modelMapper.map(repository.save(instance), getDTOClass());
     }
 
     @Override

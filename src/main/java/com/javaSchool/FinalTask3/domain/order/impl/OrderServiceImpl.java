@@ -37,10 +37,10 @@ import java.time.LocalDate;
  */
 @Secured({"ROLE_ADMIN", "EMPLOYEE", "CLIENT"})
 @Service
-@Transactional(readOnly = true)
 public class OrderServiceImpl
         extends AbstractServiceImpl<OrderRepository, OrderEntity, OrderDTO, Integer>
         implements OrderService {
+    // Fields
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
@@ -49,13 +49,13 @@ public class OrderServiceImpl
 
     /**
      * All arguments constructor.
-     *
      * @param repository     {@link OrderRepository} of the {@link OrderEntity}.
      * @param modelMapper    ModelMapper that converts the {@link OrderEntity} instance to {@link OrderDTO}
      * @param userRepository {@link UserRepository} of the {@link UserEntity}.
-     * @param bookRepository
+     * @param bookRepository {@link BookRepository} of the {@link BookEntity}.
      */
-    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserRepository userRepository, BookRepository bookRepository) {
+    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserRepository userRepository,
+                            BookRepository bookRepository) {
         super(repository, modelMapper);
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
@@ -91,6 +91,12 @@ public class OrderServiceImpl
         } catch (NullPointerException e){
             return BigDecimal.ZERO;
         }
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN", "EMPLOYEE"})
+    public void deleteInstance(Integer integer) {
+        super.deleteInstance(integer);
     }
 
     @Override

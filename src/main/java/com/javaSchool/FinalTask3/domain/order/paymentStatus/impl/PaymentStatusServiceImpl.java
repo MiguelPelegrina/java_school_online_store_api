@@ -7,8 +7,8 @@ import com.javaSchool.FinalTask3.domain.order.paymentStatus.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
  * and returns the object(s) of the entity {@link PaymentStatusEntity} as {@link PaymentStatusDTO} to the
  * {@link PaymentStatusRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class PaymentStatusServiceImpl
         extends AbstractServiceImpl<PaymentStatusRepository, PaymentStatusEntity, PaymentStatusDTO, String>
         implements PaymentStatusService {

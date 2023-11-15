@@ -6,8 +6,8 @@ import com.javaSchool.FinalTask3.domain.order.paymentMethod.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
  * and returns the object(s) of the entity {@link PaymentMethodEntity} as {@link PaymentMethodEntity} to the
  * {@link PaymentMethodRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class PaymentMethodServiceImpl
         extends AbstractServiceImpl<PaymentMethodRepository, PaymentMethodEntity, PaymentMethodDTO, String>
         implements PaymentMethodService {

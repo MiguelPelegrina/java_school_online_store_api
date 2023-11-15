@@ -5,8 +5,8 @@ import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterEntity;
 import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link BookParameterRepository} and the
@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
  * {@link BookParameterRepository} and returns the object(s) of the entity {@link BookParameterEntity} as
  * {@link BookParameterDTO} to the {@link BookParameterRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class BookParameterServiceImpl
         extends AbstractServiceImpl<BookParameterRepository, BookParameterEntity, BookParameterDTO, Integer> {
     /**

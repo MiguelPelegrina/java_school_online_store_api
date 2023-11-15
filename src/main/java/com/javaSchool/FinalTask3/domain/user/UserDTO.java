@@ -1,7 +1,7 @@
 package com.javaSchool.FinalTask3.domain.user;
 
 import com.javaSchool.FinalTask3.domain.user.userAddress.UserAddressDTO;
-import com.javaSchool.FinalTask3.domain.userRole.UserRoleJsonDTO;
+import com.javaSchool.FinalTask3.domain.userRole.dto.UserRoleJsonDTO;
 import lombok.Data;
 
 import java.time.LocalDate;

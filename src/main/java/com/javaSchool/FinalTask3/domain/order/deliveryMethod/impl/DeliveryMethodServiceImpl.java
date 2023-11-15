@@ -5,8 +5,8 @@ import com.javaSchool.FinalTask3.domain.order.deliveryMethod.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
  * {@link DeliveryMethodRepository} and returns the object(s) of the entity {@link DeliveryMethodEntity} as
  * {@link DeliveryMethodDTO} to the {@link DeliveryMethodRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN","ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class DeliveryMethodServiceImpl
         extends AbstractServiceImpl<DeliveryMethodRepository, DeliveryMethodEntity, DeliveryMethodDTO, String>
 implements DeliveryMethodService {

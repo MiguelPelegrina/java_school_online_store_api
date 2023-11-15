@@ -4,8 +4,8 @@ import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
  * {@link CountryRepository} and returns the object(s) of the entity {@link CountryEntity} as
  * {@link CountryDTO} to the {@link CountryRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class CountryServiceImpl
         extends AbstractServiceImpl<CountryRepository, CountryEntity, CountryDTO, String>
         implements CountryService {

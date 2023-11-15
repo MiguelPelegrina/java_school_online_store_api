@@ -4,8 +4,8 @@ import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.*;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
  * Obtains data from the  {@link PostalCodeRepository} and returns the object(s) of the entity {@link PostalCodeEntity} as
  * {@link PostalCodeDTO} to the {@link PostalCodeRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class PostalCodeServiceImpl
         extends AbstractServiceImpl<PostalCodeRepository, PostalCodeEntity, PostalCodeDTO, String>
         implements PostalCodeService {

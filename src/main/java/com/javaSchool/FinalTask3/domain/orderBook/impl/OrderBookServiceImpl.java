@@ -5,16 +5,16 @@ import com.javaSchool.FinalTask3.domain.orderBook.OrderBookEntity;
 import com.javaSchool.FinalTask3.domain.orderBook.OrderBookRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link OrderBookRepository} and the
  * {@link OrderBookRestControllerImpl}. Obtains data from the {@link OrderBookRepository} and returns the object(s) of
  * the entity {@link OrderBookEntity} as {@link OrderBookDTO} to the {@link OrderBookRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class OrderBookServiceImpl
         extends AbstractServiceImpl<OrderBookRepository, OrderBookEntity, OrderBookDTO, Integer>{
     /**

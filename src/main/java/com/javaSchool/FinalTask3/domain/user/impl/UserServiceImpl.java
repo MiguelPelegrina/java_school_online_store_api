@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.Optional;
@@ -26,7 +25,6 @@ import java.util.Optional;
  */
 @Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE", "ROLE_CLIENT"})
 @Service
-@Transactional(readOnly = true)
 public class UserServiceImpl
         extends AbstractServiceImpl<UserRepository, UserEntity, UserDTO, Integer>
         implements UserService {
@@ -114,7 +112,6 @@ public class UserServiceImpl
         return instance.getId();
     }
 
-    // TODO Does not return users with address
     @Override
     public Page<UserDTO> getAllInstances(UserRequest userRequest) {
         // Variables

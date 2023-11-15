@@ -1,12 +1,12 @@
 package com.javaSchool.FinalTask3.domain.userRole.impl;
 
-import com.javaSchool.FinalTask3.domain.userRole.UserRoleDTO;
+import com.javaSchool.FinalTask3.domain.userRole.dto.UserRoleDTO;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleRepository;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class responsible for the interaction between the {@link UserRoleRepository} and the
@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
  * {@link UserRoleRepository} and returns the object(s) of the entity {@link UserRoleEntity} as
  * {@link UserRoleDTO} to the {@link UserRoleRestControllerImpl}.
  */
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
-@Transactional(readOnly = true)
 public class UserRoleServiceImpl
         extends AbstractServiceImpl<UserRoleRepository, UserRoleEntity, UserRoleDTO, Integer> {
     /**

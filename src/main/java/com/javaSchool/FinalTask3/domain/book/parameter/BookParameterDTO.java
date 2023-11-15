@@ -1,12 +1,16 @@
 package com.javaSchool.FinalTask3.domain.book.parameter;
 
 import com.javaSchool.FinalTask3.domain.book.parameter.format.BookParametersFormatDTO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * Data Transfer Object (DTO) of {@link BookParameterEntity}.
  */
+@AllArgsConstructor
+@Builder
 @Data
 @NoArgsConstructor
 public class BookParameterDTO {
