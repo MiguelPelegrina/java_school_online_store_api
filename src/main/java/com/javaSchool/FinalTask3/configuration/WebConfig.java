@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,13 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-// TODO Need to differentiate between:
-//  - not logged in users (unauthorized) --> GET with Book
-//  - authorized users --> POST and PUT of Order
-//  - employees --> POST AND PUT of Book
-//  - admin --> management of employees?
-//  Not sure how much of this applies to backend and how much to frontend
-
 /**
  * The {@code WebConfig} class is responsible for configuring various aspects of the application's web security. It
  * defines security-related beans and settings, including user authentication, authorization, CORS (Cross-Origin
@@ -37,21 +31,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebConfig {
-    // Fields
-    private final CustomUserDetailsService userDetailsService;
-    private final JwtAuthorizationFilter jwtAuthorizationFilter;
-
     /**
      * Configures and provides an {@link AuthenticationManager} that is used for user authentication and authorization.
      * It specifies the user details service and password encoder for managing user authentication.
-     * @param http            The {@link HttpSecurity} configuration.
-     * @param passwordEncoder The password encoder for secure authentication.
+     * @param userDetailsService The {@link CustomUserDetailsService} for retrieving user details during authentication.
+     * @param http               The {@link HttpSecurity} configuration.
+     * @param passwordEncoder    The {@link PasswordEncoder} for secure password encoding during authentication.
      * @return {@link AuthenticationManager} configured for the application.
      * @throws Exception If an exception occurs during configuration.
      */
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
-            throws Exception {
+    public AuthenticationManager authenticationManager(
+            CustomUserDetailsService userDetailsService,
+            HttpSecurity http,
+            PasswordEncoder passwordEncoder
+    ) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
 
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
@@ -69,41 +63,30 @@ public class WebConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // TODO Not deprecated CORS -> Does not work
-    /*@Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }*/
-
     /**
      * Configures the security filter chain for the application. It specifies various security settings, including CORS,
      * (Cross-Origin Resource Sharing), CSRF (Cross-Site Request Forgery) protection, URL authorization, and JWT
      * authorization filter.
-     * @param http The {@link HttpSecurity} configuration.
+     * @param http                   The {@link HttpSecurity} configuration.
+     * @param jwtAuthorizationFilter The {@link JwtAuthorizationFilter} responsible for JWT-based authorization.
      * @return {@link SecurityFilterChain} for the application's security.
      * @throws Exception If an exception occurs during configuration.
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // TODO Try some way that is not deprecated?
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            JwtAuthorizationFilter jwtAuthorizationFilter
+    ) throws Exception {
         return http.cors().and()
-                // TODO Not deprecated CORS -> Does not work
-                // .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login",
+                        .requestMatchers(HttpMethod.GET, "/book_genres").permitAll()
+                        .requestMatchers(
+                                "/auth/login",
                                 "/auth/register",
                                 "/api-docs",
                                 "/api-docs.yaml",
-                                // TODO correct approach?
                                 "/books/search",
-                                // TODO Check if saving or deleting is secured
-                                "/book_genres",
                                 "/countries/search",
                                 "/cities/search",
                                 "/delivery_methods/search",
@@ -115,19 +98,18 @@ public class WebConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                . addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
 
     /**
      * Configures CORS settings for the application, allowing cross-origin requests from the specified origin
-     * (http://localhost:4200).
+     * (<a href="http://localhost:4200">...</a>).
      * @return {@link WebMvcConfigurer} for configuring CORS settings.
      */
     @Bean
     public WebMvcConfigurer corsConfig() {
-        // TODO Not sure if right, might be missing something
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
