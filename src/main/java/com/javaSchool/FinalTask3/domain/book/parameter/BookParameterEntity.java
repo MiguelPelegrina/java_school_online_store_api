@@ -22,13 +22,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Table(name = "book_parameters", schema = "public", catalog = "online_store")
 public class BookParameterEntity {
-    // TODO Could use composite key or needs to search the repository before entering the data to use an existing parameter
     @Id
     @Column(name = "id")
     @GeneratedValue
     private int id;
 
-    // TODO Add author as entity?
     @Column(name = "author", nullable = false, length = 60)
     private String author;
 

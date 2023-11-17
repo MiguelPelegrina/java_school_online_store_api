@@ -3,6 +3,8 @@ package com.javaSchool.FinalTask3.domain.book.impl;
 import com.javaSchool.FinalTask3.domain.book.*;
 import com.javaSchool.FinalTask3.domain.book.dto.BookDTO;
 import com.javaSchool.FinalTask3.domain.book.dto.NumberedBookDTO;
+import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterEntity;
+import com.javaSchool.FinalTask3.domain.book.parameter.BookParameterRepository;
 import com.javaSchool.FinalTask3.domain.orderBook.QOrderBookEntity;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
@@ -30,16 +32,22 @@ import java.util.List;
 public class BookServiceImpl
         extends AbstractServiceImpl<BookRepository, BookEntity, BookDTO, Integer>
         implements BookService {
+    // Fields
+    private final BookParameterRepository bookParameterRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
     /**
      * All arguments constructor.
-     * @param repository {@link BookRepository} of the {@link BookEntity} entity.
-     * @param modelMapper ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
+     *
+     * @param repository              {@link BookRepository} of the {@link BookEntity} entity.
+     * @param modelMapper             ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
+     * @param bookParameterRepository {@link BookParameterRepository} of the {@link BookParameterEntity}
      */
-    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper) {
+    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository) {
         super(repository, modelMapper);
+        this.bookParameterRepository = bookParameterRepository;
     }
 
     @Override
@@ -110,5 +118,27 @@ public class BookServiceImpl
                 .orderBy(totalAmount.desc())
                 .limit(limit)
                 .fetch();
+    }
+
+    /**
+     * Overrides the base saveInstance method to handle BookEntity instances.
+     * Before saving a BookEntity, checks if there are existing BookParameterEntity instances
+     * with the same author and format. If found, associates the first matching BookParameterEntity
+     * with the BookEntity's parameters. Saves the BookEntity instance and returns a BookDTO.
+     * @param book {@link BookEntity} instance to be saved.
+     * @return {@link BookDTO} representing the saved BookEntity.
+     */
+    @Override
+    public BookDTO saveInstance(BookEntity book){
+        List<BookParameterEntity> bookParameters = bookParameterRepository.findByAuthorAndFormat(
+                book.getParameters().getAuthor(),
+                book.getParameters().getFormat()
+        );
+
+        if(!bookParameters.isEmpty()){
+           book.setParameters(bookParameters.get(0));
+        }
+
+        return super.saveInstance(book);
     }
 }
