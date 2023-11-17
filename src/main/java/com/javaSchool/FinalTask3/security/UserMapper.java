@@ -8,10 +8,8 @@ import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.PostalCodeRe
 import com.javaSchool.FinalTask3.domain.userRole.UserRoleEntity;
 import com.javaSchool.FinalTask3.security.dto.RegisterRequestBodyDTO;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
