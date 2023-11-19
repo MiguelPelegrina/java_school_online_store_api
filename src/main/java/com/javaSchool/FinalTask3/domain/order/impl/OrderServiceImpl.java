@@ -8,9 +8,10 @@ import com.javaSchool.FinalTask3.domain.order.dto.SaveOrderDTO;
 import com.javaSchool.FinalTask3.domain.orderBook.QOrderBookEntity;
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
-import com.javaSchool.FinalTask3.exception.InsufficientPermissionsException;
-import com.javaSchool.FinalTask3.exception.ProductOutOfStockException;
-import com.javaSchool.FinalTask3.exception.UserDoesNotExistException;
+import com.javaSchool.FinalTask3.exception.book.ProductNotAvailableException;
+import com.javaSchool.FinalTask3.exception.user.InsufficientPermissionsException;
+import com.javaSchool.FinalTask3.exception.book.ProductOutOfStockException;
+import com.javaSchool.FinalTask3.exception.user.UserDoesNotExistException;
 import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.utils.StringValues;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;
@@ -164,7 +165,7 @@ public class OrderServiceImpl
 
     @Override
     @Transactional
-    public OrderDTO saveInstance(SaveOrderDTO saveOrderDTO) throws ProductOutOfStockException{
+    public OrderDTO saveInstance(SaveOrderDTO saveOrderDTO) {
         // Build an order
         OrderEntity newOrder = OrderEntity.builder()
                 .id(saveOrderDTO.getOrder().getId())
@@ -181,17 +182,20 @@ public class OrderServiceImpl
         // If it has no id, it's a new order and therefore the stock remains unchanged
         if(newOrder.getId() == 0){
             newOrder.getOrderedBooks().stream().forEach(orderBook -> {
-                int previousAmount = orderBook.getBook().getStock();
+                BookEntity book = bookRepository.findById(orderBook.getBook().getId()).orElseThrow();
 
-                // Check if the product stock is enough to be sold in the issued amount
-                if(previousAmount - orderBook.getAmount() >= 0){
-                    // TODO Not sure if this is the right way, applying CascadeType.MERGE to orderBookEntity does not
-                    //  work, PERSIST does not make sense as then a bookEntity could be created
-                    BookEntity book = orderBook.getBook();
-                    book.setStock(previousAmount - orderBook.getAmount());
-                    bookRepository.save(book);
+                if (book.isActive()){
+                    int previousAmount = book.getStock();
+
+                    // Check if the product stock is enough to be sold in the issued amount
+                    if(previousAmount - orderBook.getAmount() >= 0){
+                        book.setStock(previousAmount - orderBook.getAmount());
+                        bookRepository.save(book);
+                    } else {
+                        throw new ProductOutOfStockException(orderBook.getBook());
+                    }
                 } else {
-                    throw new ProductOutOfStockException(orderBook.getBook());
+                    throw new ProductNotAvailableException(orderBook.getBook());
                 }
             });
         }

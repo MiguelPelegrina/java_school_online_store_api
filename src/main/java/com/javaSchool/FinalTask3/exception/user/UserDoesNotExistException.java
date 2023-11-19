@@ -1,5 +1,6 @@
-package com.javaSchool.FinalTask3.exception;
+package com.javaSchool.FinalTask3.exception.user;
 
+import com.javaSchool.FinalTask3.utils.StringValues;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -16,6 +17,6 @@ public class UserDoesNotExistException extends RuntimeException{
      */
     @Override
     public String getMessage(){
-        return message;
+        return String.format(StringValues.USER_DOES_NOT_EXIST, message);
     }
 }

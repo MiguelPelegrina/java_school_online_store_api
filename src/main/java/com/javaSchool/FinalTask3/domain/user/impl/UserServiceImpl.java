@@ -1,8 +1,8 @@
 package com.javaSchool.FinalTask3.domain.user.impl;
 
 import com.javaSchool.FinalTask3.domain.user.*;
-import com.javaSchool.FinalTask3.exception.InsufficientPermissionsException;
-import com.javaSchool.FinalTask3.exception.UserDoesNotExistException;
+import com.javaSchool.FinalTask3.exception.user.InsufficientPermissionsException;
+import com.javaSchool.FinalTask3.exception.user.UserDoesNotExistException;
 import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.utils.StringValues;
 import com.javaSchool.FinalTask3.utils.impl.AbstractServiceImpl;

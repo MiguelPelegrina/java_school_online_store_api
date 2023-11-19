@@ -1,5 +1,7 @@
 package com.javaSchool.FinalTask3.exception;
 
+import com.javaSchool.FinalTask3.exception.book.ProductNotAvailableException;
+import com.javaSchool.FinalTask3.exception.book.ProductOutOfStockException;
 import com.javaSchool.FinalTask3.utils.StringValues;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,10 +15,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 // TODO Review this: Either implement it properly or just remove.
 @RestControllerAdvice
 public class BusinessLogicExceptionHandler {
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<?> handleAccessDenied(AccessDeniedException e){
+        return ResponseEntity.status(403).body(e.getMessage());
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<?> handleNotFound(ResourceNotFoundException e){
         return ResponseEntity.status(404).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ProductNotAvailableException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<?> handleProductNotAvailable(ProductNotAvailableException e){
+        return ResponseEntity.status(405).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ProductOutOfStockException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<?> handleProductNotAvailable(ProductOutOfStockException e){
+        return ResponseEntity.status(405).body(e.getMessage());
     }
 
     @ExceptionHandler(ResourceConflictException.class)
@@ -29,12 +49,6 @@ public class BusinessLogicExceptionHandler {
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     public ResponseEntity<?> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException e){
         return ResponseEntity.status(415).body(StringValues.ACCEPTABLE_MEDIA + MediaType.APPLICATION_JSON_VALUE);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<?> handleAccessDenied(AccessDeniedException e){
-        return ResponseEntity.status(403).body("Roles check failed, access denied");
     }
 
     /*@ExceptionHandler(Exception.class)

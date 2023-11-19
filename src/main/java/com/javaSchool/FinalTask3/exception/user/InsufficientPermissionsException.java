@@ -1,4 +1,4 @@
-package com.javaSchool.FinalTask3.exception;
+package com.javaSchool.FinalTask3.exception.user;
 
 import com.javaSchool.FinalTask3.utils.StringValues;
 

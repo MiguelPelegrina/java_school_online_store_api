@@ -2,7 +2,7 @@ package com.javaSchool.FinalTask3.security.impl;
 
 import com.javaSchool.FinalTask3.domain.user.UserEntity;
 import com.javaSchool.FinalTask3.domain.user.UserRepository;
-import com.javaSchool.FinalTask3.exception.EmailAlreadyUsedException;
+import com.javaSchool.FinalTask3.exception.user.EmailAlreadyUsedException;
 import com.javaSchool.FinalTask3.security.AuthController;
 import com.javaSchool.FinalTask3.security.JwtUtil;
 import com.javaSchool.FinalTask3.security.dto.AuthResultDTO;
