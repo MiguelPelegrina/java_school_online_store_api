@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.javaSchool</groupId>
-	<artifactId>FinalTask3</artifactId>
+	<artifactId>final-task3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>FinalTask3</name>
+	<name>final-task3</name>
 	<description>Java School Final Task</description>
 	<properties>
 		<java.version>17</java.version>
