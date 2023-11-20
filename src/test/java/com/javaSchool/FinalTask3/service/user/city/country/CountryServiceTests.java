@@ -1,4 +1,4 @@
-package com.javaSchool.FinalTask3.service;
+package com.javaSchool.FinalTask3.service.user.city.country;
 
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryDTO;
 import com.javaSchool.FinalTask3.domain.user.userAddress.postalCode.city.country.CountryEntity;
@@ -27,6 +27,7 @@ import static org.mockito.Mockito.*;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CountryServiceTests {
+    // Fields
     @Mock
     private CountryRepository repository;
 
@@ -36,24 +37,24 @@ public class CountryServiceTests {
     @InjectMocks
     private CountryServiceImpl service;
 
-    // Instances for testing
     private CountryEntity country;
     private CountryDTO countryDTO;
 
+    // TODO Might need to be BeforeEach
     @Before
     public void setUp() {
-        // Create instances for testing
         country = CountryEntity.builder()
                 .isActive(true)
-                .name("Granada")
+                .name("Spain")
                 .build();
 
         countryDTO = CountryDTO.builder()
                 .isActive(true)
-                .name("Granada")
+                .name("Spain")
                 .build();
     }
 
+    // Tests for the abstract methods
     @Test
     public void CountryService_CreateCountry_ReturnsSavedCountryDTO(){
         // Arrange
@@ -74,13 +75,13 @@ public class CountryServiceTests {
     @Test
     public void CountryService_DeleteCountryById(){
         // Arrange
-        lenient().when(repository.findById("Granada")).thenReturn(Optional.ofNullable(country));
+        lenient().when(repository.findById("Spain")).thenReturn(Optional.ofNullable(country));
 
         // Act
-        service.deleteInstance("Granada");
+        service.deleteInstance("Spain");
 
         // Assert
-        verify(repository).deleteById("Granada");
+        verify(repository).deleteById("Spain");
     }
 
     @Test
@@ -120,6 +121,45 @@ public class CountryServiceTests {
     }
 
     @Test
+    public void CountryService_GetCountryById_ReturnsCountryDTO(){
+        // Arrange
+        when(repository.findById("Spain")).thenReturn(Optional.ofNullable(country));
+        when(modelMapper.map(country, service.getDTOClass())).thenReturn(countryDTO);
+
+        // Act
+        CountryDTO savedCountry = service.getInstanceById("Spain");
+
+        // Assert
+        assertThat(savedCountry).isNotNull();
+        verify(repository, times(1)).findById("Spain");
+        verify(modelMapper, times(1)).map(country, CountryDTO.class);
+        assertEquals(countryDTO, savedCountry);
+    }
+
+    // TODO Might be redundant
+    @Test
+    public void CountryService_UpdateCountry_ReturnsSavedCountryDTOs(){
+        service.saveInstance(country);
+
+        countryDTO.setActive(false);
+
+        country.setActive(false);
+
+        when(repository.save(any(CountryEntity.class))).thenReturn(country);
+        when(modelMapper.map(country, service.getDTOClass())).thenReturn(countryDTO);
+
+        // Act
+        CountryDTO resultCountryDTO = service.saveInstance(country);
+
+        // Assert
+        assertThat(resultCountryDTO).isNotNull();
+        verify(repository, times(2)).save(country);
+        verify(modelMapper, times(1)).map(country, CountryDTO.class);
+        assertEquals(countryDTO, resultCountryDTO);
+    }
+
+    // Tests for own methods
+    @Test
     public void CountryService_GetAllCountriesFiltered_ReturnsCountryDTOsPage(){
         // Arrange
         List<CountryEntity> countries = new ArrayList<>();
@@ -142,42 +182,5 @@ public class CountryServiceTests {
         assertThat(resultCountryDTOs).isNotNull();
         assertThat(resultCountryDTOs).hasSize(1);
         assertThat(resultCountryDTOs.get(0)).isEqualTo(countryDTO);
-    }
-
-    @Test
-    public void CountryService_GetCountryById_ReturnsCountryDTO(){
-        // Arrange
-        when(repository.findById("Granada")).thenReturn(Optional.ofNullable(country));
-        when(modelMapper.map(country, service.getDTOClass())).thenReturn(countryDTO);
-
-        // Act
-        CountryDTO savedCountry = service.getInstanceById("Granada");
-
-        // Assert
-        assertThat(savedCountry).isNotNull();
-        verify(repository, times(1)).findById("Granada");
-        verify(modelMapper, times(1)).map(country, CountryDTO.class);
-        assertEquals(countryDTO, savedCountry);
-    }
-
-    @Test
-    public void CountryService_UpdateCountry_ReturnsSavedCountryDTOs(){
-        service.saveInstance(country);
-
-        countryDTO.setActive(false);
-
-        country.setActive(false);
-
-        when(repository.save(any(CountryEntity.class))).thenReturn(country);
-        when(modelMapper.map(country, service.getDTOClass())).thenReturn(countryDTO);
-
-        // Act
-        CountryDTO resultCountryDTO = service.saveInstance(country);
-
-        // Assert
-        assertThat(resultCountryDTO).isNotNull();
-        verify(repository, times(2)).save(country);
-        verify(modelMapper, times(1)).map(country, CountryDTO.class);
-        assertEquals(countryDTO, resultCountryDTO);
     }
 }
