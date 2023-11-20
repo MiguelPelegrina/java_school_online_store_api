@@ -1,19 +1,26 @@
 version: '3.9'
 
 services:
-  app:
+  backend-app:
     build: .
-    environment:
-      DB_HOST: jdbc:postgresql://db:5432/online_store
-      DB_USER: postgres
-      DB_PASSWORD: postgres
+    container_name: backend_app
     depends_on:
       - db
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/online_store
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+
   db:
+    container_name: database
     image: postgres
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: online_store
       POSTGRES_USER: postgres
-      POSTGRES_DB: dl
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+    volumes:
+      - .src/main/resources/sql:/docker-entrypoint-initdb.d

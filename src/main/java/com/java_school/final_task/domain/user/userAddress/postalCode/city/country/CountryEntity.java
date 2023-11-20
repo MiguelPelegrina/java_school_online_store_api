@@ -9,8 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-// TODO Why does Postman show "is_active" as "active". When I want to save a new Country the field name must be active (
-//  not is_active)
 @AllArgsConstructor
 @Builder
 @Data

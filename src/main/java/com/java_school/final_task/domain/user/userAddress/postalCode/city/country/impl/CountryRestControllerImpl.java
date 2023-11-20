@@ -32,7 +32,7 @@ public class CountryRestControllerImpl
     @Override
     public ResponseEntity<List<CountryDTO>> getAllInstances(
             @RequestParam("active") Optional<Boolean> active,
-            @RequestParam(value = "country_name", defaultValue = "") String countryName){
-        return ResponseEntity.ok(this.service.getAllInstances(active, countryName));
+            @RequestParam(value = "name", defaultValue = "") String name){
+        return ResponseEntity.ok(this.service.getAllInstances(active, name));
     }
 }
