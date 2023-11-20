@@ -1,0 +1,62 @@
+package com.java_school.final_task.utils.impl;
+
+import com.java_school.final_task.exception.ResourceNotFoundException;
+import com.java_school.final_task.utils.AbstractService;
+import com.java_school.final_task.utils.StringValues;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+// TODO Try to add something that guaranties that the modelMapper and the repository are never null, if possible.
+/**
+ * The {@code AbstractServiceImpl} is a parent service responsible for the interaction between repositories and controller.
+ * Obtains data from the repository and returns the instance(s) of the entity as Data Transfer Object(s) (DTO) to the
+ * related controller. Used for entities that only have one attribute and therefore can't be updated.
+ * @param <RepositoryClass> Repository of the entity.
+ * @param <Entity> Entity instance that will be managed.
+ * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
+ * @param <EntityID> Identifier of the entity instance.
+ */
+@NoArgsConstructor(force = true)
+@RequiredArgsConstructor
+@Service
+@Transactional(readOnly = true)
+public abstract class AbstractServiceImpl<RepositoryClass extends JpaRepository<Entity, EntityID>, Entity, EntityDTO, EntityID>
+        implements AbstractService<Entity, EntityDTO, EntityID> {
+    // Fields
+    protected final RepositoryClass repository;
+    protected final ModelMapper modelMapper;
+
+    @Override
+    public List<EntityDTO> getAllInstances() {
+        return repository.findAll()
+                .stream()
+                .map(entity ->
+                        modelMapper.map(entity, getDTOClass()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public EntityDTO getInstanceById(EntityID id){
+        return modelMapper.map(repository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException(String.format(StringValues.INSTANCE_NOT_FOUND, id))), getDTOClass());
+    }
+
+    @Override
+    @Transactional
+    public EntityDTO saveInstance(Entity instance){
+        return modelMapper.map(repository.save(instance), getDTOClass());
+    }
+
+    @Override
+    @Transactional
+    public void deleteInstance(EntityID id){
+        repository.deleteById(id);
+    }
+}
