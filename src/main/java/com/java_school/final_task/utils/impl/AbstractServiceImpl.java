@@ -19,22 +19,22 @@ import java.util.stream.Collectors;
  * Obtains data from the repository and returns the instance(s) of the entity as Data Transfer Object(s) (DTO) to the
  * related controller. Used for entities that only have one attribute and therefore can't be updated.
  * @param <RepositoryClass> Repository of the entity.
- * @param <Entity> Entity instance that will be managed.
- * @param <EntityDTO> Data Transfer Object (DTO) of the managed entity instance.
- * @param <EntityID> Identifier of the entity instance.
+ * @param <E> Entity instance that will be managed.
+ * @param <T> Data Transfer Object (DTO) of the managed entity instance.
+ * @param <K> Identifier of the entity instance.
  */
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public abstract class AbstractServiceImpl<RepositoryClass extends JpaRepository<Entity, EntityID>, Entity, EntityDTO, EntityID>
-        implements AbstractService<Entity, EntityDTO, EntityID> {
+public abstract class AbstractServiceImpl<RepositoryClass extends JpaRepository<E, K>, E, T, K>
+        implements AbstractService<E, T, K> {
     // Fields
     protected final RepositoryClass repository;
     protected final ModelMapper modelMapper;
 
     @Override
-    public List<EntityDTO> getAllInstances() {
+    public List<T> getAllInstances() {
         return repository.findAll()
                 .stream()
                 .map(entity ->
@@ -43,20 +43,20 @@ public abstract class AbstractServiceImpl<RepositoryClass extends JpaRepository<
     }
 
     @Override
-    public EntityDTO getInstanceById(EntityID id){
+    public T getInstanceById(K id){
         return modelMapper.map(repository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException(String.format(StringValues.INSTANCE_NOT_FOUND, id))), getDTOClass());
     }
 
     @Override
     @Transactional
-    public EntityDTO saveInstance(Entity instance){
+    public T saveInstance(E instance){
         return modelMapper.map(repository.save(instance), getDTOClass());
     }
 
     @Override
     @Transactional
-    public void deleteInstance(EntityID id){
+    public void deleteInstance(K id){
         repository.deleteById(id);
     }
 }
