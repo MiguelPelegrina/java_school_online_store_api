@@ -3,14 +3,14 @@ package com.java_school.final_task.domain.user_address;
 import com.java_school.final_task.domain.user.userAddress.UserAddressDTO;
 import com.java_school.final_task.domain.user.userAddress.UserAddressEntity;
 import com.java_school.final_task.domain.user.userAddress.impl.UserAddressServiceImpl;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserAddressServiceTests {
     @InjectMocks
     private UserAddressServiceImpl service;

@@ -8,12 +8,12 @@ import com.java_school.final_task.domain.user.userAddress.postalCode.city.countr
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.impl.CityServiceImpl;
 import com.querydsl.core.BooleanBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CityServiceTests {
     // Fields
     @Mock
@@ -40,7 +40,7 @@ public class CityServiceTests {
 
     private CityDTO instanceDTO;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = CityEntity.builder()
                 .isActive(true)

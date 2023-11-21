@@ -5,13 +5,14 @@ import com.java_school.final_task.domain.user.userAddress.postalCode.city.countr
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryRepository;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.QCountryEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.impl.CountryServiceImpl;
+import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -23,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * Test class for the abstract class AbstractService
+ * Test class for {@link CountryServiceImpl}. Implements methods to test {@link AbstractServiceImpl}
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CountryServiceTests {
     // Fields
     @Mock
@@ -40,8 +41,7 @@ public class CountryServiceTests {
     private CountryEntity instance;
     private CountryDTO instanceDTO;
 
-    // TODO Might need to be BeforeEach
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = CountryEntity.builder()
                 .isActive(true)
@@ -57,11 +57,11 @@ public class CountryServiceTests {
     @Test
     public void CountryService_GetEntityId_ReturnsIdClass(){
         // Arrange
-        CountryEntity instancec = new CountryEntity();
-        instancec.setName("TestCountry");
+        CountryEntity instance = new CountryEntity();
+        instance.setName("TestCountry");
 
         // Act
-        String entityId = service.getEntityId(instancec);
+        String entityId = service.getEntityId(instance);
 
         // Assert
         assertEquals("TestCountry", entityId);
