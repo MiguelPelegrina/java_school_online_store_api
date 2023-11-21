@@ -99,10 +99,9 @@ public class BookServiceImpl
         );
     }
 
+    // TODO Add sorting and paging
     @Override
-    public List<NumberedBookDTO> getTopProducts(int limit
-                                                //, int page, int size
-    ){
+    public List<NumberedBookDTO> getTopProducts(int limit){
         JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
 
         QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;

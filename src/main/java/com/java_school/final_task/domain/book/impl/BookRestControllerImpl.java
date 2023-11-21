@@ -39,17 +39,10 @@ public class BookRestControllerImpl
         return ResponseEntity.ok(this.service.getAllInstances(bookRequest));
     }
 
-    // TODO Add a number to the dto
     // TODO Implement Paging and sorting
     @GetMapping("/top_products")
     @Override
-    public ResponseEntity<List<NumberedBookDTO>> getTopProducts(
-            @RequestParam("limit") int limit
-            //@RequestParam("page") int page,
-            //@RequestParam("size") int size
-    ){
-        return ResponseEntity.ok(this.service.getTopProducts(limit
-                //, page, size
-                ));
+    public ResponseEntity<List<NumberedBookDTO>> getTopProducts(@RequestParam("limit") int limit){
+        return ResponseEntity.ok(this.service.getTopProducts(limit));
     }
 }

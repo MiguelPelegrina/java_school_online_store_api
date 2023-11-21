@@ -84,12 +84,13 @@ public class CityServiceTests {
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         queryBuilder.and(qInstance.isActive.eq(true));
+        queryBuilder.and(qInstance.countryName.name.containsIgnoreCase("s"));
 
         when(repository.findAll(queryBuilder)).thenReturn(instances);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
-        List<CityDTO> resultDTOs = service.getAllInstances("", Optional.of(true));
+        List<CityDTO> resultDTOs = service.getAllInstances("s", Optional.of(true));
 
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);

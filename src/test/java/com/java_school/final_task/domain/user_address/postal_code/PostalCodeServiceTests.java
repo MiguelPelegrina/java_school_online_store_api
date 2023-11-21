@@ -96,12 +96,13 @@ public class PostalCodeServiceTests {
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         queryBuilder.and(qInstance.isActive.eq(true));
+        queryBuilder.and(qInstance.city.name.containsIgnoreCase("g"));
 
         when(repository.findAll(queryBuilder)).thenReturn(instances);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
-        List<PostalCodeDTO> resultDTOs = service.getAllInstances("", Optional.of(true));
+        List<PostalCodeDTO> resultDTOs = service.getAllInstances("g", Optional.of(true));
 
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);

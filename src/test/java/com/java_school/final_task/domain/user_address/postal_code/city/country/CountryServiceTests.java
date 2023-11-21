@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * Test class for {@link CountryServiceImpl}. Implements methods to test {@link AbstractServiceImpl}
+ * Test class for {@link CountryServiceImpl}. Implements tests for {@link AbstractServiceImpl} as well.
  */
 @ExtendWith(MockitoExtension.class)
 public class CountryServiceTests {
@@ -102,12 +102,12 @@ public class CountryServiceTests {
         // Arrange
         CountryEntity instance2 = CountryEntity.builder()
                 .isActive(true)
-                .name("Málaga")
+                .name("Germany")
                 .build();
 
         CountryDTO instanceDTO2 = CountryDTO.builder()
                 .isActive(true)
-                .name("Málaga")
+                .name("Germany")
                 .build();
 
         List<CountryEntity> countries = new ArrayList<>();
@@ -160,12 +160,13 @@ public class CountryServiceTests {
         instances.add(instance);
 
         queryBuilder.and(qInstance.isActive.eq(true));
+        queryBuilder.and(qInstance.name.containsIgnoreCase("s"));
 
         when(repository.findAll(queryBuilder)).thenReturn(instances);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
-        List<CountryDTO> resultDTOs = service.getAllInstances(Optional.of(true),"");
+        List<CountryDTO> resultDTOs = service.getAllInstances(Optional.of(true),"s");
 
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
