@@ -10,9 +10,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,5 +99,50 @@ public class CountryRestControllerTests {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(instances.size())))
                 .andExpect(jsonPath("$[0].name", is(instanceDTO.getName())));
+    }
+
+    @Test
+    public void CountryController_CountryDetail_ReturnCountryDTO() throws Exception {
+        // Arrange
+        when(service.getInstanceById(instance.getName())).thenReturn(instanceDTO);
+
+        // Act
+        ResultActions result = mockMvc.perform(get("/countries/" + instance.getName())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instanceDTO)));
+
+        // Assert
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", CoreMatchers.is(instanceDTO.getName())))
+                .andExpect(jsonPath("$.active", CoreMatchers.is(instanceDTO.isActive())));
+    }
+
+    @Test
+    public void CountryController_UpdateCountry_ReturnCountryDTO() throws Exception {
+        // Arrange
+        when(service.saveInstance(instance)).thenReturn(instanceDTO);
+
+        // Act
+        ResultActions result = mockMvc.perform(put("/countries/" + instance.getName())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instanceDTO)));
+
+        // Assert
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", CoreMatchers.is(instanceDTO.getName())))
+                .andExpect(jsonPath("$.active", CoreMatchers.is(instanceDTO.isActive())));
+    }
+
+    @Test
+    public void CountryController_DeleteCountry_ReturnStatus() throws Exception {
+        // Arrange
+        doNothing().when(service).deleteInstance(instance.getName());
+
+        // Act
+        ResultActions result = mockMvc.perform(delete("/countries/" + instance.getName())
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // Assert
+        result.andExpect(status().isOk());
     }
 }
