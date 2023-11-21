@@ -70,7 +70,6 @@ public abstract class AbstractRestControllerImpl
             @ApiResponse(responseCode = "401", description = "Not authorized",
                     content = @Content)
     })
-
     @PostMapping
     @Operation(summary = "Saves an instance of an entity into the repository or updates it, if already exists.")
     @Override
@@ -80,7 +79,7 @@ public abstract class AbstractRestControllerImpl
         if (instanceDTO == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return ResponseEntity.ok(instanceDTO);
+            return new ResponseEntity<T>(instanceDTO, HttpStatus.CREATED);
         }
     }
 

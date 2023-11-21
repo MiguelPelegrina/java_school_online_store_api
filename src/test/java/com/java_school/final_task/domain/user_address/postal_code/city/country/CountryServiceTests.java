@@ -151,13 +151,13 @@ public class CountryServiceTests {
 
     // Tests for own methods
     @Test
-    public void CountryService_GetAllCountriesFiltered_ReturnsCountryDTOsPage(){
+    public void CountryService_GetAllCountriesFiltered_ReturnsCountryDTOs(){
         // Arrange
-        List<CountryEntity> instances = new ArrayList<>();
-        instances.add(instance);
-
         final QCountryEntity qInstance = QCountryEntity.countryEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+        List<CountryEntity> instances = new ArrayList<>();
+        instances.add(instance);
 
         queryBuilder.and(qInstance.isActive.eq(true));
 
