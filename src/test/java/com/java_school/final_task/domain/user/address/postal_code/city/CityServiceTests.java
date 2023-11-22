@@ -1,14 +1,12 @@
-package com.java_school.final_task.domain.user_address.postal_code;
+package com.java_school.final_task.domain.user.address.postal_code.city;
 
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeRepository;
-import com.java_school.final_task.domain.user.userAddress.postalCode.QPostalCodeEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
+import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityRepository;
+import com.java_school.final_task.domain.user.userAddress.postalCode.city.QCityEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.impl.PostalCodeServiceImpl;
+import com.java_school.final_task.domain.user.userAddress.postalCode.city.impl.CityServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,83 +24,69 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-/**
- * Test class for {@link PostalCodeServiceImpl}
- */
 @ExtendWith(MockitoExtension.class)
-public class PostalCodeServiceTests {
+public class CityServiceTests {
     // Fields
     @Mock
-    private PostalCodeRepository repository;
+    private CityRepository repository;
 
     @Mock
     private ModelMapper modelMapper;
 
     @InjectMocks
-    private PostalCodeServiceImpl service;
+    private CityServiceImpl service;
 
-    private PostalCodeEntity instance;
-    private PostalCodeDTO instanceDTO;
+    private CityEntity instance;
+
+    private CityDTO instanceDTO;
 
     @BeforeEach
     public void setUp() {
-        instance = PostalCodeEntity.builder()
+        instance = CityEntity.builder()
                 .isActive(true)
-                .code("18014")
-                .city(CityEntity.builder()
-                        .name("Granada")
-                        .countryName(CountryEntity.builder()
-                                .isActive(true)
-                                .name("Spain")
-                                .build())
+                .name("City")
+                .countryName(CountryEntity.builder()
                         .isActive(true)
+                        .name("Country")
                         .build())
                 .build();
 
-        instanceDTO = PostalCodeDTO.builder()
+        instanceDTO = CityDTO.builder()
                 .isActive(true)
-                .code("18014")
-                .city(CityDTO.builder()
-                        .name("Granada")
-                        .country(CountryDTO.builder()
-                                .isActive(true)
-                                .name("Spain")
-                                .build())
+                .name("City")
+                .country(CountryDTO.builder()
                         .isActive(true)
+                        .name("Country")
                         .build())
                 .build();
     }
 
     @Test
-    public void PostalCodeService_GetEntityId_ReturnsIdClass(){
-        // Arrange
-        PostalCodeEntity instance = new PostalCodeEntity();
-        instance.setCode("TestPostalCode");
-
+    public void CountryService_GetEntityId_ReturnsIdClass(){
         // Act
         String entityId = service.getEntityId(instance);
 
         // Assert
-        assertEquals("TestPostalCode", entityId);
+        assertEquals("City", entityId);
     }
 
     @Test
-    public void PostalCodeService_GetAllPostalCodesFiltered_ReturnsPostalCodeDTOsPage(){
+    public void CityService_GetAllCitiesFiltered_ReturnsCityDTOs(){
         // Arrange
-        List<PostalCodeEntity> instances = new ArrayList<>();
+        List<CityEntity> instances = new ArrayList<>();
         instances.add(instance);
 
-        final QPostalCodeEntity qInstance  = QPostalCodeEntity.postalCodeEntity;
+        final QCityEntity qInstance = QCityEntity.cityEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         queryBuilder.and(qInstance.isActive.eq(true));
-        queryBuilder.and(qInstance.city.name.containsIgnoreCase("g"));
+        queryBuilder.and(qInstance.countryName.name.containsIgnoreCase("s"));
 
         when(repository.findAll(queryBuilder)).thenReturn(instances);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
-        List<PostalCodeDTO> resultDTOs = service.getAllInstances("g", Optional.of(true));
+        List<CityDTO> resultDTOs = service.getAllInstances("s", Optional.of(true));
 
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);

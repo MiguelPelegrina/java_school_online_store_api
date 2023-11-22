@@ -31,9 +31,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test class for {@link BookServiceImpl}
+ */
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTests {
-    @Spy
+    @Mock
     private BookRepository bookRepository;
 
     @Mock
@@ -50,7 +53,9 @@ public class BookServiceTests {
 
     @BeforeEach
     public void setUp() {
+        // Arrange
         instance = BookEntity.builder()
+                .id(1)
                 .title("Title")
                 .active(true)
                 .genre(new BookGenreEntity("Genre"))
@@ -68,6 +73,7 @@ public class BookServiceTests {
                 .build();
 
         instanceDTO = BookDTO.builder()
+                .id(1)
                 .title("Title")
                 .active(true)
                 .genre(new BookGenreDTO("Genre"))
@@ -86,19 +92,28 @@ public class BookServiceTests {
     }
 
     @Test
+    public void BookService_GetEntityId_ReturnsIdClass(){
+        // Act
+        int entityId = service.getEntityId(instance);
+
+        // Assert
+        assertEquals(1, entityId);
+    }
+
+    @Test
     public void BookService_CreateBook_ReturnsSavedBookDTO(){
         // Arrange
-        when(bookRepository.save(Mockito.any(BookEntity.class))).thenReturn(instance);
+        when(bookRepository.save(any(BookEntity.class))).thenReturn(instance);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
-        BookDTO savedBook = service.saveInstance(instance);
+        BookDTO savedInstance = service.saveInstance(instance);
 
         // Assert
-        assertThat(savedBook).isNotNull();
+        assertThat(savedInstance).isNotNull();
         verify(bookRepository, times(1)).save(instance);
         verify(modelMapper, times(1)).map(instance, BookDTO.class);
-        assertEquals(instanceDTO, savedBook);
+        assertEquals(instanceDTO, savedInstance);
     }
 
     @Test
@@ -110,11 +125,13 @@ public class BookServiceTests {
         List<BookEntity> instances = new ArrayList<>();
         instances.add(instance);
 
-        Page<BookEntity> pageEntities = new PageImpl<>(instances);
+        Page<BookEntity> page = new PageImpl<>(instances);
 
         queryBuilder.and(qInstance.active.eq(true));
+        queryBuilder.and(qInstance.genre.name.containsIgnoreCase(instance.getGenre().getName()));
 
         BookRequest request = new BookRequest();
+        request.setGenre("Genre");
         request.setActive(Optional.of(true));
         request.setPage(0);
         request.setSize(10);
@@ -127,7 +144,7 @@ public class BookServiceTests {
                 Sort.Direction.valueOf(request.getSortType()),
                 request.getSortProperty());
 
-        when(bookRepository.findAll(queryBuilder, pageRequest)).thenReturn(pageEntities);
+        when(bookRepository.findAll(queryBuilder, pageRequest)).thenReturn(page);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act

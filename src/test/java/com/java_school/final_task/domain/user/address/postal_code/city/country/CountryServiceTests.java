@@ -1,4 +1,4 @@
-package com.java_school.final_task.domain.user_address.postal_code.city.country;
+package com.java_school.final_task.domain.user.address.postal_code.city.country;
 
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
@@ -43,28 +43,16 @@ public class CountryServiceTests {
 
     @BeforeEach
     public void setUp() {
+        // Arrange
         instance = CountryEntity.builder()
                 .isActive(true)
-                .name("Spain")
+                .name("Country")
                 .build();
 
         instanceDTO = CountryDTO.builder()
                 .isActive(true)
-                .name("Spain")
+                .name("Country")
                 .build();
-    }
-
-    @Test
-    public void CountryService_GetEntityId_ReturnsIdClass(){
-        // Arrange
-        CountryEntity instance = new CountryEntity();
-        instance.setName("TestCountry");
-
-        // Act
-        String entityId = service.getEntityId(instance);
-
-        // Assert
-        assertEquals("TestCountry", entityId);
     }
 
     // Tests for the abstract methods
@@ -88,13 +76,13 @@ public class CountryServiceTests {
     @Test
     public void CountryService_DeleteCountryById(){
         // Arrange
-        lenient().when(repository.findById("Spain")).thenReturn(Optional.ofNullable(instance));
+        lenient().when(repository.findById("Country")).thenReturn(Optional.ofNullable(instance));
 
         // Act
-        service.deleteInstance("Spain");
+        service.deleteInstance("Country");
 
         // Assert
-        verify(repository).deleteById("Spain");
+        verify(repository).deleteById("Country");
     }
 
     @Test
@@ -136,20 +124,29 @@ public class CountryServiceTests {
     @Test
     public void CountryService_GetCountryById_ReturnsCountryDTO(){
         // Arrange
-        when(repository.findById("Spain")).thenReturn(Optional.ofNullable(instance));
+        when(repository.findById("Country")).thenReturn(Optional.ofNullable(instance));
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
-        CountryDTO savedCountry = service.getInstanceById("Spain");
+        CountryDTO savedCountry = service.getInstanceById("Country");
 
         // Assert
         assertThat(savedCountry).isNotNull();
-        verify(repository, times(1)).findById("Spain");
+        verify(repository, times(1)).findById("Country");
         verify(modelMapper, times(1)).map(instance, CountryDTO.class);
         assertEquals(instanceDTO, savedCountry);
     }
 
     // Tests for own methods
+    @Test
+    public void CountryService_GetEntityId_ReturnsIdClass(){
+        // Act
+        String entityId = service.getEntityId(instance);
+
+        // Assert
+        assertEquals("Country", entityId);
+    }
+
     @Test
     public void CountryService_GetAllCountriesFiltered_ReturnsCountryDTOs(){
         // Arrange

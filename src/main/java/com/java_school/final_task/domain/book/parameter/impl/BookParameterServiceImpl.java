@@ -28,7 +28,7 @@ public class BookParameterServiceImpl
     }
     @Override
     public Class<BookParameterDTO> getDTOClass() {
-        return null;
+        return BookParameterDTO.class;
     }
 
     @Override
