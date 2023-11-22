@@ -1,14 +1,11 @@
 package com.java_school.final_task.domain.book;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.genre.BookGenreDTO;
-import com.java_school.final_task.domain.book.genre.BookGenreEntity;
+import com.java_school.final_task.domain.book.impl.BookRestControllerImpl;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
 import com.java_school.final_task.domain.book.parameter.BookParameterDTO;
-import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatDTO;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +30,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+/**
+ * Test class for {@link BookRestControllerImpl}
+ */
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -43,32 +43,13 @@ public class BookRestControllerTests {
     @MockBean
     private BookServiceImpl service;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    private BookEntity instance;
     private BookDTO instanceDTO;
 
     @BeforeEach
     public void setUp() {
-        instance = BookEntity.builder()
-                .title("Title")
-                .active(true)
-                .genre(new BookGenreEntity("Genre"))
-                .image("Image")
-                .isbn("ISBN")
-                .price(new BigDecimal("1.23"))
-                .stock(10)
-                .parameters(
-                        BookParameterEntity.builder()
-                                .author("Author")
-                                .format(new BookParametersFormatEntity("Format"))
-                                .isActive(true)
-                                .build()
-                )
-                .build();
-
+        // Arrange
         instanceDTO = BookDTO.builder()
+                .id(1)
                 .title("Title")
                 .active(true)
                 .genre(new BookGenreDTO("Genre"))
@@ -87,7 +68,7 @@ public class BookRestControllerTests {
     }
 
     @Test
-    public void BookController_GetAllBooksByParams_ReturnBookDTOPage() throws Exception {
+    public void BookRestController_GetAllBooksByParams_ReturnBookDTOPage() throws Exception {
         // Arrange
         Page<BookDTO> page = new PageImpl<>(Collections.singletonList(instanceDTO));
 

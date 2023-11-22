@@ -1,14 +1,12 @@
-package com.java_school.final_task.domain.user_address.postal_code;
+package com.java_school.final_task.domain.user.address.postal_code.city;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.impl.CityRestControllerImpl;
-import com.java_school.final_task.domain.user.userAddress.postalCode.impl.PostalCodeServiceImpl;
+import com.java_school.final_task.domain.user.userAddress.postalCode.city.impl.CityServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,62 +35,53 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class PostalCodeRestControllerTests {
+public class CityRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private PostalCodeServiceImpl service;
+    private CityServiceImpl service;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    private PostalCodeEntity instance;
-    private PostalCodeDTO instanceDTO;
+    private CityEntity instance;
+    private CityDTO instanceDTO;
 
     @BeforeEach
     public void setUp() {
-        instance = PostalCodeEntity.builder()
+        // Arrange
+        instance = CityEntity.builder()
                 .isActive(true)
-                .code("18014")
-                .city(CityEntity.builder()
+                .name("City")
+                .countryName(CountryEntity.builder()
                         .isActive(true)
-                        .name("Granada")
-                        .countryName(CountryEntity.builder()
-                                .isActive(true)
-                                .name("Spain")
-                                .build())
+                        .name("Country")
                         .build())
                 .build();
 
-        instanceDTO = PostalCodeDTO.builder()
+        instanceDTO = CityDTO.builder()
                 .isActive(true)
-                .code("18014")
-                .city(CityDTO.builder()
+                .name("City")
+                .country(CountryDTO.builder()
                         .isActive(true)
-                        .name("Granada")
-                        .country(CountryDTO.builder()
-                                .isActive(true)
-                                .name("Spain")
-                                .build())
+                        .name("Country")
                         .build())
                 .build();
     }
 
     @Test
-    public void PostalCodeController_GetAllPostalCodesByParams_ReturnPostalCodeDTOs() throws Exception {
+    public void CountryController_GetAllCountriesByParams_ReturnCountryDTOs() throws Exception {
         // Arrange
-        List<PostalCodeDTO> instances = Arrays.asList(instanceDTO);
+        List<CityDTO> instances = Arrays.asList(instanceDTO);
         when(service.getAllInstances(any(), any())).thenReturn(instances);
 
         // Act
-        ResultActions result = mockMvc.perform(request(HttpMethod.GET,"/postal_codes/search")
-                .param("active", String.valueOf(instance.isActive()))
-                .param("name", instance.getCode()));
-
-        // Assert
-        result.andExpect(status().isOk())
+        mockMvc.perform(request(HttpMethod.GET,"/cities/search")
+                        .param("active", String.valueOf(instance.isActive()))
+                        .param("name", instance.getName()))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(instances.size())))
-                .andExpect(jsonPath("$[0].code", is(instanceDTO.getCode())));
+                .andExpect(jsonPath("$[0].name", is(instanceDTO.getName())));
     }
 }

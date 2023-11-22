@@ -7,7 +7,10 @@ import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodDTO;
 import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusDTO;
 import com.java_school.final_task.domain.orderBook.OrderBookJsonDTO;
 import com.java_school.final_task.domain.user.UserDTO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,7 +18,10 @@ import java.util.List;
 /**
  * Data Transfer Object (DTO) of {@link OrderEntity}.
  */
+@AllArgsConstructor
+@Builder
 @Data
+@NoArgsConstructor
 public class OrderDTO {
     private int id;
     private UserDTO user;
@@ -23,6 +29,6 @@ public class OrderDTO {
     private OrderStatusDTO orderStatus;
     private PaymentMethodDTO paymentMethod;
     private PaymentStatusDTO paymentStatus;
-    private List<OrderBookJsonDTO> orderedBooks;
     private LocalDate date;
+    private List<OrderBookJsonDTO> orderedBooks;
 }

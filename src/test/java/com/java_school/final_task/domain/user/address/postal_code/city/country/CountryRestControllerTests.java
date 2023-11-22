@@ -1,4 +1,4 @@
-package com.java_school.final_task.domain.user_address.postal_code.city.country;
+package com.java_school.final_task.domain.user.address.postal_code.city.country;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
@@ -55,6 +55,7 @@ public class CountryRestControllerTests {
 
     @BeforeEach
     public void setUp() {
+        // Arrage
         instance = CountryEntity.builder()
                 .isActive(true)
                 .name("Spain")

@@ -1,4 +1,4 @@
-package com.java_school.final_task.domain.user_address;
+package com.java_school.final_task.domain.user.address;
 
 import com.java_school.final_task.domain.user.userAddress.UserAddressDTO;
 import com.java_school.final_task.domain.user.userAddress.UserAddressEntity;
@@ -30,8 +30,10 @@ public class UserAddressServiceTests {
 
     @Test
     public void UserAddressService_GetDTOClass_ReturnsDTOClass(){
+        // Act
         Class<UserAddressDTO> result = service.getDTOClass();
 
+        // Assert
         assertEquals(UserAddressDTO.class, result);
     }
 }
