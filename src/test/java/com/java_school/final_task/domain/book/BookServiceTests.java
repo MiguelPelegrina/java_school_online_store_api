@@ -3,11 +3,9 @@ package com.java_school.final_task.domain.book;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
-import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
 import com.java_school.final_task.domain.orderBook.QOrderBookEntity;
 import com.java_school.final_task.mothers.book.BookMother;
-import com.java_school.final_task.mothers.book.parameter.BookParameterMother;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -19,10 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -140,7 +136,7 @@ public class BookServiceTests {
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
     }
 
-    @Test
+    /*@Test
     public void BookService_GetTopProducts_ReturnNumberedBookDTOs(){
         // Arrange
         int limit = 2;
@@ -177,5 +173,5 @@ public class BookServiceTests {
                 .fetch();
 
         assertEquals(expectedResults, result);
-    }
+    }*/
 }

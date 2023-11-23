@@ -53,7 +53,6 @@ public class AuthControllerImpl implements AuthController {
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StringValues.INVALID_CREDENTIALS);
         } catch (Exception e){
-            System.out.println(e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
