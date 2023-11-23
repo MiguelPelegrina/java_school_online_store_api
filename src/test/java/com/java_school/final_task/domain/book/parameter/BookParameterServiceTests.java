@@ -1,8 +1,7 @@
 package com.java_school.final_task.domain.book.parameter;
 
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatDTO;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatEntity;
 import com.java_school.final_task.domain.book.parameter.impl.BookParameterServiceImpl;
+import com.java_school.final_task.mothers.book.parameter.BookParameterMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,27 +28,10 @@ public class BookParameterServiceTests {
     private BookParameterServiceImpl service;
 
     private BookParameterEntity instance;
-    private BookParameterDTO instanceDTO;
 
     @BeforeEach
     public void setUp() {
-        instance = BookParameterEntity.builder()
-                .id(1)
-                .isActive(true)
-                .author("Author")
-                .format(BookParametersFormatEntity.builder()
-                        .name("Format")
-                        .build())
-                .build();
-
-        instanceDTO = BookParameterDTO.builder()
-                .id(1)
-                .isActive(true)
-                .author("Author")
-                .format(BookParametersFormatDTO.builder()
-                        .name("Format")
-                        .build())
-                .build();
+        instance = BookParameterMother.createBookParameter();
     }
 
     @Test

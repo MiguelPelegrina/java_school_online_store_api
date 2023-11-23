@@ -17,6 +17,6 @@ public class UserAddressDTO {
     private int id;
     private PostalCodeDTO postalCode;
     private String street;
-    private int number;
+    private String number;
     private boolean isActive;
 }

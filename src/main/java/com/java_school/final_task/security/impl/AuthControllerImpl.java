@@ -3,6 +3,7 @@ package com.java_school.final_task.security.impl;
 import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserRepository;
 import com.java_school.final_task.exception.user.EmailAlreadyUsedException;
+import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.security.AuthController;
 import com.java_school.final_task.security.JwtUtil;
 import com.java_school.final_task.security.dto.AuthResultDTO;
@@ -33,11 +34,12 @@ public class AuthControllerImpl implements AuthController {
     @Override
     @PostMapping
     @RequestMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestBodyDTO loginRequestBodyDto)  {
+    public ResponseEntity<?> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDto)  {
         try {
             // Get the user
-            String email = loginRequestBodyDto.getEmail();
-            UserEntity user = repository.findUserByEmail(email).orElseThrow();
+            UserEntity user = repository.findUserByEmail(loginRequestBodyDto.getEmail()).orElseThrow(
+                    () -> new UserDoesNotExistException(String.format(StringValues.INSTANCE_NOT_FOUND, loginRequestBodyDto.getEmail()))
+            );
 
             if(!user.isActive()){
                 return ResponseEntity.status(401).body(StringValues.INACTIVE_USER);
@@ -51,6 +53,7 @@ public class AuthControllerImpl implements AuthController {
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StringValues.INVALID_CREDENTIALS);
         } catch (Exception e){
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -58,7 +61,7 @@ public class AuthControllerImpl implements AuthController {
     @PostMapping
     @RequestMapping("/register")
     @Override
-    public ResponseEntity register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO){
+    public ResponseEntity<?> register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO){
         try{
             return ResponseEntity.ok(this.generateAuthResultDTO(service.register(registerRequestBodyDTO)));
         } catch (EmailAlreadyUsedException e) {

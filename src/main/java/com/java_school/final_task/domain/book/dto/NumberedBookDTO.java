@@ -6,8 +6,8 @@ import com.java_school.final_task.domain.book.parameter.BookParameterDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class NumberedBookDTO extends BookDTO {
     private int totalAmount;
 

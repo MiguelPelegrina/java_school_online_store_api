@@ -1,28 +1,33 @@
 package com.java_school.final_task.domain.book;
 
 import com.java_school.final_task.domain.book.dto.BookDTO;
-import com.java_school.final_task.domain.book.genre.BookGenreDTO;
-import com.java_school.final_task.domain.book.genre.BookGenreEntity;
+import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
-import com.java_school.final_task.domain.book.parameter.BookParameterDTO;
 import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatDTO;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatEntity;
+import com.java_school.final_task.domain.orderBook.QOrderBookEntity;
+import com.java_school.final_task.mothers.book.BookMother;
+import com.java_school.final_task.mothers.book.parameter.BookParameterMother;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +39,9 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTests {
+    @InjectMocks
+    private BookServiceImpl service;
+
     @Mock
     private BookRepository bookRepository;
 
@@ -41,10 +49,10 @@ public class BookServiceTests {
     private BookParameterRepository bookParameterRepository;
 
     @Mock
-    private ModelMapper modelMapper;
+    private EntityManager emMock;
 
-    @InjectMocks
-    private BookServiceImpl service;
+    @Mock
+    private ModelMapper modelMapper;
 
     private BookEntity instance;
     private BookDTO instanceDTO;
@@ -52,41 +60,9 @@ public class BookServiceTests {
     @BeforeEach
     public void setUp() {
         // Arrange
-        instance = BookEntity.builder()
-                .id(1)
-                .title("Title")
-                .active(true)
-                .genre(new BookGenreEntity("Genre"))
-                .image("Image")
-                .isbn("ISBN")
-                .price(new BigDecimal("1.23"))
-                .stock(10)
-                .parameters(
-                        BookParameterEntity.builder()
-                                .author("Author")
-                                .format(new BookParametersFormatEntity("Format"))
-                                .isActive(true)
-                                .build()
-                )
-                .build();
+        instance = BookMother.createBook();
 
-        instanceDTO = BookDTO.builder()
-                .id(1)
-                .title("Title")
-                .active(true)
-                .genre(new BookGenreDTO("Genre"))
-                .image("Image")
-                .isbn("ISBN")
-                .price(new BigDecimal("1.23"))
-                .stock(10)
-                .parameters(
-                        BookParameterDTO.builder()
-                                .author("Author")
-                                .format(new BookParametersFormatDTO("Hardcover"))
-                                .isActive(true)
-                                .build()
-                )
-                .build();
+        instanceDTO = BookMother.createBookDTO();
     }
 
     @Test
@@ -101,7 +77,11 @@ public class BookServiceTests {
     @Test
     public void BookService_CreateBook_ReturnsSavedBookDTO(){
         // Arrange
-        when(bookRepository.save(any(BookEntity.class))).thenReturn(instance);
+        when(bookRepository.save(instance)).thenReturn(instance);
+        when(bookParameterRepository.findByAuthorAndFormat(
+                instance.getParameters().getAuthor(),
+                instance.getParameters().getFormat()))
+                .thenReturn(List.of(instance.getParameters()));
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
@@ -125,16 +105,19 @@ public class BookServiceTests {
 
         Page<BookEntity> page = new PageImpl<>(instances);
 
-        queryBuilder.and(qInstance.active.eq(true));
-        queryBuilder.and(qInstance.genre.name.containsIgnoreCase(instance.getGenre().getName()));
-
         BookRequest request = new BookRequest();
         request.setGenre("Genre");
+        request.setName("Title");
         request.setActive(Optional.of(true));
         request.setPage(0);
         request.setSize(10);
         request.setSortType("ASC");
         request.setSortProperty("title");
+
+        queryBuilder.and(qInstance.active.eq(true));
+        queryBuilder.and(qInstance.title.containsIgnoreCase("Title")
+                        .or(qInstance.parameters.author.containsIgnoreCase("Title")));
+        queryBuilder.and(qInstance.genre.name.containsIgnoreCase(instance.getGenre().getName()));
 
         PageRequest pageRequest = PageRequest.of(
                 request.getPage(),
@@ -155,5 +138,44 @@ public class BookServiceTests {
         assertThat(resultDTOs).isNotNull();
         assertThat(resultDTOs).hasSize(1);
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
+    }
+
+    @Test
+    public void BookService_GetTopProducts_ReturnNumberedBookDTOs(){
+        // Arrange
+        int limit = 2;
+        QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;
+        QBookEntity qBook = QBookEntity.bookEntity;
+
+        NumberExpression<Integer> totalAmount = qOrderBook.amount.sum();
+
+        List<NumberedBookDTO> expectedResults = new ArrayList<>(); // Add your expected results
+        expectedResults.add(BookMother.createNumberedBookDTO(3));
+        expectedResults.add(BookMother.createNumberedBookDTO(2));
+
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(emMock);
+        JPAQuery jpaQuery = mock(JPAQuery.class);
+        when(jpaQueryFactory.selectFrom(any())).thenReturn(jpaQuery);
+        when(jpaQuery.select(Projections.constructor(NumberedBookDTO.class, qBook, totalAmount))).thenReturn(jpaQuery);
+        when(jpaQuery.join(qOrderBook.book, qBook)).thenReturn(jpaQuery);
+        when(jpaQuery.groupBy(qBook.id)).thenReturn(jpaQuery);
+        when(jpaQuery.orderBy(totalAmount.desc())).thenReturn(jpaQuery);
+        when(jpaQuery.limit(limit)).thenReturn(jpaQuery);
+        when(jpaQuery.fetch()).thenReturn(expectedResults);
+
+        // Act
+        List<NumberedBookDTO> result = service.getTopProducts(limit);
+
+        // Assert
+        verify(jpaQueryFactory, times(1))
+                .select(Projections.constructor(NumberedBookDTO.class, qBook, totalAmount))
+                .from(qOrderBook)
+                .join(qOrderBook.book, qBook)
+                .groupBy(qBook.id)
+                .orderBy(totalAmount.desc())
+                .limit(limit)
+                .fetch();
+
+        assertEquals(expectedResults, result);
     }
 }

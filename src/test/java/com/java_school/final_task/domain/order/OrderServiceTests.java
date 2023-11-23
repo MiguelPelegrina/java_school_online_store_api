@@ -1,51 +1,17 @@
 package com.java_school.final_task.domain.order;
 
-import com.java_school.final_task.domain.book.BookEntity;
 import com.java_school.final_task.domain.book.BookRepository;
-import com.java_school.final_task.domain.book.dto.BookDTO;
-import com.java_school.final_task.domain.book.genre.BookGenreDTO;
-import com.java_school.final_task.domain.book.genre.BookGenreEntity;
-import com.java_school.final_task.domain.book.parameter.BookParameterDTO;
-import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatDTO;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatEntity;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodDTO;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodEntity;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
-import com.java_school.final_task.domain.order.orderStatus.OrderStatusDTO;
-import com.java_school.final_task.domain.order.orderStatus.OrderStatusEntity;
-import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodDTO;
-import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodEntity;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusDTO;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusEntity;
-import com.java_school.final_task.domain.orderBook.OrderBookEntity;
-import com.java_school.final_task.domain.orderBook.OrderBookJsonDTO;
 import com.java_school.final_task.domain.orderBook.OrderBookRepository;
-import com.java_school.final_task.domain.role.RoleDTO;
-import com.java_school.final_task.domain.role.RoleEntity;
-import com.java_school.final_task.domain.user.UserDTO;
-import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserRepository;
-import com.java_school.final_task.domain.user.userAddress.UserAddressDTO;
-import com.java_school.final_task.domain.user.userAddress.UserAddressEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.java_school.final_task.domain.userRole.UserRoleEntity;
-import com.java_school.final_task.domain.userRole.dto.UserRoleJsonDTO;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
-import com.java_school.final_task.exception.user.UserDoesNotExistException;
+import com.java_school.final_task.mothers.order.OrderMother;
+import com.java_school.final_task.mothers.order_book.OrderBookMother;
 import com.java_school.final_task.security.JwtUtil;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.jsonwebtoken.Claims;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -63,12 +28,10 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -106,7 +69,7 @@ public class OrderServiceTests {
     public void setUp(){
         instance = createSaveOrderDTO();
 
-        instanceDTO = createOrderDTO();
+        instanceDTO = OrderMother.createOrderDTO();
     }
 
     @Test
@@ -122,8 +85,10 @@ public class OrderServiceTests {
     public void OrderService_CreateOrder_ReturnsSavedOrderDTO(){
         // Arrange
         when(orderRepository.save(any(OrderEntity.class))).thenReturn(instance.getOrder());
-        when(bookRepository.findById(instance.getOrderedBooks().get(0).getBook().getId())).thenReturn(Optional.ofNullable(createOrderBook().getBook()));
-        lenient().when(bookRepository.save(instance.getOrderedBooks().get(0).getBook())).thenReturn(createOrderBook().getBook());
+        when(bookRepository.findById(instance.getOrderedBooks().get(0).getBook().getId()))
+                .thenReturn(Optional.ofNullable(OrderBookMother.createOrderBook().getBook()));
+        lenient().when(bookRepository.save(instance.getOrderedBooks().get(0).getBook()))
+                .thenReturn(OrderBookMother.createOrderBook().getBook());
         when(modelMapper.map(instance.getOrder(), service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
@@ -245,145 +210,10 @@ public class OrderServiceTests {
     }
 
     // Auxiliary methods
-    private OrderEntity createOrder() {
-        return OrderEntity.builder()
-                .id(0)
-                .orderedBooks(null)
-                .date(LocalDate.now())
-                .deliveryMethod(DeliveryMethodEntity.builder().name("DeliveryMethod").isActive(true).build())
-                .orderStatus(OrderStatusEntity.builder().name("OrderStatus").isActive(true).build())
-                .paymentMethod(PaymentMethodEntity.builder().name("PaymentMethod").isActive(true).build())
-                .paymentStatus(PaymentStatusEntity.builder().name("PaymentStatus").isActive(true).build())
-                .orderedBooks(List.of(createOrderBook()))
-                .user(UserEntity.builder()
-                        .id(4)
-                        .active(true)
-                        .email("email@.com")
-                        .dateOfBirth(LocalDate.now())
-                        .phone("12345678912")
-                        .password("Password")
-                        .name("Name")
-                        .surname("Surname")
-                        .roles(Set.of(UserRoleEntity.builder()
-                                        .assignedDate(LocalDate.now())
-                                        .id(1)
-                                        .role(RoleEntity.builder()
-                                                .name("ADMIN")
-                                                .build())
-                                .build()))
-                        .address(UserAddressEntity.builder()
-                                .postalCode(PostalCodeEntity.builder()
-                                        .isActive(true)
-                                        .code("Code")
-                                        .city(CityEntity.builder()
-                                                .name("City")
-                                                .countryName(CountryEntity.builder()
-                                                        .isActive(true)
-                                                        .name("Country")
-                                                        .build())
-                                                .isActive(true)
-                                                .build())
-                                        .build())
-                                .build())
-                        .build())
-                .build();
-    }
-
-    private OrderBookEntity createOrderBook(){
-        return OrderBookEntity.builder()
-                .id(1)
-                .book(BookEntity.builder()
-                        .title("Title")
-                        .active(true)
-                        .genre(new BookGenreEntity("Genre"))
-                        .image("Image")
-                        .isbn("ISBN")
-                        .price(new BigDecimal("1.23"))
-                        .stock(10)
-                        .parameters(
-                                BookParameterEntity.builder()
-                                        .author("Author")
-                                        .format(new BookParametersFormatEntity("Format"))
-                                        .isActive(true)
-                                        .build()
-                        )
-                        .build())
-                .amount(1)
-                .build();
-    }
-
-    private OrderBookJsonDTO createOrderBookJsonDTO(){
-        return OrderBookJsonDTO.builder()
-                .id(1)
-                .book(BookDTO.builder()
-                        .title("Title")
-                        .active(true)
-                        .genre(new BookGenreDTO("Genre"))
-                        .image("Image")
-                        .isbn("ISBN")
-                        .price(new BigDecimal("1.23"))
-                        .stock(9)
-                        .parameters(
-                                BookParameterDTO.builder()
-                                        .author("Author")
-                                        .format(new BookParametersFormatDTO("Format"))
-                                        .isActive(true)
-                                        .build()
-                        )
-                        .build())
-                .amount(1)
-                .build();
-    }
-
-    private UserDTO createUserDTO() {
-        return UserDTO.builder()
-                .id(4)
-                .isActive(true)
-                .email("email@.com")
-                .dateOfBirth(LocalDate.now())
-                .phone("12345678912")
-                .name("Name")
-                .surname("Surname")
-                .roles(Set.of(UserRoleJsonDTO.builder()
-                                .role(RoleDTO.builder()
-                                        .name("ADMIN")
-                                        .build())
-                                .assignedDate(LocalDate.now())
-                        .build()))
-                .address(UserAddressDTO.builder()
-                        .postalCode(PostalCodeDTO.builder()
-                                .isActive(true)
-                                .code("Code")
-                                .city(CityDTO.builder()
-                                        .name("City")
-                                        .country(CountryDTO.builder()
-                                                .isActive(true)
-                                                .name("Country")
-                                                .build())
-                                        .isActive(true)
-                                        .build())
-                                .build())
-                        .build())
-                .build();
-    }
-
-    private OrderDTO createOrderDTO() {
-        return OrderDTO.builder()
-                .id(0)
-                .user(createUserDTO())
-                .date(LocalDate.now())
-                .deliveryMethod(DeliveryMethodDTO.builder().name("DeliveryMethod").isActive(true).build())
-                .orderStatus(OrderStatusDTO.builder().name("OrderStatus").isActive(true).build())
-                .paymentMethod(PaymentMethodDTO.builder().name("PaymentMethod").isActive(true).build())
-                .paymentStatus(PaymentStatusDTO.builder().name("PaymentStatus").isActive(true).build())
-                .orderedBooks(List.of(createOrderBookJsonDTO()))
-                .build();
-    }
-
     private SaveOrderDTO createSaveOrderDTO() {
         return SaveOrderDTO.builder()
-                .order(createOrder())
-                .orderedBooks(List.of(createOrderBook()))
+                .order(OrderMother.createOrder())
+                .orderedBooks(List.of(OrderBookMother.createOrderBook()))
                 .build();
     }
 }

@@ -1,11 +1,9 @@
 package com.java_school.final_task.domain.book;
 
 import com.java_school.final_task.domain.book.dto.BookDTO;
-import com.java_school.final_task.domain.book.genre.BookGenreDTO;
 import com.java_school.final_task.domain.book.impl.BookRestControllerImpl;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
-import com.java_school.final_task.domain.book.parameter.BookParameterDTO;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatDTO;
+import com.java_school.final_task.mothers.book.BookMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +20,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -48,23 +45,7 @@ public class BookRestControllerTests {
     @BeforeEach
     public void setUp() {
         // Arrange
-        instanceDTO = BookDTO.builder()
-                .id(1)
-                .title("Title")
-                .active(true)
-                .genre(new BookGenreDTO("Genre"))
-                .image("Image")
-                .isbn("ISBN")
-                .price(new BigDecimal("1.23"))
-                .stock(10)
-                .parameters(
-                        BookParameterDTO.builder()
-                                .author("Author")
-                                .format(new BookParametersFormatDTO("Hardcover"))
-                                .isActive(true)
-                                .build()
-                )
-                .build();
+        instanceDTO = BookMother.createBookDTO();
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.java_school.final_task.domain.book.parameter.format;
 
 import com.java_school.final_task.domain.book.parameter.format.impl.BookParametersFormatServiceImpl;
+import com.java_school.final_task.mothers.book.parameter.format.BookParametersFormatMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,18 +28,11 @@ public class BookParametersFormatServiceTests {
     private BookParametersFormatServiceImpl service;
 
     private BookParametersFormatEntity instance;
-    private BookParametersFormatDTO instanceDTO;
 
     @BeforeEach
     public void setUp() {
         // Arrange
-        instance = BookParametersFormatEntity.builder()
-                        .name("Format")
-                        .build();
-
-        instanceDTO = BookParametersFormatDTO.builder()
-                        .name("Format")
-                        .build();
+        instance = BookParametersFormatMother.createBookParametersFormat();
     }
 
     @Test

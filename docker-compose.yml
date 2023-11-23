@@ -2,24 +2,25 @@ version: '3.9'
 
 services:
   backend-app:
-    build: .
+    build:
+      context: .
     container_name: backend_app
     depends_on:
       - db
     environment:
-      DB_URL: jdbc:postgresql://localhost:5432/online_store
-      DB_USER: postgres
-      DB_PASSWORD: postgre
+      DATABASE_URL: jdbc:postgresql://db:5432/online_store
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
     ports:
-      - "8080:8080"
+      - "8081:8081"
 
   db:
     container_name: database
-    image: postgres
+    image: postgres:latest
     environment:
       POSTGRES_DB: online_store
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgre
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:

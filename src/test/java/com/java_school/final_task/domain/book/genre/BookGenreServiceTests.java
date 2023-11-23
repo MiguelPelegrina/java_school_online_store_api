@@ -1,6 +1,7 @@
 package com.java_school.final_task.domain.book.genre;
 
 import com.java_school.final_task.domain.book.genre.impl.BookGenreServiceImpl;
+import com.java_school.final_task.mothers.book.genre.BookGenreMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,18 +28,11 @@ public class BookGenreServiceTests {
     private BookGenreServiceImpl service;
 
     private BookGenreEntity instance;
-    private BookGenreDTO instanceDTO;
 
     @BeforeEach
     public void setUp() {
         // Arrange
-        instance = BookGenreEntity.builder()
-                .name("Genre")
-                .build();
-
-        instanceDTO = BookGenreDTO.builder()
-                .name("Genre")
-                .build();
+        instance = BookGenreMother.createBookGenre();
     }
 
     @Test

@@ -1,19 +1,8 @@
 package com.java_school.final_task.domain.user;
 
-import com.java_school.final_task.domain.role.RoleDTO;
-import com.java_school.final_task.domain.role.RoleEntity;
 import com.java_school.final_task.domain.user.impl.UserServiceImpl;
-import com.java_school.final_task.domain.user.userAddress.UserAddressDTO;
-import com.java_school.final_task.domain.user.userAddress.UserAddressEntity;
 import com.java_school.final_task.domain.user.userAddress.UserAddressRepository;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.java_school.final_task.domain.userRole.UserRoleEntity;
-import com.java_school.final_task.domain.userRole.dto.UserRoleJsonDTO;
+import com.java_school.final_task.mothers.user.UserMother;
 import com.java_school.final_task.security.JwtUtil;
 import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,11 +21,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,9 +52,9 @@ public class UserServiceTests {
 
     @BeforeEach
     public void setUp(){
-        instance = createUser();
+        instance = UserMother.createUser();
 
-        instanceDTO = createUserDTO();
+        instanceDTO = UserMother.createUserDTO();
 
         prepareRequestAttributes();
     }
@@ -108,13 +95,17 @@ public class UserServiceTests {
 
         Page<UserEntity> page = new PageImpl<>(instances);
 
-        queryBuilder.and(qInstance.roles.any().role.name.eq("CLIENT"));
-
         UserRequest request = new UserRequest();
+        request.setName("Name");
         request.setPage(0);
         request.setPage(10);
         request.setSortType("ASC");
         request.setSortProperty("name");
+
+        queryBuilder.and(qInstance.name.containsIgnoreCase(request.getName())
+                .or(qInstance.surname.containsIgnoreCase(request.getName()))
+                .or(qInstance.email.containsIgnoreCase(request.getName())));
+        queryBuilder.and(qInstance.roles.any().role.name.eq("CLIENT"));
 
         PageRequest pageRequest = PageRequest.of(
                 request.getPage(),
@@ -136,72 +127,6 @@ public class UserServiceTests {
         assertThat(resultDTOs).isNotNull();
         assertThat(resultDTOs).hasSize(1);
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
-    }
-
-    private UserEntity createUser() {
-        return UserEntity.builder()
-                .id(4)
-                .active(true)
-                .email("email@.com")
-                .dateOfBirth(LocalDate.now())
-                .phone("12345678912")
-                .password("Password")
-                .name("Name")
-                .surname("Surname")
-                .roles(Set.of(UserRoleEntity.builder()
-                        .assignedDate(LocalDate.now())
-                        .id(1)
-                        .role(RoleEntity.builder()
-                                .name("ADMIN")
-                                .build())
-                        .build()))
-                .address(UserAddressEntity.builder()
-                        .postalCode(PostalCodeEntity.builder()
-                                .isActive(true)
-                                .code("Code")
-                                .city(CityEntity.builder()
-                                        .name("City")
-                                        .countryName(CountryEntity.builder()
-                                                .isActive(true)
-                                                .name("Country")
-                                                .build())
-                                        .isActive(true)
-                                        .build())
-                                .build())
-                        .build())
-                .build();
-    }
-
-    private UserDTO createUserDTO() {
-        return UserDTO.builder()
-                .id(4)
-                .isActive(true)
-                .email("email@.com")
-                .dateOfBirth(LocalDate.now())
-                .phone("12345678912")
-                .name("Name")
-                .surname("Surname")
-                .roles(Set.of(UserRoleJsonDTO.builder()
-                        .role(RoleDTO.builder()
-                                .name("ADMIN")
-                                .build())
-                        .assignedDate(LocalDate.now())
-                        .build()))
-                .address(UserAddressDTO.builder()
-                        .postalCode(PostalCodeDTO.builder()
-                                .isActive(true)
-                                .code("Code")
-                                .city(CityDTO.builder()
-                                        .name("City")
-                                        .country(CountryDTO.builder()
-                                                .isActive(true)
-                                                .name("Country")
-                                                .build())
-                                        .isActive(true)
-                                        .build())
-                                .build())
-                        .build())
-                .build();
     }
 
     private void prepareRequestAttributes() {
