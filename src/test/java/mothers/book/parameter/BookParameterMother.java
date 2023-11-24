@@ -1,4 +1,4 @@
-package com.java_school.final_task.mothers.book.parameter;
+package mothers.book.parameter;
 
 import com.java_school.final_task.domain.book.parameter.BookParameterDTO;
 import com.java_school.final_task.domain.book.parameter.BookParameterEntity;

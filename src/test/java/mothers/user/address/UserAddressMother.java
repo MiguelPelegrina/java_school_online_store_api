@@ -1,10 +1,9 @@
-package com.java_school.final_task.mothers.user.address;
+package mothers.user.address;
 
 import com.java_school.final_task.domain.user.userAddress.UserAddressDTO;
 import com.java_school.final_task.domain.user.userAddress.UserAddressEntity;
-import com.java_school.final_task.mothers.user.address.postal_code.PostalCodeMother;
+import mothers.user.address.postal_code.PostalCodeMother;
 
-// TODO Randomize values
 public class UserAddressMother {
     public static UserAddressEntity createUserAddress(){
         return UserAddressEntity.builder()

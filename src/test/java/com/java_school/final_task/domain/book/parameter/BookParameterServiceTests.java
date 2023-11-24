@@ -1,7 +1,7 @@
 package com.java_school.final_task.domain.book.parameter;
 
 import com.java_school.final_task.domain.book.parameter.impl.BookParameterServiceImpl;
-import com.java_school.final_task.mothers.book.parameter.BookParameterMother;
+import mothers.book.parameter.BookParameterMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

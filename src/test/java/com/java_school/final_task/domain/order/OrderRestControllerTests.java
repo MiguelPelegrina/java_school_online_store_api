@@ -3,7 +3,7 @@ package com.java_school.final_task.domain.order;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
 import com.java_school.final_task.domain.order.impl.OrderRestControllerImpl;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
-import com.java_school.final_task.mothers.order.OrderMother;
+import mothers.order.OrderMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

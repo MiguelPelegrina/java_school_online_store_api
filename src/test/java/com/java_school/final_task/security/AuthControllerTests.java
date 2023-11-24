@@ -3,7 +3,7 @@ package com.java_school.final_task.security;
 import com.java_school.final_task.domain.user.UserDTO;
 import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserRepository;
-import com.java_school.final_task.mothers.user.UserMother;
+import mothers.user.UserMother;
 import com.java_school.final_task.security.dto.LoginRequestBodyDTO;
 import com.java_school.final_task.security.impl.AuthControllerImpl;
 import org.junit.jupiter.api.BeforeEach;

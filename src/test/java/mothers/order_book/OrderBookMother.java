@@ -1,7 +1,7 @@
-package com.java_school.final_task.mothers.order_book;
+package mothers.order_book;
 
 import com.java_school.final_task.domain.orderBook.OrderBookEntity;
-import com.java_school.final_task.mothers.book.BookMother;
+import mothers.book.BookMother;
 
 
 public class OrderBookMother {

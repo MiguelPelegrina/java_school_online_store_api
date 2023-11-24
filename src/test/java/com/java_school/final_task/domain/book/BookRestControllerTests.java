@@ -3,7 +3,7 @@ package com.java_school.final_task.domain.book;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.impl.BookRestControllerImpl;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
-import com.java_school.final_task.mothers.book.BookMother;
+import mothers.book.BookMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

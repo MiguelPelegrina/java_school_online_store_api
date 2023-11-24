@@ -1,16 +1,10 @@
 package com.java_school.final_task.domain.book;
 
 import com.java_school.final_task.domain.book.dto.BookDTO;
-import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
-import com.java_school.final_task.domain.orderBook.QOrderBookEntity;
-import com.java_school.final_task.mothers.book.BookMother;
+import mothers.book.BookMother;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -136,6 +130,8 @@ public class BookServiceTests {
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
     }
 
+    // TODO No clue how to mock it or even if i should test this in a unit test.
+    //  Maybe this should be part of an integration test
     /*@Test
     public void BookService_GetTopProducts_ReturnNumberedBookDTOs(){
         // Arrange

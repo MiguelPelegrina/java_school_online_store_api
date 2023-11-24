@@ -1,17 +1,13 @@
-package com.java_school.final_task.mothers.user;
+package mothers.user;
 
-import com.java_school.final_task.domain.role.RoleDTO;
-import com.java_school.final_task.domain.role.RoleEntity;
 import com.java_school.final_task.domain.user.UserDTO;
 import com.java_school.final_task.domain.user.UserEntity;
-import com.java_school.final_task.domain.userRole.UserRoleEntity;
-import com.java_school.final_task.domain.userRole.dto.UserRoleJsonDTO;
-import com.java_school.final_task.mothers.user.address.UserAddressMother;
+import mothers.user.address.UserAddressMother;
+import mothers.user_role.UserRoleMother;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-// TODO Randomize values
 public class UserMother {
     public static UserEntity createUser(){
         return UserEntity.builder()
@@ -23,13 +19,7 @@ public class UserMother {
                 .password("Password")
                 .name("Name")
                 .surname("Surname")
-                .roles(Set.of(UserRoleEntity.builder()
-                        .assignedDate(LocalDate.now())
-                        .id(1)
-                        .role(RoleEntity.builder()
-                                .name("ADMIN")
-                                .build())
-                        .build()))
+                .roles(Set.of(UserRoleMother.createUserRoleAdmin()))
                 .address(UserAddressMother.createUserAddress())
                 .build();
     }
@@ -43,12 +33,7 @@ public class UserMother {
                 .phone("12345678912")
                 .name("Name")
                 .surname("Surname")
-                .roles(Set.of(UserRoleJsonDTO.builder()
-                        .role(RoleDTO.builder()
-                                .name("ADMIN")
-                                .build())
-                        .assignedDate(LocalDate.now())
-                        .build()))
+                .roles(Set.of())
                 .address(UserAddressMother.createUserAddressDTO())
                 .build();
     }

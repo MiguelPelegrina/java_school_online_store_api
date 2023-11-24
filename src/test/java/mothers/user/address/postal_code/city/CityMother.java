@@ -1,10 +1,9 @@
-package com.java_school.final_task.mothers.user.address.postal_code.city;
+package mothers.user.address.postal_code.city;
 
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
 import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
-import com.java_school.final_task.mothers.user.address.postal_code.city.country.CountryMother;
+import mothers.user.address.postal_code.city.country.CountryMother;
 
-// TODO Randomize values
 public class CityMother {
     public static CityEntity createCity(){
         return CityEntity.builder()

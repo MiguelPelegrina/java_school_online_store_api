@@ -1,4 +1,4 @@
-package com.java_school.final_task.mothers.order;
+package mothers.order;
 
 import com.java_school.final_task.domain.order.OrderEntity;
 import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodDTO;
@@ -11,9 +11,9 @@ import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodEntity
 import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusDTO;
 import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusEntity;
 import com.java_school.final_task.domain.orderBook.OrderBookJsonDTO;
-import com.java_school.final_task.mothers.book.BookMother;
-import com.java_school.final_task.mothers.order_book.OrderBookMother;
-import com.java_school.final_task.mothers.user.UserMother;
+import mothers.book.BookMother;
+import mothers.order_book.OrderBookMother;
+import mothers.user.UserMother;
 
 import java.time.LocalDate;
 import java.util.List;

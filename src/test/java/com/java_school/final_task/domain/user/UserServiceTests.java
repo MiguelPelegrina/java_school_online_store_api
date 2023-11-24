@@ -2,9 +2,12 @@ package com.java_school.final_task.domain.user;
 
 import com.java_school.final_task.domain.user.impl.UserServiceImpl;
 import com.java_school.final_task.domain.user.userAddress.UserAddressRepository;
-import com.java_school.final_task.mothers.user.UserMother;
+import com.java_school.final_task.exception.user.InsufficientPermissionsException;
+import com.java_school.final_task.exception.user.UserDoesNotExistException;
+import mothers.user.UserMother;
 import com.java_school.final_task.security.JwtUtil;
 import com.querydsl.core.BooleanBuilder;
+import mothers.user_role.UserRoleMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,9 +27,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -95,24 +100,14 @@ public class UserServiceTests {
 
         Page<UserEntity> page = new PageImpl<>(instances);
 
-        UserRequest request = new UserRequest();
-        request.setName("Name");
-        request.setPage(0);
-        request.setPage(10);
-        request.setSortType("ASC");
-        request.setSortProperty("name");
+        UserRequest request = generateUserRequest();
+
+        PageRequest pageRequest = generatePageRequest(request);
 
         queryBuilder.and(qInstance.name.containsIgnoreCase(request.getName())
                 .or(qInstance.surname.containsIgnoreCase(request.getName()))
                 .or(qInstance.email.containsIgnoreCase(request.getName())));
         queryBuilder.and(qInstance.roles.any().role.name.eq("CLIENT"));
-
-        PageRequest pageRequest = PageRequest.of(
-                request.getPage(),
-                request.getSize(),
-                Sort.Direction.valueOf(request.getSortType()),
-                request.getSortProperty()
-        );
 
         when(userRepository.findById(instance.getId())).thenReturn(Optional.ofNullable(instance));
         when(userRepository.findAll(queryBuilder, pageRequest)).thenReturn(page);
@@ -129,6 +124,35 @@ public class UserServiceTests {
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
     }
 
+    @Test
+    public void UserService_GetAllClients_ThrowsUserDoesNotExist(){
+        // Arrange
+        UserRequest request = generateUserRequest();
+
+        // Act & assert
+        assertThrows(UserDoesNotExistException.class, () -> service.getAllInstances(request));
+        verify(userRepository, times(1)).findById(instance.getId());
+    }
+
+    @Test
+    public void UserService_SaveInstance_ThrowsUserDoesNotExist(){
+        // Act & assert
+        assertThrows(UserDoesNotExistException.class, () -> service.saveInstance(instance));
+        verify(userRepository, times(1)).findById(instance.getId());
+    }
+
+    @Test
+    public void UserService_GetAllClients_ThrowsInsufficientPermissions(){
+        // Arrange
+        instance.setRoles(Set.of(UserRoleMother.createUserRoleClient()));
+        UserRequest request = generateUserRequest();
+
+        when(userRepository.findById(instance.getId())).thenReturn(Optional.ofNullable(instance));
+
+        // Act & assert
+        assertThrows(InsufficientPermissionsException.class, () -> service.getAllInstances(request));
+    }
+
     private void prepareRequestAttributes() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWd1ZWxAZW1haWwuY29tIiwiaWQiOjQsInJvbGVzIjpbIkFETUlOIl0sImV4cCI6MTkxNjY3Mzk1NX0.wrX_u_broIqIiO-47Z5pZ4hI8zvA40Yj40nAdBCpFJM");
@@ -139,5 +163,24 @@ public class UserServiceTests {
         try (MockedStatic<JwtUtil> mockedStatic = mockStatic(JwtUtil.class)){
             mockedStatic.when(() -> JwtUtil.getIdFromToken(requestAttributes)).thenReturn(instance.getId());
         }
+    }
+
+    private UserRequest generateUserRequest(){
+        UserRequest request = new UserRequest();
+        request.setName("Name");
+        request.setPage(0);
+        request.setPage(10);
+        request.setSortType("ASC");
+        request.setSortProperty("name");
+        return request;
+    }
+
+    private PageRequest generatePageRequest(UserRequest request){
+        return PageRequest.of(
+                request.getPage(),
+                request.getSize(),
+                Sort.Direction.valueOf(request.getSortType()),
+                request.getSortProperty()
+        );
     }
 }
