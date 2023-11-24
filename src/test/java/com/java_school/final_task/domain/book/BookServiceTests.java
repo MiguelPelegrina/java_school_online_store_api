@@ -39,9 +39,6 @@ public class BookServiceTests {
     private BookParameterRepository bookParameterRepository;
 
     @Mock
-    private EntityManager emMock;
-
-    @Mock
     private ModelMapper modelMapper;
 
     private BookEntity instance;
@@ -130,8 +127,6 @@ public class BookServiceTests {
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
     }
 
-    // TODO No clue how to mock it or even if i should test this in a unit test.
-    //  Maybe this should be part of an integration test
     /*@Test
     public void BookService_GetTopProducts_ReturnNumberedBookDTOs(){
         // Arrange
