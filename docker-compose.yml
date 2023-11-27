@@ -60,5 +60,6 @@ services:
   mkdocs:
     build:
       context: ./online_store
+    container_name: mkdocs
     ports:
       - "8000:8000"
