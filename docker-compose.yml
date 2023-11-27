@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   api:
-    build: .
+    build: ./FinalTask3
     container_name: api
     depends_on:
       - database
@@ -24,4 +24,35 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - .src/main/resources/sql:/docker-entrypoint-initdb.d
+      - ./src/main/resources/sql:/docker-entrypoint-initdb.d
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    depends_on:
+      - api
+    ports:
+      - "4200:4200"
+
+  pgadmin:
+    container_name: dbms
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    depends_on:
+      - database
+
+  sonarqube:
+    container_name: sonarqube
+    environment:
+      - SONARQUBE_JDBC_HOSTNAME=database
+      - SONARQUBE_JDBC_USERNAME=postgres
+      - SONARQUBE_JDBC_PASSWORD=postgres
+    image: sonarqube:latest
+    ports:
+      - "9000:9000"
+    depends_on:
+      - api

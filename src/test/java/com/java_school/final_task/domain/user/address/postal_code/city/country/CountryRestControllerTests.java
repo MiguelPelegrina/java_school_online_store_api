@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.java_school.final_task.utils.impl.AbstractRestControllerImpl;
+import mothers.user.address.postal_code.city.country.CountryMother;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,23 +56,17 @@ public class CountryRestControllerTests {
 
     @BeforeEach
     public void setUp() {
-        // Arrage
-        instance = CountryEntity.builder()
-                .isActive(true)
-                .name("Spain")
-                .build();
+        // Arrange
+        instance = CountryMother.createCountry();
 
-        instanceDTO = CountryDTO.builder()
-                .isActive(true)
-                .name("Spain")
-                .build();
+        instanceDTO = CountryMother.createCountryDTO();
     }
 
     // Tests for the abstract methods
     @Test
     public void CountryController_CreateCountry_ReturnCreated() throws Exception {
         // Arrange
-        given(service.saveInstance(any())).willAnswer(invocation -> invocation.getArgument(0));
+        given(service.saveInstance(instance)).willAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         ResultActions result = mockMvc.perform(post("/countries")
