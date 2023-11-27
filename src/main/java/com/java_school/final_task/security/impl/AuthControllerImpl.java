@@ -15,7 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The {@code AuthController} class is responsible for handling user authentication via a login endpoint.
@@ -34,25 +37,25 @@ public class AuthControllerImpl implements AuthController {
     @Override
     @PostMapping
     @RequestMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDto)  {
+    public ResponseEntity<?> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDto) {
         try {
             // Get the user
             UserEntity user = repository.findUserByEmail(loginRequestBodyDto.getEmail()).orElseThrow(
-                    () -> new UserDoesNotExistException(String.format(StringValues.INSTANCE_NOT_FOUND, loginRequestBodyDto.getEmail()))
+                    () -> new UserDoesNotExistException(String.format(StringValues.USER_DOES_NOT_EXIST, loginRequestBodyDto.getEmail()))
             );
 
-            if(!user.isActive()){
+            if (!user.isActive()) {
                 return ResponseEntity.status(401).body(StringValues.INACTIVE_USER);
             }
 
-            if(!passwordEncoder.matches(loginRequestBodyDto.getPassword(), user.getPassword())){
+            if (!passwordEncoder.matches(loginRequestBodyDto.getPassword(), user.getPassword())) {
                 return ResponseEntity.status(401).body(StringValues.PASSWORD_NOT_MATCHING);
             }
 
             return ResponseEntity.ok(this.generateAuthResultDTO(user));
-        } catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StringValues.INVALID_CREDENTIALS);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -60,8 +63,8 @@ public class AuthControllerImpl implements AuthController {
     @PostMapping
     @RequestMapping("/register")
     @Override
-    public ResponseEntity<?> register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO){
-        try{
+    public ResponseEntity<?> register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO) {
+        try {
             return ResponseEntity.ok(this.generateAuthResultDTO(service.register(registerRequestBodyDTO)));
         } catch (EmailAlreadyUsedException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -70,10 +73,11 @@ public class AuthControllerImpl implements AuthController {
 
     /**
      * Generates an AuthResultDTO object based on a UserEntity, including an access token, user ID, and user roles.
+     *
      * @param user The UserEntity for which to generate the AuthResultDTO.
      * @return An AuthResultDTO containing the access token, user ID, and user roles.
      */
-    private AuthResultDTO generateAuthResultDTO(UserEntity user){
+    private AuthResultDTO generateAuthResultDTO(UserEntity user) {
         AuthResultDTO resultDto = new AuthResultDTO();
         resultDto.setAccessToken(jwtUtil.createToken(user));
         return resultDto;

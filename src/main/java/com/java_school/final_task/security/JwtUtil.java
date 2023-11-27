@@ -2,7 +2,6 @@ package com.java_school.final_task.security;
 
 import com.java_school.final_task.domain.user.UserEntity;
 import io.jsonwebtoken.*;
-
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
@@ -21,11 +20,13 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
     // Class methods
+
     /**
      * Decodes a JSON Web Token (JWT) to extract its claims.
+     *
      * @param token The JWT to decode.
      * @return A Claims object containing the decoded claims from the JWT. Returns null if the token is invalid or an
-     *          exception occurs during decoding.
+     * exception occurs during decoding.
      */
     public static Claims decodeToken(String token) {
         try {
@@ -39,7 +40,7 @@ public class JwtUtil {
         }
     }
 
-    public static int getIdFromToken(RequestAttributes requestAttributes){
+    public static int getIdFromToken(RequestAttributes requestAttributes) {
         // Get the token
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 
@@ -50,22 +51,24 @@ public class JwtUtil {
     }
 
     // Fields
-    private final static String secret_key = "mysecretkey";
-    private long accessTokenValidity = 60*60*1000;
+    private static final String secret_key = "mysecretkey";
+    private static long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000;
     private final JwtParser jwtParser;
-    private final String TOKEN_HEADER = "Authorization";
-    private final String TOKEN_PREFIX = "Bearer ";
+    private static final String TOKEN_HEADER = "Authorization";
+    private static final String TOKEN_PREFIX = "Bearer ";
 
     /**
      * Default constructor.
      */
-    public JwtUtil(){
+    public JwtUtil() {
         this.jwtParser = Jwts.parser().setSigningKey(secret_key);
     }
 
     // Instance methods
+
     /**
      * Creates a JWT token for a user.
+     *
      * @param user The user entity for which the token is created.
      * @return JWT token as a string.
      */
@@ -73,11 +76,11 @@ public class JwtUtil {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
         claims.put("id", user.getId());
         claims.put("roles", user.getRoles().stream().map(
-                userRoleEntity -> userRoleEntity.getRole().getName())
+                        userRoleEntity -> userRoleEntity.getRole().getName())
                 .collect(Collectors.toList())
         );
         Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(ACCESS_TOKEN_VALIDITY));
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(tokenValidity)
@@ -86,9 +89,9 @@ public class JwtUtil {
     }
 
 
-
     /**
      * Parses the claims from a JWT token.
+     *
      * @param token The JWT token as a string.
      * @return Claims extracted from the token.
      */
@@ -98,6 +101,7 @@ public class JwtUtil {
 
     /**
      * Resolves and extracts JWT claims from an HTTP request.
+     *
      * @param req The HTTP request from which the JWT is extracted.
      * @return JWT claims as extracted from the token.
      * @throws AuthenticationException If an exception occurs while resolving and parsing the token.
@@ -120,6 +124,7 @@ public class JwtUtil {
 
     /**
      * Resolves and extracts a JWT token from an HTTP request.
+     *
      * @param request The HTTP request.
      * @return The JWT token as a string or null if not found.
      */
@@ -135,6 +140,7 @@ public class JwtUtil {
 
     /**
      * Validates the expiration time of JWT claims.
+     *
      * @param claims The JWT claims to be validated.
      * @return True if the JWT is not expired, false otherwise.
      * @throws AuthenticationException - If an exception occurs during validation.
@@ -145,6 +151,7 @@ public class JwtUtil {
 
     /**
      * Retrieves the email from JWT claims.
+     *
      * @param claims The JWT claims from which to extract the email.
      * @return The email address stored in the JWT claims.
      */
@@ -154,6 +161,7 @@ public class JwtUtil {
 
     /**
      * Retrieves the roles from JWT claims.
+     *
      * @param claims The JWT claims from which to extract the roles.
      * @return List of role names stored in the JWT claims.
      */
