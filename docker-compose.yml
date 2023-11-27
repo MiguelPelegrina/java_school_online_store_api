@@ -56,3 +56,9 @@ services:
       - "9000:9000"
     depends_on:
       - api
+
+  mkdocs:
+    build:
+      context: ./online_store
+    ports:
+      - "8000:8000"
