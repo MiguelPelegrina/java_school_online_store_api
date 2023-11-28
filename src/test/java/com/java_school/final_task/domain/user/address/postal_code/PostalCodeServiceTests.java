@@ -4,12 +4,9 @@ import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeD
 import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeRepository;
 import com.java_school.final_task.domain.user.userAddress.postalCode.QPostalCodeEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
 import com.java_school.final_task.domain.user.userAddress.postalCode.impl.PostalCodeServiceImpl;
 import com.querydsl.core.BooleanBuilder;
+import mothers.user.address.postal_code.PostalCodeMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,35 +44,13 @@ public class PostalCodeServiceTests {
     @BeforeEach
     public void setUp() {
         // Arrange
-        instance = PostalCodeEntity.builder()
-                .isActive(true)
-                .code("Code")
-                .city(CityEntity.builder()
-                        .name("City")
-                        .countryName(CountryEntity.builder()
-                                .isActive(true)
-                                .name("Spain")
-                                .build())
-                        .isActive(true)
-                        .build())
-                .build();
+        instance = PostalCodeMother.createPostalCode();
 
-        instanceDTO = PostalCodeDTO.builder()
-                .isActive(true)
-                .code("Code")
-                .city(CityDTO.builder()
-                        .name("City")
-                        .country(CountryDTO.builder()
-                                .isActive(true)
-                                .name("Country")
-                                .build())
-                        .isActive(true)
-                        .build())
-                .build();
+        instanceDTO = PostalCodeMother.createPostalCodeDTO();
     }
 
     @Test
-    public void PostalCodeService_GetEntityId_ReturnsIdClass(){
+    public void PostalCodeService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -84,12 +59,12 @@ public class PostalCodeServiceTests {
     }
 
     @Test
-    public void PostalCodeService_GetAllPostalCodesFiltered_ReturnsPostalCodeDTOs(){
+    public void PostalCodeService_GetAllPostalCodesFiltered_ReturnsPostalCodeDTOs() {
         // Arrange
         List<PostalCodeEntity> instances = new ArrayList<>();
         instances.add(instance);
 
-        final QPostalCodeEntity qInstance  = QPostalCodeEntity.postalCodeEntity;
+        final QPostalCodeEntity qInstance = QPostalCodeEntity.postalCodeEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         queryBuilder.and(qInstance.isActive.eq(true));
@@ -100,6 +75,31 @@ public class PostalCodeServiceTests {
 
         // Act
         List<PostalCodeDTO> resultDTOs = service.getAllInstances("g", Optional.of(true));
+
+        // Assert
+        verify(repository, times(1)).findAll(queryBuilder);
+        verify(modelMapper, times(1)).map(instance, service.getDTOClass());
+        assertThat(resultDTOs).isNotNull();
+        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
+    }
+
+    @Test
+    public void PostalCodeService_GetAllActivePostalCodes_ReturnsPostalCodeDTOs() {
+        // Arrange
+        List<PostalCodeEntity> instances = new ArrayList<>();
+        instances.add(instance);
+
+        final QPostalCodeEntity qInstance = QPostalCodeEntity.postalCodeEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+        queryBuilder.and(qInstance.isActive.eq(true));
+
+        when(repository.findAll(queryBuilder)).thenReturn(instances);
+        when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
+
+        // Act
+        List<PostalCodeDTO> resultDTOs = service.getAllInstances("", Optional.of(true));
 
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);

@@ -167,6 +167,14 @@
                     jacoco-maven-plugin
                 </artifactId>
                 <version>0.8.8</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/security/**</exclude>
+                        <exclude>**/*DTO.*</exclude>
+                        <exclude>**/*Entity.*</exclude>
+                        <exclude>**/*Request.*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
