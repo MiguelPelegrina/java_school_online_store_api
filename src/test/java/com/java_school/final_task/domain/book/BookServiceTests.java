@@ -3,9 +3,9 @@ package com.java_school.final_task.domain.book;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
-import mothers.book.BookMother;
 import com.querydsl.core.BooleanBuilder;
-import jakarta.persistence.EntityManager;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import mothers.book.BookMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +18,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,6 +41,9 @@ public class BookServiceTests {
     private BookParameterRepository bookParameterRepository;
 
     @Mock
+    private JPAQueryFactory jpaQueryFactory;
+
+    @Mock
     private ModelMapper modelMapper;
 
     private BookEntity instance;
@@ -53,7 +58,7 @@ public class BookServiceTests {
     }
 
     @Test
-    public void BookService_GetEntityId_ReturnsIdClass(){
+    public void BookService_GetEntityId_ReturnsIdClass() {
         // Act
         int entityId = service.getEntityId(instance);
 
@@ -62,7 +67,7 @@ public class BookServiceTests {
     }
 
     @Test
-    public void BookService_CreateBook_ReturnsSavedBookDTO(){
+    public void BookService_CreateBook_ReturnsSavedBookDTO() {
         // Arrange
         when(bookRepository.save(instance)).thenReturn(instance);
         when(bookParameterRepository.findByAuthorAndFormat(
@@ -82,7 +87,7 @@ public class BookServiceTests {
     }
 
     @Test
-    public void BookService_GetAllBooksFiltered_ReturnsBookDTOPage(){
+    public void BookService_GetAllBooksFiltered_ReturnsBookDTOPage() {
         // Arrange
         final QBookEntity qInstance = QBookEntity.bookEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -103,7 +108,7 @@ public class BookServiceTests {
 
         queryBuilder.and(qInstance.active.eq(true));
         queryBuilder.and(qInstance.title.containsIgnoreCase("Title")
-                        .or(qInstance.parameters.author.containsIgnoreCase("Title")));
+                .or(qInstance.parameters.author.containsIgnoreCase("Title")));
         queryBuilder.and(qInstance.genre.name.containsIgnoreCase(instance.getGenre().getName()));
 
         PageRequest pageRequest = PageRequest.of(
@@ -128,7 +133,7 @@ public class BookServiceTests {
     }
 
     /*@Test
-    public void BookService_GetTopProducts_ReturnNumberedBookDTOs(){
+    public void BookService_GetTopProducts_ReturnNumberedBookDTOs() {
         // Arrange
         int limit = 2;
         QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;

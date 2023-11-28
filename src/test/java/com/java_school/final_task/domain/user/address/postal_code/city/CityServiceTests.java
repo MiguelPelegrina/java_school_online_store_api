@@ -62,7 +62,7 @@ public class CityServiceTests {
     }
 
     @Test
-    public void CountryService_GetEntityId_ReturnsIdClass(){
+    public void CountryService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -71,7 +71,7 @@ public class CityServiceTests {
     }
 
     @Test
-    public void CityService_GetAllCitiesFiltered_ReturnsCityDTOs(){
+    public void CityService_GetAllCitiesFiltered_ReturnsCityDTOs() {
         // Arrange
         List<CityEntity> instances = new ArrayList<>();
         instances.add(instance);
@@ -87,6 +87,31 @@ public class CityServiceTests {
 
         // Act
         List<CityDTO> resultDTOs = service.getAllInstances("s", Optional.of(true));
+
+        // Assert
+        verify(repository, times(1)).findAll(queryBuilder);
+        verify(modelMapper, times(1)).map(instance, service.getDTOClass());
+        assertThat(resultDTOs).isNotNull();
+        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
+    }
+
+    @Test
+    public void CityService_GetAllActiveCities_ReturnsCityDTOs() {
+        // Arrange
+        List<CityEntity> instances = new ArrayList<>();
+        instances.add(instance);
+
+        final QCityEntity qInstance = QCityEntity.cityEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+        queryBuilder.and(qInstance.isActive.eq(true));
+
+        when(repository.findAll(queryBuilder)).thenReturn(instances);
+        when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
+
+        // Act
+        List<CityDTO> resultDTOs = service.getAllInstances("", Optional.of(true));
 
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);

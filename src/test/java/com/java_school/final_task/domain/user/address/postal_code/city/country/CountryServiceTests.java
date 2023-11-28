@@ -57,7 +57,7 @@ public class CountryServiceTests {
 
     // Tests for the abstract methods
     @Test
-    public void CountryService_CreateCountry_ReturnsSavedCountryDTO(){
+    public void CountryService_CreateCountry_ReturnsSavedCountryDTO() {
         // Arrange
         when(repository.save(any(CountryEntity.class))).thenReturn(instance);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
@@ -74,7 +74,7 @@ public class CountryServiceTests {
     }
 
     @Test
-    public void CountryService_DeleteCountryById_ReturnsVoid(){
+    public void CountryService_DeleteCountryById_ReturnsVoid() {
         // Arrange
         lenient().when(repository.findById("Country")).thenReturn(Optional.ofNullable(instance));
 
@@ -86,7 +86,7 @@ public class CountryServiceTests {
     }
 
     @Test
-    public void CountryService_GetAllCountries_ReturnsCountryDTOs(){
+    public void CountryService_GetAllCountries_ReturnsCountryDTOs() {
         // Arrange
         CountryEntity instance2 = CountryEntity.builder()
                 .isActive(true)
@@ -122,7 +122,7 @@ public class CountryServiceTests {
     }
 
     @Test
-    public void CountryService_GetCountryById_ReturnsCountryDTO(){
+    public void CountryService_GetCountryById_ReturnsCountryDTO() {
         // Arrange
         when(repository.findById("Country")).thenReturn(Optional.ofNullable(instance));
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
@@ -139,7 +139,7 @@ public class CountryServiceTests {
 
     // Tests for own methods
     @Test
-    public void CountryService_GetEntityId_ReturnsIdClass(){
+    public void CountryService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -148,7 +148,7 @@ public class CountryServiceTests {
     }
 
     @Test
-    public void CountryService_GetAllCountriesFiltered_ReturnsCountryDTOs(){
+    public void CountryService_GetAllCountriesFiltered_ReturnsCountryDTOs() {
         // Arrange
         final QCountryEntity qInstance = QCountryEntity.countryEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -163,7 +163,32 @@ public class CountryServiceTests {
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
-        List<CountryDTO> resultDTOs = service.getAllInstances(Optional.of(true),"s");
+        List<CountryDTO> resultDTOs = service.getAllInstances(Optional.of(true), "s");
+
+        // Assert
+        verify(repository, times(1)).findAll(queryBuilder);
+        verify(modelMapper, times(1)).map(instance, service.getDTOClass());
+        assertThat(resultDTOs).isNotNull();
+        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
+    }
+
+    @Test
+    public void CountryService_GetAllActiveCountries_ReturnsCountryDTOs() {
+        // Arrange
+        final QCountryEntity qInstance = QCountryEntity.countryEntity;
+        final BooleanBuilder queryBuilder = new BooleanBuilder();
+
+        List<CountryEntity> instances = new ArrayList<>();
+        instances.add(instance);
+
+        queryBuilder.and(qInstance.isActive.eq(true));
+
+        when(repository.findAll(queryBuilder)).thenReturn(instances);
+        when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
+
+        // Act
+        List<CountryDTO> resultDTOs = service.getAllInstances(Optional.of(true), "");
 
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
