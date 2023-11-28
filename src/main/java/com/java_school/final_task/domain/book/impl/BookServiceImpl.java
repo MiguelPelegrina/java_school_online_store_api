@@ -11,8 +11,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +25,7 @@ import java.util.List;
  * {@link BookRestControllerImpl}. Obtains data from the {@link BookRepository} and returns
  * the object(s) of the entity {@link BookEntity} as {@link BookDTO} to the {@link BookRestControllerImpl}.
  */
-@Secured({"ROLE_ADMIN","ROLE_EMPLOYEE"})
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
 @Service
 public class BookServiceImpl
         extends AbstractServiceImpl<BookRepository, BookEntity, BookDTO, Integer>
@@ -35,8 +33,7 @@ public class BookServiceImpl
     // Fields
     private final BookParameterRepository bookParameterRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final JPAQueryFactory queryFactory;
 
     /**
      * All arguments constructor.
@@ -44,10 +41,12 @@ public class BookServiceImpl
      * @param repository              {@link BookRepository} of the {@link BookEntity} entity.
      * @param modelMapper             ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
      * @param bookParameterRepository {@link BookParameterRepository} of the {@link BookParameterEntity}
+     * @param queryFactory
      */
-    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository) {
+    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.bookParameterRepository = bookParameterRepository;
+        this.queryFactory = queryFactory;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class BookServiceImpl
         // Check which parameters are present and build a query
         bookRequest.getActive().ifPresent(aBoolean -> queryBuilder.and(qBook.active.eq(aBoolean)));
 
-        if(!bookRequest.getName().isEmpty()){
+        if (!bookRequest.getName().isEmpty()) {
             queryBuilder.and(qBook.title.containsIgnoreCase(bookRequest.getName())
                     .or(qBook.parameters.author.containsIgnoreCase(bookRequest.getName())));
         }
@@ -95,15 +94,13 @@ public class BookServiceImpl
 
         // Convert the book page to a bookDTO page
         return pageEntities.map(book ->
-            modelMapper.map(book, this.getDTOClass())
+                modelMapper.map(book, this.getDTOClass())
         );
     }
 
     // TODO Add sorting and paging
     @Override
-    public List<NumberedBookDTO> getTopProducts(int limit){
-        JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
-
+    public List<NumberedBookDTO> getTopProducts(int limit) {
         QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;
         QBookEntity qBook = QBookEntity.bookEntity;
 
@@ -124,18 +121,19 @@ public class BookServiceImpl
      * Before saving a BookEntity, checks if there are existing BookParameterEntity instances
      * with the same author and format. If found, associates the first matching BookParameterEntity
      * with the BookEntity's parameters. Saves the BookEntity instance and returns a BookDTO.
+     *
      * @param book {@link BookEntity} instance to be saved.
      * @return {@link BookDTO} representing the saved BookEntity.
      */
     @Override
-    public BookDTO saveInstance(BookEntity book){
+    public BookDTO saveInstance(BookEntity book) {
         List<BookParameterEntity> bookParameters = bookParameterRepository.findByAuthorAndFormat(
                 book.getParameters().getAuthor(),
                 book.getParameters().getFormat()
         );
 
-        if(!bookParameters.isEmpty()){
-           book.setParameters(bookParameters.get(0));
+        if (!bookParameters.isEmpty()) {
+            book.setParameters(bookParameters.get(0));
         }
 
         return super.saveInstance(book);

@@ -17,8 +17,6 @@ import com.java_school.final_task.utils.StringValues;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,8 +43,7 @@ public class OrderServiceImpl
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final JPAQueryFactory queryFactory;
 
     /**
      * All arguments constructor.
@@ -55,12 +52,14 @@ public class OrderServiceImpl
      * @param modelMapper    ModelMapper that converts the {@link OrderEntity} instance to {@link OrderDTO}
      * @param userRepository {@link UserRepository} of the {@link UserEntity}.
      * @param bookRepository {@link BookRepository} of the {@link BookEntity}.
+     * @param queryFactory
      */
     public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserRepository userRepository,
-                            BookRepository bookRepository) {
+                            BookRepository bookRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
+        this.queryFactory = queryFactory;
     }
 
     @Override
@@ -76,8 +75,6 @@ public class OrderServiceImpl
     @Override
     @Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
     public BigDecimal calculateTotalRevenue(LocalDate startDate, LocalDate endDate) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(this.entityManager);
-
         QOrderEntity qOrder = QOrderEntity.orderEntity;
         QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;
 
