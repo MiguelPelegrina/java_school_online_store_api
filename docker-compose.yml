@@ -24,10 +24,10 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./src/main/resources/sql:/docker-entrypoint-initdb.d
+      - ./FinalTask3/src/main/resources/sql:/docker-entrypoint-initdb.d
 
   frontend:
-    build: ./frontend
+    build: ../frontend
     container_name: frontend
     depends_on:
       - api
@@ -36,17 +36,19 @@ services:
 
   pgadmin:
     container_name: dbms
+    depends_on:
+      - database
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     image: dpage/pgadmin4
     ports:
       - "5050:80"
-    depends_on:
-      - database
 
   sonarqube:
     container_name: sonarqube
+    depends_on:
+      - api
     environment:
       - SONARQUBE_JDBC_HOSTNAME=database
       - SONARQUBE_JDBC_USERNAME=postgres
@@ -54,12 +56,10 @@ services:
     image: sonarqube:latest
     ports:
       - "9000:9000"
-    depends_on:
-      - api
 
   mkdocs:
     build:
-      context: ./online_store
+      context: ../online_store
     container_name: mkdocs
     ports:
       - "8000:8000"
