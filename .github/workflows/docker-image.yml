@@ -14,10 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: test
-      run: chmod +x mvnw
     - name: Build and test
-      run: ./mvnw clean package
+      run: chmod +x mvnw && ./mvnw clean package
     - name: Build Docker image
       run: |
         docker build -t app.jar .
