@@ -4,9 +4,9 @@ import com.java_school.final_task.domain.user.impl.UserServiceImpl;
 import com.java_school.final_task.domain.user.userAddress.UserAddressRepository;
 import com.java_school.final_task.exception.user.InsufficientPermissionsException;
 import com.java_school.final_task.exception.user.UserDoesNotExistException;
-import mothers.user.UserMother;
 import com.java_school.final_task.security.JwtUtil;
 import com.querydsl.core.BooleanBuilder;
+import mothers.user.UserMother;
 import mothers.user_role.UserRoleMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -49,6 +50,9 @@ public class UserServiceTests {
     @Mock
     private ModelMapper modelMapper;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserServiceImpl service;
 
@@ -56,7 +60,7 @@ public class UserServiceTests {
     private UserDTO instanceDTO;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         instance = UserMother.createUser();
 
         instanceDTO = UserMother.createUserDTO();
@@ -65,7 +69,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_GetEntityId_ReturnsIdClass(){
+    public void UserService_GetEntityId_ReturnsIdClass() {
         // Act
         int entityId = service.getEntityId(instance);
 
@@ -74,7 +78,10 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_CreateUser_ReturnsSavedUserDTO(){
+    public void UserService_CreateUser_ReturnsSavedUserDTO() {
+        when(passwordEncoder.encode(instance.getPassword())).thenReturn(
+                "$2a$10$I3rJr4zrbsHQ4jGPKcyqKOcstbsLBFCe/7KmXZYnG8VoDMRDlJxC6"
+        );
         when(userRepository.findById(instance.getId())).thenReturn(Optional.ofNullable(instance));
         when(userRepository.save(any(UserEntity.class))).thenReturn(instance);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
@@ -90,7 +97,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_GetAllClients_ReturnClientsPage(){
+    public void UserService_GetAllClients_ReturnClientsPage() {
         // Arrange
         final QUserEntity qInstance = QUserEntity.userEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -125,7 +132,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_GetAllClients_ThrowsUserDoesNotExist(){
+    public void UserService_GetAllClients_ThrowsUserDoesNotExist() {
         // Arrange
         UserRequest request = generateUserRequest();
 
@@ -135,14 +142,14 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_SaveInstance_ThrowsUserDoesNotExist(){
+    public void UserService_SaveInstance_ThrowsUserDoesNotExist() {
         // Act & assert
         assertThrows(UserDoesNotExistException.class, () -> service.saveInstance(instance));
         verify(userRepository, times(1)).findById(instance.getId());
     }
 
     @Test
-    public void UserService_GetAllClients_ThrowsInsufficientPermissions(){
+    public void UserService_GetAllClients_ThrowsInsufficientPermissions() {
         // Arrange
         instance.setRoles(Set.of(UserRoleMother.createUserRoleClient()));
         UserRequest request = generateUserRequest();
@@ -160,12 +167,12 @@ public class UserServiceTests {
         ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
         RequestContextHolder.setRequestAttributes(requestAttributes);
 
-        try (MockedStatic<JwtUtil> mockedStatic = mockStatic(JwtUtil.class)){
+        try (MockedStatic<JwtUtil> mockedStatic = mockStatic(JwtUtil.class)) {
             mockedStatic.when(() -> JwtUtil.getIdFromToken(requestAttributes)).thenReturn(instance.getId());
         }
     }
 
-    private UserRequest generateUserRequest(){
+    private UserRequest generateUserRequest() {
         UserRequest request = new UserRequest();
         request.setName("Name");
         request.setPage(0);
@@ -175,7 +182,7 @@ public class UserServiceTests {
         return request;
     }
 
-    private PageRequest generatePageRequest(UserRequest request){
+    private PageRequest generatePageRequest(UserRequest request) {
         return PageRequest.of(
                 request.getPage(),
                 request.getSize(),
