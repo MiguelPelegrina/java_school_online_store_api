@@ -79,8 +79,7 @@ public class PostalCodeServiceTests {
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
     }
 
@@ -104,8 +103,7 @@ public class PostalCodeServiceTests {
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
     }
 }

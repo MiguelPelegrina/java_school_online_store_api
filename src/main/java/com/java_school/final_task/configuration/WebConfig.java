@@ -34,6 +34,7 @@ public class WebConfig {
     /**
      * Configures and provides an {@link AuthenticationManager} that is used for user authentication and authorization.
      * It specifies the user details service and password encoder for managing user authentication.
+     *
      * @param userDetailsService The {@link CustomUserDetailsService} for retrieving user details during authentication.
      * @param http               The {@link HttpSecurity} configuration.
      * @param passwordEncoder    The {@link PasswordEncoder} for secure password encoding during authentication.
@@ -56,10 +57,11 @@ public class WebConfig {
     /**
      * Provides a password encoder bean, specifically a {@link BCryptPasswordEncoder}, for securely encoding and
      * verifying passwords.
+     *
      * @return {@link PasswordEncoder} bean.
      */
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -67,6 +69,7 @@ public class WebConfig {
      * Configures the security filter chain for the application. It specifies various security settings, including CORS,
      * (Cross-Origin Resource Sharing), CSRF (Cross-Site Request Forgery) protection, URL authorization, and JWT
      * authorization filter.
+     *
      * @param http                   The {@link HttpSecurity} configuration.
      * @param jwtAuthorizationFilter The {@link JwtAuthorizationFilter} responsible for JWT-based authorization.
      * @return {@link SecurityFilterChain} for the application's security.
@@ -93,11 +96,13 @@ public class WebConfig {
                                 "/order_statuses/search",
                                 "/payment_methods/search",
                                 "/payment_statuses/search",
-                                "/postal_codes/search"
+                                "/postal_codes/search",
+                                "/swagger-ui/**",
+                                "/api-docs/swagger-config"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .build();
@@ -106,6 +111,7 @@ public class WebConfig {
     /**
      * Configures CORS settings for the application, allowing cross-origin requests from the specified origin
      * (<a href="http://localhost:4200">...</a>).
+     *
      * @return {@link WebMvcConfigurer} for configuring CORS settings.
      */
     @Bean
