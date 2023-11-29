@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -28,15 +29,18 @@ import java.util.Optional;
 public class UserServiceImpl
         extends AbstractServiceImpl<UserRepository, UserEntity, UserDTO, Integer>
         implements UserService {
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * All arguments constructor.
      *
-     * @param repository  {@link UserRepository} of the {@link UserEntity} entity.
-     * @param modelMapper ModelMapper that converts the {@link UserEntity} to {@link UserDTO}
+     * @param repository      {@link UserRepository} of the {@link UserEntity} entity.
+     * @param modelMapper     ModelMapper that converts the {@link UserEntity} to {@link UserDTO}
+     * @param passwordEncoder
      */
-    public UserServiceImpl(UserRepository repository, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository repository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         super(repository, modelMapper);
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -76,6 +80,8 @@ public class UserServiceImpl
             // If they didn't set a password any other property is being changed.
             if (user.getPassword().isEmpty()) {
                 toSaveOrUpdateUser.setPassword(user.getPassword());
+            } else {
+                toSaveOrUpdateUser.setPassword(passwordEncoder.encode(toSaveOrUpdateUser.getPassword()));
             }
             toSaveOrUpdateUser.setRoles(user.getRoles());
         });
