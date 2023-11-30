@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '17'
-        distribution: 'alpine'
+        distribution: 'adopt'
     - name: Build and test
       run: chmod +x mvnw && ./mvnw clean package
     - name: Build Docker image
