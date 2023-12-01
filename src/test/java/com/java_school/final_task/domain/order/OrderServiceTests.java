@@ -4,14 +4,14 @@ import com.java_school.final_task.domain.book.BookRepository;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
-import com.java_school.final_task.domain.orderBook.OrderBookRepository;
+import com.java_school.final_task.domain.order_book.OrderBookRepository;
 import com.java_school.final_task.domain.user.UserRepository;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
-import mothers.order.OrderMother;
-import mothers.order_book.OrderBookMother;
 import com.java_school.final_task.security.JwtUtil;
 import com.querydsl.core.BooleanBuilder;
+import mothers.order.OrderMother;
+import mothers.order_book.OrderBookMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.*;
  * Test class for {@link OrderServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceTests {
+class OrderServiceTests {
     @Mock
     private OrderRepository orderRepository;
 
@@ -66,14 +66,14 @@ public class OrderServiceTests {
     private OrderDTO instanceDTO;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         instance = createSaveOrderDTO();
 
         instanceDTO = OrderMother.createOrderDTO();
     }
 
     @Test
-    public void OrderService_GetEntityId_ReturnsIdClass(){
+    void OrderService_GetEntityId_ReturnsIdClass() {
         // Act
         int entityId = service.getEntityId(instance.getOrder());
 
@@ -82,7 +82,7 @@ public class OrderServiceTests {
     }
 
     @Test
-    public void OrderService_CreateOrder_ReturnsSavedOrderDTO(){
+    void OrderService_CreateOrder_ReturnsSavedOrderDTO() {
         // Arrange
         when(orderRepository.save(any(OrderEntity.class))).thenReturn(instance.getOrder());
         when(bookRepository.findById(instance.getOrderedBooks().get(0).getBook().getId()))
@@ -102,7 +102,7 @@ public class OrderServiceTests {
     }
 
     @Test
-    public void OrderService_CreateOrder_ThrowsProductOutOfStockException(){
+    void OrderService_CreateOrder_ThrowsProductOutOfStockException() {
         // Arrange
         instance.getOrderedBooks().get(0).getBook().setStock(0);
 
@@ -117,7 +117,7 @@ public class OrderServiceTests {
     }
 
     @Test
-    public void OrderService_CreateOrder_ThrowsProductNotAvailableException(){
+    void OrderService_CreateOrder_ThrowsProductNotAvailableException() {
         // Arrange
         instance.getOrderedBooks().get(0).getBook().setActive(false);
 
@@ -132,7 +132,7 @@ public class OrderServiceTests {
     }
 
     @Test
-    public void OrderService_DeleteOrderById_ReturnsVoid(){
+    void OrderService_DeleteOrderById_ReturnsVoid() {
         // Arrange
         lenient().when(orderRepository.findById(instance.getOrder().getId())).thenReturn(Optional.ofNullable(instance.getOrder()));
 
@@ -145,7 +145,7 @@ public class OrderServiceTests {
 
     // TODO I might have went over board
     @Test
-    public void OrderService_GetAllOrdersByParams_ReturnsOrderDTOPage(){
+    void OrderService_GetAllOrdersByParams_ReturnsOrderDTOPage() {
         // Arrange
         final QOrderEntity qInstance = QOrderEntity.orderEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -186,7 +186,7 @@ public class OrderServiceTests {
 
         when(userRepository.findById(instance.getOrder().getUser().getId())).thenReturn(Optional.ofNullable(instance.getOrder().getUser()));
 
-        try (MockedStatic<JwtUtil> mockedStatic = mockStatic(JwtUtil.class)){
+        try (MockedStatic<JwtUtil> mockedStatic = mockStatic(JwtUtil.class)) {
             mockedStatic.when(() -> JwtUtil.getIdFromToken(requestAttributes)).thenReturn(instance.getOrder().getUser().getId());
         }
 
@@ -199,15 +199,11 @@ public class OrderServiceTests {
         // Assert
         verify(orderRepository, times(1)).findAll(queryBuilder, pageRequest);
         verify(modelMapper, times(1)).map(instance.getOrder(), service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
     }
 
-    @Test
-    public void OrderService_GetCalculatedRevenue_ReturnsBigDecimal(){
-
-    }
+    //@Test public void OrderService_GetCalculatedRevenue_ReturnsBigDecimal(){}
 
     // Auxiliary methods
     private SaveOrderDTO createSaveOrderDTO() {

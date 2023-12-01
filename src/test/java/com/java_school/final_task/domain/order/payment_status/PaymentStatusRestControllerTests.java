@@ -1,10 +1,8 @@
 package com.java_school.final_task.domain.order.payment_status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusDTO;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusEntity;
-import com.java_school.final_task.domain.order.paymentStatus.impl.PaymentStatusRestControllerImpl;
-import com.java_school.final_task.domain.order.paymentStatus.impl.PaymentStatusServiceImpl;
+import com.java_school.final_task.domain.order.payment_status.impl.PaymentStatusRestControllerImpl;
+import com.java_school.final_task.domain.order.payment_status.impl.PaymentStatusServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class PaymentStatusRestControllerTests {
+class PaymentStatusRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -62,13 +60,13 @@ public class PaymentStatusRestControllerTests {
     }
 
     @Test
-    public void PaymentStatusController_GetAllPaymentStatusesByParams_ReturnPaymentStatusDTOs() throws Exception {
+    void PaymentStatusController_GetAllPaymentStatusesByParams_ReturnPaymentStatusDTOs() throws Exception {
         // Arrange
         List<PaymentStatusDTO> instances = Arrays.asList(instanceDTO);
         when(service.getAllInstances(any())).thenReturn(instances);
 
         // Act
-        ResultActions result = mockMvc.perform(request(HttpMethod.GET,"/payment_statuses/search")
+        ResultActions result = mockMvc.perform(request(HttpMethod.GET, "/payment_statuses/search")
                 .param("active", String.valueOf(instance.isActive())));
 
         // Assert

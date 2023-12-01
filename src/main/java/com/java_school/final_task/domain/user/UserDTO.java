@@ -1,7 +1,7 @@
 package com.java_school.final_task.domain.user;
 
-import com.java_school.final_task.domain.user.userAddress.UserAddressDTO;
-import com.java_school.final_task.domain.userRole.dto.UserRoleJsonDTO;
+import com.java_school.final_task.domain.user.user_address.UserAddressDTO;
+import com.java_school.final_task.domain.user_role.dto.UserRoleJsonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

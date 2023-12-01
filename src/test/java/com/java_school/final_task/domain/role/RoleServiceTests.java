@@ -13,21 +13,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Test class for {@link RoleServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class RoleServiceTests {
+class RoleServiceTests {
     @InjectMocks
     private RoleServiceImpl service;
 
     private RoleEntity instance;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         instance = RoleEntity.builder()
                 .name("ROLE")
                 .build();
     }
 
     @Test
-    public void RoleService_GetEntityId_ReturnsIdClass(){
+    void RoleService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -36,7 +36,7 @@ public class RoleServiceTests {
     }
 
     @Test
-    public void RoleService_GetDTOClass_ReturnsDTOClass(){
+    void RoleService_GetDTOClass_ReturnsDTOClass() {
         // Assert
         assertEquals(service.getDTOClass(), RoleDTO.class);
     }

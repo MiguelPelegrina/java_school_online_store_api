@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Test class for {@link BookParameterServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class BookParameterServiceTests {
+class BookParameterServiceTests {
     // Fields
     @Mock
     private BookParameterRepository repository;
@@ -35,7 +35,7 @@ public class BookParameterServiceTests {
     }
 
     @Test
-    public void BookParameterService_GetEntityId_ReturnsIdClass(){
+    void BookParameterService_GetEntityId_ReturnsIdClass() {
         // Act
         int entityId = service.getEntityId(instance);
 
@@ -44,7 +44,7 @@ public class BookParameterServiceTests {
     }
 
     @Test
-    public void BookParameterService_GetDTOClass_ReturnsDTOClass(){
+    void BookParameterService_GetDTOClass_ReturnsDTOClass() {
         // Act
         Class<BookParameterDTO> result = service.getDTOClass();
 

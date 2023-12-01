@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// TODO Try to add something that guaranties that the service is never null, if possible.
 /**
  * The {@code AbstractRestController} class is a parent controller responsible for the interaction between service and
  * user. Obtains data from the services and returns a {@link ResponseEntity} that contains the Data Transfer Object
  * (DTO) of the entity and the status of the operation. Used for entities that only have one attribute and therefore
  * can't be updated.
- * @param <S>  The service class that manages the entity.
- * @param <R>  The repository class associated with the entity.
- * @param <E>  The entity being managed.
- * @param <T>  The Data Transfer Object (DTO) of the entity.
- * @param <K>  The identifier type of the entity.
+ *
+ * @param <S> The service class that manages the entity.
+ * @param <R> The repository class associated with the entity.
+ * @param <E> The entity being managed.
+ * @param <T> The Data Transfer Object (DTO) of the entity.
+ * @param <K> The identifier type of the entity.
  */
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public abstract class AbstractRestControllerImpl
     @GetMapping
     @Operation(summary = "Get all instances of an entity")
     @Override
-    public ResponseEntity<List<T>> getAllInstances(){
+    public ResponseEntity<List<T>> getAllInstances() {
         return new ResponseEntity<>(service.getAllInstances(), HttpStatus.OK);
     }
 
@@ -56,11 +56,11 @@ public abstract class AbstractRestControllerImpl
             @ApiResponse(responseCode = "401", description = "Not authorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Instance not found",
-                    content = @Content) })
+                    content = @Content)})
     @GetMapping("/{id}")
     @Operation(summary = "Get an instances of an entity by its id")
     @Override
-    public ResponseEntity<T> getInstanceById(@PathVariable K id){
+    public ResponseEntity<T> getInstanceById(@PathVariable K id) {
         return new ResponseEntity<>(service.getInstanceById(id), HttpStatus.OK);
     }
 
@@ -73,13 +73,13 @@ public abstract class AbstractRestControllerImpl
     @PostMapping
     @Operation(summary = "Saves an instance of an entity into the repository or updates it, if already exists.")
     @Override
-    public ResponseEntity<T> saveInstance(@RequestBody E instance){
+    public ResponseEntity<T> saveInstance(@RequestBody E instance) {
         T instanceDTO = service.saveInstance(instance);
 
         if (instanceDTO == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<T>(instanceDTO, HttpStatus.CREATED);
+            return new ResponseEntity<>(instanceDTO, HttpStatus.CREATED);
         }
     }
 
@@ -91,7 +91,7 @@ public abstract class AbstractRestControllerImpl
     @PutMapping("/{id}")
     @Operation(summary = "Updates an instance of an entity if the instance exists or creates a new one.")
     @Override
-    public ResponseEntity<T> updateInstance(@PathVariable K id, @RequestBody E instance){
+    public ResponseEntity<T> updateInstance(@PathVariable K id, @RequestBody E instance) {
         return ResponseEntity.ok(service.saveInstance(instance));
     }
 
@@ -103,7 +103,7 @@ public abstract class AbstractRestControllerImpl
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletes an instance of an entity")
     @Override
-    public ResponseEntity<?> deleteInstance(@PathVariable K id){
+    public ResponseEntity<Object> deleteInstance(@PathVariable K id) {
         service.deleteInstance(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

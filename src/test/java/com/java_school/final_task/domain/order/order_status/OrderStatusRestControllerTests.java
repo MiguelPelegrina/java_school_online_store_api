@@ -1,10 +1,8 @@
 package com.java_school.final_task.domain.order.order_status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java_school.final_task.domain.order.orderStatus.OrderStatusDTO;
-import com.java_school.final_task.domain.order.orderStatus.OrderStatusEntity;
-import com.java_school.final_task.domain.order.orderStatus.impl.OrderStatusRestControllerImpl;
-import com.java_school.final_task.domain.order.orderStatus.impl.OrderStatusServiceImpl;
+import com.java_school.final_task.domain.order.order_status.impl.OrderStatusRestControllerImpl;
+import com.java_school.final_task.domain.order.order_status.impl.OrderStatusServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class OrderStatusRestControllerTests {
+class OrderStatusRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -62,13 +60,13 @@ public class OrderStatusRestControllerTests {
     }
 
     @Test
-    public void OrderStatusController_GetAllOrderStatusesByParams_ReturnOrderStatusDTOs() throws Exception {
+    void OrderStatusController_GetAllOrderStatusesByParams_ReturnOrderStatusDTOs() throws Exception {
         // Arrange
         List<OrderStatusDTO> instances = Arrays.asList(instanceDTO);
         when(service.getAllInstances(any())).thenReturn(instances);
 
         // Act
-        ResultActions result = mockMvc.perform(request(HttpMethod.GET,"/order_statuses/search")
+        ResultActions result = mockMvc.perform(request(HttpMethod.GET, "/order_statuses/search")
                 .param("active", String.valueOf(instance.isActive())));
 
         // Assert

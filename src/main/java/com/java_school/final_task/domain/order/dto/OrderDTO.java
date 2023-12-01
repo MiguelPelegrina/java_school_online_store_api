@@ -1,11 +1,11 @@
 package com.java_school.final_task.domain.order.dto;
 
 import com.java_school.final_task.domain.order.OrderEntity;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodDTO;
-import com.java_school.final_task.domain.order.orderStatus.OrderStatusDTO;
-import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodDTO;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusDTO;
-import com.java_school.final_task.domain.orderBook.OrderBookJsonDTO;
+import com.java_school.final_task.domain.order.delivery_method.DeliveryMethodDTO;
+import com.java_school.final_task.domain.order.order_status.OrderStatusDTO;
+import com.java_school.final_task.domain.order.payment_method.PaymentMethodDTO;
+import com.java_school.final_task.domain.order.payment_status.PaymentStatusDTO;
+import com.java_school.final_task.domain.order_book.OrderBookJsonDTO;
 import com.java_school.final_task.domain.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

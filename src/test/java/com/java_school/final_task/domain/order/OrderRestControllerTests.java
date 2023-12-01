@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class OrderRestControllerTests {
+class OrderRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -49,7 +49,7 @@ public class OrderRestControllerTests {
     }
 
     @Test
-    public void OrderRestController_GetAllOrdersByParams_ReturnOrderDTOPage() throws Exception {
+    void OrderRestController_GetAllOrdersByParams_ReturnOrderDTOPage() throws Exception {
         // Arrange
         Page<OrderDTO> page = new PageImpl<>(Collections.singletonList(instanceDTO));
 

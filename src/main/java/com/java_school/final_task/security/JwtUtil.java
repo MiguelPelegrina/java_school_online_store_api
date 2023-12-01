@@ -19,6 +19,13 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JwtUtil {
+    // Class fields
+    private static final String SECRET_KEY = "mysecretkey";
+    private static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000;
+
+    private static final String TOKEN_HEADER = "Authorization";
+    private static final String TOKEN_PREFIX = "Bearer ";
+
     // Class methods
 
     /**
@@ -31,12 +38,12 @@ public class JwtUtil {
     public static Claims decodeToken(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(secret_key)
+                    .setSigningKey(SECRET_KEY)
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
             // TODO Handle exceptions (e.g., token expired, invalid signature, etc.)
-            return null;
+            return Jwts.claims();
         }
     }
 
@@ -45,23 +52,19 @@ public class JwtUtil {
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 
         // Parse the token to get the id
-        Claims claims = JwtUtil.decodeToken(request.getHeader("Authorization").substring(7));
+        Claims claims = JwtUtil.decodeToken(request.getHeader(TOKEN_HEADER).substring(7));
 
         return claims.get("id", Integer.class);
     }
 
     // Fields
-    private static final String secret_key = "mysecretkey";
-    private static long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000;
     private final JwtParser jwtParser;
-    private static final String TOKEN_HEADER = "Authorization";
-    private static final String TOKEN_PREFIX = "Bearer ";
 
     /**
      * Default constructor.
      */
     public JwtUtil() {
-        this.jwtParser = Jwts.parser().setSigningKey(secret_key);
+        this.jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
     }
 
     // Instance methods
@@ -84,7 +87,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(tokenValidity)
-                .signWith(SignatureAlgorithm.HS256, secret_key)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
@@ -112,7 +115,7 @@ public class JwtUtil {
             if (token != null) {
                 return parseJwtClaims(token);
             }
-            return null;
+            return Jwts.claims();
         } catch (ExpiredJwtException ex) {
             req.setAttribute("expired", ex.getMessage());
             throw ex;

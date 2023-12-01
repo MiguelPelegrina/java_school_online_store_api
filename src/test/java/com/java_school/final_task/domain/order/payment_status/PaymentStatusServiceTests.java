@@ -1,10 +1,6 @@
 package com.java_school.final_task.domain.order.payment_status;
 
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusDTO;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusEntity;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusRepository;
-import com.java_school.final_task.domain.order.paymentStatus.QPaymentStatusEntity;
-import com.java_school.final_task.domain.order.paymentStatus.impl.PaymentStatusServiceImpl;
+import com.java_school.final_task.domain.order.payment_status.impl.PaymentStatusServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +22,7 @@ import static org.mockito.Mockito.*;
  * Test class for {@link PaymentStatusServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class PaymentStatusServiceTests {
+class PaymentStatusServiceTests {
     // Fields
     @Mock
     private PaymentStatusRepository repository;
@@ -55,7 +51,7 @@ public class PaymentStatusServiceTests {
     }
 
     @Test
-    public void PaymentStatusService_GetEntityId_ReturnsIdClass(){
+    void PaymentStatusService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -64,12 +60,12 @@ public class PaymentStatusServiceTests {
     }
 
     @Test
-    public void PaymentStatusService_GetAllPaymentStatusesFiltered_ReturnsPaymentStatusDTOs(){
+    void PaymentStatusService_GetAllPaymentStatusesFiltered_ReturnsPaymentStatusDTOs() {
         // Arrange
         List<PaymentStatusEntity> instances = new ArrayList<>();
         instances.add(instance);
 
-        final QPaymentStatusEntity qInstance  = QPaymentStatusEntity.paymentStatusEntity;
+        final QPaymentStatusEntity qInstance = QPaymentStatusEntity.paymentStatusEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         queryBuilder.and(qInstance.isActive.eq(true));
@@ -83,8 +79,7 @@ public class PaymentStatusServiceTests {
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
     }
 }

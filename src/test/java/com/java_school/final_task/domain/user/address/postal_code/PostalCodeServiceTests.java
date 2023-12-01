@@ -1,10 +1,10 @@
 package com.java_school.final_task.domain.user.address.postal_code;
 
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeRepository;
-import com.java_school.final_task.domain.user.userAddress.postalCode.QPostalCodeEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.impl.PostalCodeServiceImpl;
+import com.java_school.final_task.domain.user.user_address.postal_code.PostalCodeDTO;
+import com.java_school.final_task.domain.user.user_address.postal_code.PostalCodeEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.PostalCodeRepository;
+import com.java_school.final_task.domain.user.user_address.postal_code.QPostalCodeEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.impl.PostalCodeServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import mothers.user.address.postal_code.PostalCodeMother;
 import org.junit.jupiter.api.BeforeEach;

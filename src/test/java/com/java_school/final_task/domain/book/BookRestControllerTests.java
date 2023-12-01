@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class BookRestControllerTests {
+class BookRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -49,7 +49,7 @@ public class BookRestControllerTests {
     }
 
     @Test
-    public void BookRestController_GetAllBooksByParams_ReturnBookDTOPage() throws Exception {
+    void BookRestController_GetAllBooksByParams_ReturnBookDTOPage() throws Exception {
         // Arrange
         Page<BookDTO> page = new PageImpl<>(Collections.singletonList(instanceDTO));
 
@@ -66,7 +66,7 @@ public class BookRestControllerTests {
 
         // Act
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/books/search")
-                        .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .param("active", "true")
                 .param("name", "Title")
                 .param("genre", "Genre")

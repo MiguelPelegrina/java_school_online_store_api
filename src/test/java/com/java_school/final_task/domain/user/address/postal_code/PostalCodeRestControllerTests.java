@@ -1,14 +1,11 @@
 package com.java_school.final_task.domain.user.address.postal_code;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.impl.CityRestControllerImpl;
-import com.java_school.final_task.domain.user.userAddress.postalCode.impl.PostalCodeServiceImpl;
+import com.java_school.final_task.domain.user.user_address.postal_code.PostalCodeDTO;
+import com.java_school.final_task.domain.user.user_address.postal_code.PostalCodeEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.impl.CityRestControllerImpl;
+import com.java_school.final_task.domain.user.user_address.postal_code.impl.PostalCodeServiceImpl;
+import mothers.user.address.postal_code.PostalCodeMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class PostalCodeRestControllerTests {
+class PostalCodeRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -54,41 +51,19 @@ public class PostalCodeRestControllerTests {
     @BeforeEach
     public void setUp() {
         // Arrange
-        instance = PostalCodeEntity.builder()
-                .isActive(true)
-                .code("Code")
-                .city(CityEntity.builder()
-                        .isActive(true)
-                        .name("City")
-                        .countryName(CountryEntity.builder()
-                                .isActive(true)
-                                .name("Country")
-                                .build())
-                        .build())
-                .build();
+        instance = PostalCodeMother.createPostalCode();
 
-        instanceDTO = PostalCodeDTO.builder()
-                .isActive(true)
-                .code("Code")
-                .city(CityDTO.builder()
-                        .isActive(true)
-                        .name("City")
-                        .country(CountryDTO.builder()
-                                .isActive(true)
-                                .name("Country")
-                                .build())
-                        .build())
-                .build();
+        instanceDTO = PostalCodeMother.createPostalCodeDTO();
     }
 
     @Test
-    public void PostalCodeController_GetAllPostalCodesByParams_ReturnPostalCodeDTOs() throws Exception {
+    void PostalCodeController_GetAllPostalCodesByParams_ReturnPostalCodeDTOs() throws Exception {
         // Arrange
         List<PostalCodeDTO> instances = Arrays.asList(instanceDTO);
         when(service.getAllInstances(any(), any())).thenReturn(instances);
 
         // Act
-        ResultActions result = mockMvc.perform(request(HttpMethod.GET,"/postal_codes/search")
+        ResultActions result = mockMvc.perform(request(HttpMethod.GET, "/postal_codes/search")
                 .param("active", String.valueOf(instance.isActive()))
                 .param("name", instance.getCode()));
 

@@ -1,13 +1,8 @@
 package com.java_school.final_task.domain.user;
 
-import com.java_school.final_task.domain.role.RoleDTO;
 import com.java_school.final_task.domain.user.impl.UserRestControllerImpl;
 import com.java_school.final_task.domain.user.impl.UserServiceImpl;
-import com.java_school.final_task.domain.user.userAddress.UserAddressDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.userRole.dto.UserRoleJsonDTO;
+import mothers.user.UserMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,10 +19,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -39,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class UserRestControllerTests {
+class UserRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -49,41 +42,13 @@ public class UserRestControllerTests {
     private UserDTO instanceDTO;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         // Arrange
-        instanceDTO = UserDTO.builder()
-                .id(4)
-                .isActive(true)
-                .email("email@.com")
-                .dateOfBirth(LocalDate.now())
-                .phone("12345678912")
-                .name("Name")
-                .surname("Surname")
-                .roles(Set.of(UserRoleJsonDTO.builder()
-                        .role(RoleDTO.builder()
-                                .name("ADMIN")
-                                .build())
-                        .assignedDate(LocalDate.now())
-                        .build()))
-                .address(UserAddressDTO.builder()
-                        .postalCode(PostalCodeDTO.builder()
-                                .isActive(true)
-                                .code("Code")
-                                .city(CityDTO.builder()
-                                        .name("City")
-                                        .country(CountryDTO.builder()
-                                                .isActive(true)
-                                                .name("Country")
-                                                .build())
-                                        .isActive(true)
-                                        .build())
-                                .build())
-                        .build())
-                .build();
+        instanceDTO = UserMother.createUserDTO();
     }
 
     @Test
-    public void UserRestController_GetAllUsersByParams_ReturnUserDTOPage() throws Exception {
+    void UserRestController_GetAllUsersByParams_ReturnUserDTOPage() throws Exception {
         // Arrange
         Page<UserDTO> page = new PageImpl<>(Collections.singletonList(instanceDTO));
 

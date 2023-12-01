@@ -1,13 +1,12 @@
 package com.java_school.final_task.domain.user.address.postal_code.city;
 
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityRepository;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.QCityEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.impl.CityServiceImpl;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.CityDTO;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.CityEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.CityRepository;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.QCityEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.impl.CityServiceImpl;
 import com.querydsl.core.BooleanBuilder;
+import mothers.user.address.postal_code.city.CityMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CityServiceTests {
+class CityServiceTests {
     // Fields
     @Mock
     private CityRepository repository;
@@ -42,27 +41,13 @@ public class CityServiceTests {
 
     @BeforeEach
     public void setUp() {
-        instance = CityEntity.builder()
-                .isActive(true)
-                .name("City")
-                .countryName(CountryEntity.builder()
-                        .isActive(true)
-                        .name("Country")
-                        .build())
-                .build();
+        instance = CityMother.createCity();
 
-        instanceDTO = CityDTO.builder()
-                .isActive(true)
-                .name("City")
-                .country(CountryDTO.builder()
-                        .isActive(true)
-                        .name("Country")
-                        .build())
-                .build();
+        instanceDTO = CityMother.createCityDTO();
     }
 
     @Test
-    public void CountryService_GetEntityId_ReturnsIdClass() {
+    void CountryService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -71,7 +56,7 @@ public class CityServiceTests {
     }
 
     @Test
-    public void CityService_GetAllCitiesFiltered_ReturnsCityDTOs() {
+    void CityService_GetAllCitiesFiltered_ReturnsCityDTOs() {
         // Arrange
         List<CityEntity> instances = new ArrayList<>();
         instances.add(instance);
@@ -91,13 +76,12 @@ public class CityServiceTests {
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
     }
 
     @Test
-    public void CityService_GetAllActiveCities_ReturnsCityDTOs() {
+    void CityService_GetAllActiveCities_ReturnsCityDTOs() {
         // Arrange
         List<CityEntity> instances = new ArrayList<>();
         instances.add(instance);
@@ -116,8 +100,7 @@ public class CityServiceTests {
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
     }
 }

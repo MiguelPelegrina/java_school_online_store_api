@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Test class for {@link BookGenreServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class BookGenreServiceTests {
+class BookGenreServiceTests {
     // Fields
     @InjectMocks
     private BookGenreServiceImpl service;
@@ -27,7 +27,7 @@ public class BookGenreServiceTests {
     }
 
     @Test
-    public void BookGenreService_GetEntityId_ReturnsIdClass(){
+    void BookGenreService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -36,7 +36,7 @@ public class BookGenreServiceTests {
     }
 
     @Test
-    public void BookGenreService_GetDTOClass_ReturnsDTOClass(){
+    void BookGenreService_GetDTOClass_ReturnsDTOClass() {
         // Act
         Class<BookGenreDTO> result = service.getDTOClass();
 

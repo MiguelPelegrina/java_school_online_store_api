@@ -3,9 +3,9 @@ package com.java_school.final_task.security;
 import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserRepository;
 import com.java_school.final_task.exception.user.EmailAlreadyUsedException;
-import mothers.user.UserMother;
 import com.java_school.final_task.security.dto.RegisterRequestBodyDTO;
 import com.java_school.final_task.security.impl.AuthServiceImpl;
+import mothers.user.UserMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
  * Test class for {@link AuthServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTests {
+class AuthServiceTests {
     @Mock
     private UserRepository repository;
 
@@ -40,7 +40,7 @@ public class AuthServiceTests {
     private UserEntity instance;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         // Arrange
         registerRequestBodyDTO = RegisterRequestBodyDTO.builder()
                 .email("email@.com")
@@ -60,7 +60,7 @@ public class AuthServiceTests {
     }
 
     @Test
-    public void UserService_RegisterUser_ReturnUserDTO(){
+    void UserService_RegisterUser_ReturnUserDTO() {
         // Arrange
         when(repository.findUserByEmail(registerRequestBodyDTO.getEmail())).thenReturn(Optional.empty());
         when(userMapper.mapToUserEntity(registerRequestBodyDTO)).thenReturn(instance);
@@ -78,7 +78,7 @@ public class AuthServiceTests {
     }
 
     @Test
-    public void UserService_RegisterUser_ThrowsEmailAlreadyInUseException(){
+    void UserService_RegisterUser_ThrowsEmailAlreadyInUseException() {
         // Arrange
         when(repository.findUserByEmail(instance.getEmail())).thenReturn(Optional.of(instance));
 
@@ -88,5 +88,4 @@ public class AuthServiceTests {
         // Assert
         verify(repository, times(1)).findUserByEmail((instance.getEmail()));
     }
-
 }

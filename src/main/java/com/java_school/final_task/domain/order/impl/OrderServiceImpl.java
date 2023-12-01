@@ -5,7 +5,7 @@ import com.java_school.final_task.domain.book.BookRepository;
 import com.java_school.final_task.domain.order.*;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
-import com.java_school.final_task.domain.orderBook.QOrderBookEntity;
+import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserRepository;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
@@ -16,6 +16,7 @@ import com.java_school.final_task.security.JwtUtil;
 import com.java_school.final_task.utils.StringValues;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -113,21 +114,11 @@ public class OrderServiceImpl
         // Check if the current user is active
         if (currentUser.isActive()) {
             // Check which parameters are present and build a query
-            if (!orderRequest.getDeliveryMethod().isEmpty()) {
-                queryBuilder.and(qOrder.deliveryMethod.name.containsIgnoreCase(orderRequest.getDeliveryMethod()));
-            }
+            handleParameter(orderRequest.getDeliveryMethod(), queryBuilder, qOrder.deliveryMethod.name);
+            handleParameter(orderRequest.getOrderStatus(), queryBuilder, qOrder.orderStatus.name);
+            handleParameter(orderRequest.getPaymentMethod(), queryBuilder, qOrder.paymentMethod.name);
+            handleParameter(orderRequest.getPaymentStatus(), queryBuilder, qOrder.paymentStatus.name);
 
-            if (!orderRequest.getOrderStatus().isEmpty()) {
-                queryBuilder.and(qOrder.orderStatus.name.containsIgnoreCase(orderRequest.getOrderStatus()));
-            }
-
-            if (!orderRequest.getPaymentMethod().isEmpty()) {
-                queryBuilder.and(qOrder.paymentMethod.name.containsIgnoreCase(orderRequest.getPaymentMethod()));
-            }
-
-            if (!orderRequest.getPaymentStatus().isEmpty()) {
-                queryBuilder.and(qOrder.paymentStatus.name.containsIgnoreCase(orderRequest.getPaymentStatus()));
-            }
 
             if (orderRequest.getDate() != null) {
                 queryBuilder.and(qOrder.date.eq(orderRequest.getDate()));
@@ -190,10 +181,10 @@ public class OrderServiceImpl
                         book.setStock(previousAmount - orderBook.getAmount());
                         bookRepository.save(book);
                     } else {
-                        throw new ProductOutOfStockException(orderBook.getBook());
+                        throw new ProductOutOfStockException(orderBook.getBook().getTitle());
                     }
                 } else {
-                    throw new ProductNotAvailableException(orderBook.getBook());
+                    throw new ProductNotAvailableException(orderBook.getBook().getTitle());
                 }
             });
         }
@@ -204,5 +195,9 @@ public class OrderServiceImpl
         );
 
         return modelMapper.map(repository.save(newOrder), getDTOClass());
+    }
+
+    private void handleParameter(String parameter, BooleanBuilder queryBuilder, StringExpression expression) {
+        queryBuilder.and(!"".equals(parameter) ? expression.containsIgnoreCase(parameter) : null);
     }
 }

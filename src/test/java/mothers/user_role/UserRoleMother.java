@@ -2,8 +2,8 @@ package mothers.user_role;
 
 import com.java_school.final_task.domain.role.RoleDTO;
 import com.java_school.final_task.domain.role.RoleEntity;
-import com.java_school.final_task.domain.userRole.UserRoleEntity;
-import com.java_school.final_task.domain.userRole.dto.UserRoleJsonDTO;
+import com.java_school.final_task.domain.user_role.UserRoleEntity;
+import com.java_school.final_task.domain.user_role.dto.UserRoleJsonDTO;
 
 import java.time.LocalDate;
 

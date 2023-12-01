@@ -1,6 +1,5 @@
 package com.java_school.final_task.exception.book;
 
-import com.java_school.final_task.domain.book.BookEntity;
 import com.java_school.final_task.utils.StringValues;
 import lombok.RequiredArgsConstructor;
 
@@ -10,14 +9,15 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class ProductOutOfStockException extends RuntimeException {
-    private final BookEntity book;
+    private final String title;
 
     /**
      * Overrides the getMessage method to provide the error message.
+     *
      * @return Error message associated with the exception.
      */
     @Override
-    public String getMessage(){
-        return String.format(StringValues.PRODUCT_OUT_OF_STOCK, book.getTitle());
+    public String getMessage() {
+        return String.format(StringValues.PRODUCT_OUT_OF_STOCK, title);
     }
 }

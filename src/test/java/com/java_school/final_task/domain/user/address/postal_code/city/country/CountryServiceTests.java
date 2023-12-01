@@ -1,12 +1,13 @@
 package com.java_school.final_task.domain.user.address.postal_code.city.country;
 
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryRepository;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.QCountryEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.impl.CountryServiceImpl;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.CountryDTO;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.CountryEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.CountryRepository;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.QCountryEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.impl.CountryServiceImpl;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
+import mothers.user.address.postal_code.city.country.CountryMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.*;
  * Test class for {@link CountryServiceImpl}. Implements tests for {@link AbstractServiceImpl} as well.
  */
 @ExtendWith(MockitoExtension.class)
-public class CountryServiceTests {
+class CountryServiceTests {
     // Fields
     @Mock
     private CountryRepository repository;
@@ -44,20 +45,14 @@ public class CountryServiceTests {
     @BeforeEach
     public void setUp() {
         // Arrange
-        instance = CountryEntity.builder()
-                .isActive(true)
-                .name("Country")
-                .build();
+        instance = CountryMother.createCountry();
 
-        instanceDTO = CountryDTO.builder()
-                .isActive(true)
-                .name("Country")
-                .build();
+        instanceDTO = CountryMother.createCountryDTO();
     }
 
     // Tests for the abstract methods
     @Test
-    public void CountryService_CreateCountry_ReturnsSavedCountryDTO() {
+    void CountryService_CreateCountry_ReturnsSavedCountryDTO() {
         // Arrange
         when(repository.save(any(CountryEntity.class))).thenReturn(instance);
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
@@ -74,7 +69,7 @@ public class CountryServiceTests {
     }
 
     @Test
-    public void CountryService_DeleteCountryById_ReturnsVoid() {
+    void CountryService_DeleteCountryById_ReturnsVoid() {
         // Arrange
         lenient().when(repository.findById("Country")).thenReturn(Optional.ofNullable(instance));
 
@@ -86,7 +81,7 @@ public class CountryServiceTests {
     }
 
     @Test
-    public void CountryService_GetAllCountries_ReturnsCountryDTOs() {
+    void CountryService_GetAllCountries_ReturnsCountryDTOs() {
         // Arrange
         CountryEntity instance2 = CountryEntity.builder()
                 .isActive(true)
@@ -122,7 +117,7 @@ public class CountryServiceTests {
     }
 
     @Test
-    public void CountryService_GetCountryById_ReturnsCountryDTO() {
+    void CountryService_GetCountryById_ReturnsCountryDTO() {
         // Arrange
         when(repository.findById("Country")).thenReturn(Optional.ofNullable(instance));
         when(modelMapper.map(instance, service.getDTOClass())).thenReturn(instanceDTO);
@@ -139,7 +134,7 @@ public class CountryServiceTests {
 
     // Tests for own methods
     @Test
-    public void CountryService_GetEntityId_ReturnsIdClass() {
+    void CountryService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -148,7 +143,7 @@ public class CountryServiceTests {
     }
 
     @Test
-    public void CountryService_GetAllCountriesFiltered_ReturnsCountryDTOs() {
+    void CountryService_GetAllCountriesFiltered_ReturnsCountryDTOs() {
         // Arrange
         final QCountryEntity qInstance = QCountryEntity.countryEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -168,13 +163,12 @@ public class CountryServiceTests {
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
     }
 
     @Test
-    public void CountryService_GetAllActiveCountries_ReturnsCountryDTOs() {
+    void CountryService_GetAllActiveCountries_ReturnsCountryDTOs() {
         // Arrange
         final QCountryEntity qInstance = QCountryEntity.countryEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -193,8 +187,7 @@ public class CountryServiceTests {
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
     }
 }

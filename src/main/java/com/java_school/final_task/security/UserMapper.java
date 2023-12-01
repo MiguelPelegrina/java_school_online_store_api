@@ -2,10 +2,10 @@ package com.java_school.final_task.security;
 
 import com.java_school.final_task.domain.role.RoleEntity;
 import com.java_school.final_task.domain.user.UserEntity;
-import com.java_school.final_task.domain.user.userAddress.UserAddressEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.PostalCodeRepository;
-import com.java_school.final_task.domain.userRole.UserRoleEntity;
+import com.java_school.final_task.domain.user.user_address.UserAddressEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.PostalCodeEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.PostalCodeRepository;
+import com.java_school.final_task.domain.user_role.UserRoleEntity;
 import com.java_school.final_task.security.dto.RegisterRequestBodyDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,12 +29,13 @@ public class UserMapper {
     /**
      * Maps a {@link RegisterRequestBodyDTO} to a new {@link UserEntity}, applying default values and additional logic
      * for registration.
+     *
      * @param registerRequestBodyDTO The DTO containing user registration information.
      * @return New {@link UserEntity} with mapped values from the provided {@link RegisterRequestBodyDTO}.
      * @throws RuntimeException If there are issues retrieving postal code information from the repository.
      */
     @Transactional(readOnly = true)
-    public UserEntity mapToUserEntity(RegisterRequestBodyDTO registerRequestBodyDTO){
+    public UserEntity mapToUserEntity(RegisterRequestBodyDTO registerRequestBodyDTO) {
         UserEntity newUser = UserEntity.builder()
                 .dateOfBirth(registerRequestBodyDTO.getDateOfBirth())
                 .email(registerRequestBodyDTO.getEmail())

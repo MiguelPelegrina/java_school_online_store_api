@@ -17,6 +17,4 @@ import java.util.Optional;
 public class UserRequest extends AbstractPageableSortableRequest {
     private String name = "";
     private Optional<Boolean> active = Optional.empty();
-    // TODO Scale by roles
-    // private String role = "";
 }

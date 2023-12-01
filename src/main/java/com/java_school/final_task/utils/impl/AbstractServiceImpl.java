@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO Try to add something that guaranties that the modelMapper and the repository are never null, if possible.
 /**
  * The {@code AbstractServiceImpl} is a parent service responsible for the interaction between repositories and controller.
  * Obtains data from the repository and returns the instance(s) of the entity as Data Transfer Object(s) (DTO) to the
  * related controller. Used for entities that only have one attribute and therefore can't be updated.
- * @param <RepositoryClass> Repository of the entity.
+ *
+ * @param <R> Repository of the entity.
  * @param <E> Entity instance that will be managed.
  * @param <T> Data Transfer Object (DTO) of the managed entity instance.
  * @param <K> Identifier of the entity instance.
@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public abstract class AbstractServiceImpl<RepositoryClass extends JpaRepository<E, K>, E, T, K>
+public abstract class AbstractServiceImpl<R extends JpaRepository<E, K>, E, T, K>
         implements AbstractService<E, T, K> {
     // Fields
-    protected final RepositoryClass repository;
+    protected final R repository;
     protected final ModelMapper modelMapper;
 
     @Override
@@ -43,20 +43,20 @@ public abstract class AbstractServiceImpl<RepositoryClass extends JpaRepository<
     }
 
     @Override
-    public T getInstanceById(K id){
+    public T getInstanceById(K id) {
         return modelMapper.map(repository.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException(String.format(StringValues.INSTANCE_NOT_FOUND, id))), getDTOClass());
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(StringValues.INSTANCE_NOT_FOUND, id))), getDTOClass());
     }
 
     @Override
     @Transactional
-    public T saveInstance(E instance){
+    public T saveInstance(E instance) {
         return modelMapper.map(repository.save(instance), getDTOClass());
     }
 
     @Override
     @Transactional
-    public void deleteInstance(K id){
+    public void deleteInstance(K id) {
         repository.deleteById(id);
     }
 }

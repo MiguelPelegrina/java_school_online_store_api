@@ -37,7 +37,7 @@ public class AuthControllerImpl implements AuthController {
     @Override
     @PostMapping
     @RequestMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDto) {
+    public ResponseEntity<Object> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDto) {
         try {
             // Get the user
             UserEntity user = repository.findUserByEmail(loginRequestBodyDto.getEmail()).orElseThrow(
@@ -63,7 +63,7 @@ public class AuthControllerImpl implements AuthController {
     @PostMapping
     @RequestMapping("/register")
     @Override
-    public ResponseEntity<?> register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO) {
+    public ResponseEntity<Object> register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO) {
         try {
             return ResponseEntity.ok(this.generateAuthResultDTO(service.register(registerRequestBodyDTO)));
         } catch (EmailAlreadyUsedException e) {

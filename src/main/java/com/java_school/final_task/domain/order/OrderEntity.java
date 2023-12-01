@@ -1,11 +1,11 @@
 package com.java_school.final_task.domain.order;
 
-import com.java_school.final_task.domain.orderBook.OrderBookEntity;
+import com.java_school.final_task.domain.order.delivery_method.DeliveryMethodEntity;
+import com.java_school.final_task.domain.order.order_status.OrderStatusEntity;
+import com.java_school.final_task.domain.order.payment_method.PaymentMethodEntity;
+import com.java_school.final_task.domain.order.payment_status.PaymentStatusEntity;
+import com.java_school.final_task.domain.order_book.OrderBookEntity;
 import com.java_school.final_task.domain.user.UserEntity;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodEntity;
-import com.java_school.final_task.domain.order.orderStatus.OrderStatusEntity;
-import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodEntity;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,7 +47,6 @@ public class OrderEntity {
     @JoinColumn(name = "payment_status", referencedColumnName = "name", nullable = false)
     private PaymentStatusEntity paymentStatus;
 
-    //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH}
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
     private List<OrderBookEntity> orderedBooks;
 

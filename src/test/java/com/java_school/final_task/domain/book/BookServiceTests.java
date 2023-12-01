@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
  * Test class for {@link BookServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class BookServiceTests {
+class BookServiceTests {
     @InjectMocks
     private BookServiceImpl service;
 
@@ -58,7 +58,7 @@ public class BookServiceTests {
     }
 
     @Test
-    public void BookService_GetEntityId_ReturnsIdClass() {
+    void BookService_GetEntityId_ReturnsIdClass() {
         // Act
         int entityId = service.getEntityId(instance);
 
@@ -67,7 +67,7 @@ public class BookServiceTests {
     }
 
     @Test
-    public void BookService_CreateBook_ReturnsSavedBookDTO() {
+    void BookService_CreateBook_ReturnsSavedBookDTO() {
         // Arrange
         when(bookRepository.save(instance)).thenReturn(instance);
         when(bookParameterRepository.findByAuthorAndFormat(
@@ -87,7 +87,7 @@ public class BookServiceTests {
     }
 
     @Test
-    public void BookService_GetAllBooksFiltered_ReturnsBookDTOPage() {
+    void BookService_GetAllBooksFiltered_ReturnsBookDTOPage() {
         // Arrange
         final QBookEntity qInstance = QBookEntity.bookEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -127,8 +127,7 @@ public class BookServiceTests {
         // Assert
         verify(bookRepository, times(1)).findAll(queryBuilder, pageRequest);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
     }
 

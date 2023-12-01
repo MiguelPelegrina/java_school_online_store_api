@@ -1,7 +1,7 @@
 package com.java_school.final_task.domain.user;
 
 import com.java_school.final_task.domain.user.impl.UserServiceImpl;
-import com.java_school.final_task.domain.user.userAddress.UserAddressRepository;
+import com.java_school.final_task.domain.user.user_address.UserAddressRepository;
 import com.java_school.final_task.exception.user.InsufficientPermissionsException;
 import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.security.JwtUtil;
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.*;
  * Test class for {@link UserServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTests {
+class UserServiceTests {
     @Mock
     private UserRepository userRepository;
 
@@ -69,7 +69,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_GetEntityId_ReturnsIdClass() {
+    void UserService_GetEntityId_ReturnsIdClass() {
         // Act
         int entityId = service.getEntityId(instance);
 
@@ -78,7 +78,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_CreateUser_ReturnsSavedUserDTO() {
+    void UserService_CreateUser_ReturnsSavedUserDTO() {
         when(passwordEncoder.encode(instance.getPassword())).thenReturn(
                 "$2a$10$I3rJr4zrbsHQ4jGPKcyqKOcstbsLBFCe/7KmXZYnG8VoDMRDlJxC6"
         );
@@ -97,7 +97,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_GetAllClients_ReturnClientsPage() {
+    void UserService_GetAllClients_ReturnClientsPage() {
         // Arrange
         final QUserEntity qInstance = QUserEntity.userEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -126,13 +126,12 @@ public class UserServiceTests {
         // Assert
         verify(userRepository, times(1)).findAll(queryBuilder, pageRequest);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
     }
 
     @Test
-    public void UserService_GetAllClients_ThrowsUserDoesNotExist() {
+    void UserService_GetAllClients_ThrowsUserDoesNotExist() {
         // Arrange
         UserRequest request = generateUserRequest();
 
@@ -142,14 +141,14 @@ public class UserServiceTests {
     }
 
     @Test
-    public void UserService_SaveInstance_ThrowsUserDoesNotExist() {
+    void UserService_SaveInstance_ThrowsUserDoesNotExist() {
         // Act & assert
         assertThrows(UserDoesNotExistException.class, () -> service.saveInstance(instance));
         verify(userRepository, times(1)).findById(instance.getId());
     }
 
     @Test
-    public void UserService_GetAllClients_ThrowsInsufficientPermissions() {
+    void UserService_GetAllClients_ThrowsInsufficientPermissions() {
         // Arrange
         instance.setRoles(Set.of(UserRoleMother.createUserRoleClient()));
         UserRequest request = generateUserRequest();

@@ -1,16 +1,16 @@
 package mothers.order;
 
 import com.java_school.final_task.domain.order.OrderEntity;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodDTO;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodEntity;
+import com.java_school.final_task.domain.order.delivery_method.DeliveryMethodDTO;
+import com.java_school.final_task.domain.order.delivery_method.DeliveryMethodEntity;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
-import com.java_school.final_task.domain.order.orderStatus.OrderStatusDTO;
-import com.java_school.final_task.domain.order.orderStatus.OrderStatusEntity;
-import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodDTO;
-import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodEntity;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusDTO;
-import com.java_school.final_task.domain.order.paymentStatus.PaymentStatusEntity;
-import com.java_school.final_task.domain.orderBook.OrderBookJsonDTO;
+import com.java_school.final_task.domain.order.order_status.OrderStatusDTO;
+import com.java_school.final_task.domain.order.order_status.OrderStatusEntity;
+import com.java_school.final_task.domain.order.payment_method.PaymentMethodDTO;
+import com.java_school.final_task.domain.order.payment_method.PaymentMethodEntity;
+import com.java_school.final_task.domain.order.payment_status.PaymentStatusDTO;
+import com.java_school.final_task.domain.order.payment_status.PaymentStatusEntity;
+import com.java_school.final_task.domain.order_book.OrderBookJsonDTO;
 import mothers.book.BookMother;
 import mothers.order_book.OrderBookMother;
 import mothers.user.UserMother;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class OrderMother {
-    public static OrderEntity createOrder(){
+    public static OrderEntity createOrder() {
         return OrderEntity.builder()
                 .id(0)
                 .orderedBooks(null)
@@ -33,7 +33,7 @@ public class OrderMother {
                 .build();
     }
 
-    public static OrderDTO createOrderDTO(){
+    public static OrderDTO createOrderDTO() {
         return OrderDTO.builder()
                 .id(0)
                 .user(UserMother.createUserDTO())
@@ -46,7 +46,7 @@ public class OrderMother {
                 .build();
     }
 
-    public static OrderBookJsonDTO createOrderBookJsonDTO(){
+    public static OrderBookJsonDTO createOrderBookJsonDTO() {
         return OrderBookJsonDTO.builder()
                 .id(1)
                 .book(BookMother.createBookDTO())

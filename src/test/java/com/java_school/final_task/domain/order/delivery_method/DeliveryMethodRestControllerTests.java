@@ -1,10 +1,8 @@
 package com.java_school.final_task.domain.order.delivery_method;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodDTO;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodEntity;
-import com.java_school.final_task.domain.order.deliveryMethod.impl.DeliveryMethodRestControllerImpl;
-import com.java_school.final_task.domain.order.deliveryMethod.impl.DeliveryMethodServiceImpl;
+import com.java_school.final_task.domain.order.delivery_method.impl.DeliveryMethodRestControllerImpl;
+import com.java_school.final_task.domain.order.delivery_method.impl.DeliveryMethodServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class DeliveryMethodRestControllerTests {
+class DeliveryMethodRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -62,13 +60,13 @@ public class DeliveryMethodRestControllerTests {
     }
 
     @Test
-    public void DeliveryMethodController_GetAllDeliveryMethodsByParams_ReturnDeliveryMethodDTOs() throws Exception {
+    void DeliveryMethodController_GetAllDeliveryMethodsByParams_ReturnDeliveryMethodDTOs() throws Exception {
         // Arrange
         List<DeliveryMethodDTO> instances = Arrays.asList(instanceDTO);
         when(service.getAllInstances(any())).thenReturn(instances);
 
         // Act
-        ResultActions result = mockMvc.perform(request(HttpMethod.GET,"/delivery_methods/search")
+        ResultActions result = mockMvc.perform(request(HttpMethod.GET, "/delivery_methods/search")
                 .param("active", String.valueOf(instance.isActive())));
 
         // Assert

@@ -1,10 +1,8 @@
 package com.java_school.final_task.domain.order.payment_method;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodDTO;
-import com.java_school.final_task.domain.order.paymentMethod.PaymentMethodEntity;
-import com.java_school.final_task.domain.order.paymentMethod.impl.PaymentMethodRestControllerImpl;
-import com.java_school.final_task.domain.order.paymentMethod.impl.PaymentMethodServiceImpl;
+import com.java_school.final_task.domain.order.payment_method.impl.PaymentMethodRestControllerImpl;
+import com.java_school.final_task.domain.order.payment_method.impl.PaymentMethodServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class PaymentMethodRestControllerTests {
+class PaymentMethodRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -62,13 +60,13 @@ public class PaymentMethodRestControllerTests {
     }
 
     @Test
-    public void DeliveryMethodController_GetAllDeliveryMethodsByParams_ReturnDeliveryMethodDTOs() throws Exception {
+    void DeliveryMethodController_GetAllDeliveryMethodsByParams_ReturnDeliveryMethodDTOs() throws Exception {
         // Arrange
         List<PaymentMethodDTO> instances = Arrays.asList(instanceDTO);
         when(service.getAllInstances(any())).thenReturn(instances);
 
         // Act
-        ResultActions result = mockMvc.perform(request(HttpMethod.GET,"/payment_methods/search")
+        ResultActions result = mockMvc.perform(request(HttpMethod.GET, "/payment_methods/search")
                 .param("active", String.valueOf(instance.isActive())));
 
         // Assert

@@ -1,6 +1,6 @@
 package com.java_school.final_task.domain.role;
 
-import com.java_school.final_task.domain.userRole.UserRoleEntity;
+import com.java_school.final_task.domain.user_role.UserRoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

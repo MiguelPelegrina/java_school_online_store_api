@@ -1,12 +1,11 @@
 package com.java_school.final_task.domain.user.address.postal_code.city;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.CityEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.impl.CityRestControllerImpl;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.impl.CityServiceImpl;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.CityDTO;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.CityEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.impl.CityRestControllerImpl;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.impl.CityServiceImpl;
+import mothers.user.address.postal_code.city.CityMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class CityRestControllerTests {
+class CityRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -51,33 +50,19 @@ public class CityRestControllerTests {
     @BeforeEach
     public void setUp() {
         // Arrange
-        instance = CityEntity.builder()
-                .isActive(true)
-                .name("City")
-                .countryName(CountryEntity.builder()
-                        .isActive(true)
-                        .name("Country")
-                        .build())
-                .build();
+        instance = CityMother.createCity();
 
-        instanceDTO = CityDTO.builder()
-                .isActive(true)
-                .name("City")
-                .country(CountryDTO.builder()
-                        .isActive(true)
-                        .name("Country")
-                        .build())
-                .build();
+        instanceDTO = CityMother.createCityDTO();
     }
 
     @Test
-    public void CountryController_GetAllCountriesByParams_ReturnCountryDTOs() throws Exception {
+    void CountryController_GetAllCountriesByParams_ReturnCountryDTOs() throws Exception {
         // Arrange
         List<CityDTO> instances = Arrays.asList(instanceDTO);
         when(service.getAllInstances(any(), any())).thenReturn(instances);
 
         // Act
-        mockMvc.perform(request(HttpMethod.GET,"/cities/search")
+        mockMvc.perform(request(HttpMethod.GET, "/cities/search")
                         .param("active", String.valueOf(instance.isActive()))
                         .param("name", instance.getName()))
                 .andExpect(status().isOk())

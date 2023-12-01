@@ -1,21 +1,10 @@
 package com.java_school.final_task.domain.user.address.postal_code.city.country;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryDTO;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.CountryEntity;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.impl.CountryRestControllerImpl;
-import com.java_school.final_task.domain.user.userAddress.postalCode.city.country.impl.CountryServiceImpl;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.CountryDTO;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.CountryEntity;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.impl.CountryRestControllerImpl;
+import com.java_school.final_task.domain.user.user_address.postal_code.city.country.impl.CountryServiceImpl;
 import com.java_school.final_task.utils.impl.AbstractRestControllerImpl;
 import mothers.user.address.postal_code.city.country.CountryMother;
 import org.hamcrest.CoreMatchers;
@@ -35,13 +24,23 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 /**
  * Test class for {@link CountryRestControllerImpl}. Implements tests for {@link AbstractRestControllerImpl} as well.
  */
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class CountryRestControllerTests {
+class CountryRestControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -64,7 +63,7 @@ public class CountryRestControllerTests {
 
     // Tests for the abstract methods
     @Test
-    public void CountryController_CreateCountry_ReturnCreated() throws Exception {
+    void CountryController_CreateCountry_ReturnCreated() throws Exception {
         // Arrange
         given(service.saveInstance(instance)).willAnswer(invocation -> invocation.getArgument(0));
 
@@ -81,15 +80,15 @@ public class CountryRestControllerTests {
 
     // Tests for own methods
     @Test
-    public void CountryController_GetAllCountriesByParams_ReturnCountryDTOs() throws Exception {
+    void CountryController_GetAllCountriesByParams_ReturnCountryDTOs() throws Exception {
         // Arrange
         List<CountryDTO> instances = Arrays.asList(instanceDTO);
         when(service.getAllInstances(any(), any())).thenReturn(instances);
 
         // Act
-        ResultActions result = mockMvc.perform(request(HttpMethod.GET,"/countries/search")
-                        .param("active", String.valueOf(instance.isActive()))
-                        .param("name", instance.getName()));
+        ResultActions result = mockMvc.perform(request(HttpMethod.GET, "/countries/search")
+                .param("active", String.valueOf(instance.isActive()))
+                .param("name", instance.getName()));
 
         // Assert
         result.andExpect(status().isOk())
@@ -98,7 +97,7 @@ public class CountryRestControllerTests {
     }
 
     @Test
-    public void CountryController_CountryDetail_ReturnCountryDTO() throws Exception {
+    void CountryController_CountryDetail_ReturnCountryDTO() throws Exception {
         // Arrange
         when(service.getInstanceById(instance.getName())).thenReturn(instanceDTO);
 
@@ -114,7 +113,7 @@ public class CountryRestControllerTests {
     }
 
     @Test
-    public void CountryController_UpdateCountry_ReturnCountryDTO() throws Exception {
+    void CountryController_UpdateCountry_ReturnCountryDTO() throws Exception {
         // Arrange
         when(service.saveInstance(instance)).thenReturn(instanceDTO);
 
@@ -130,7 +129,7 @@ public class CountryRestControllerTests {
     }
 
     @Test
-    public void CountryController_DeleteCountry_ReturnStatus() throws Exception {
+    void CountryController_DeleteCountry_ReturnStatus() throws Exception {
         // Arrange
         doNothing().when(service).deleteInstance(instance.getName());
 

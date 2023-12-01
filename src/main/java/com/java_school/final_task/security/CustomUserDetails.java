@@ -1,6 +1,6 @@
 package com.java_school.final_task.security;
 
-import com.java_school.final_task.domain.userRole.UserRoleEntity;
+import com.java_school.final_task.domain.user_role.UserRoleEntity;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

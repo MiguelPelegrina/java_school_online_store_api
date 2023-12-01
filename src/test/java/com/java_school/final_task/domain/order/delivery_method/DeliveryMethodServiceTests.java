@@ -1,10 +1,6 @@
 package com.java_school.final_task.domain.order.delivery_method;
 
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodDTO;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodEntity;
-import com.java_school.final_task.domain.order.deliveryMethod.DeliveryMethodRepository;
-import com.java_school.final_task.domain.order.deliveryMethod.QDeliveryMethodEntity;
-import com.java_school.final_task.domain.order.deliveryMethod.impl.DeliveryMethodServiceImpl;
+import com.java_school.final_task.domain.order.delivery_method.impl.DeliveryMethodServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +22,7 @@ import static org.mockito.Mockito.*;
  * Test class for {@link DeliveryMethodServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class DeliveryMethodServiceTests {
+class DeliveryMethodServiceTests {
     // Fields
     @Mock
     private DeliveryMethodRepository repository;
@@ -55,7 +51,7 @@ public class DeliveryMethodServiceTests {
     }
 
     @Test
-    public void DeliveryMethodService_GetEntityId_ReturnsIdClass(){
+    void DeliveryMethodService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -64,12 +60,12 @@ public class DeliveryMethodServiceTests {
     }
 
     @Test
-    public void DeliveryMethodService_GetAllDeliveryMethodsFiltered_ReturnsDeliveryMethodDTOs(){
+    void DeliveryMethodService_GetAllDeliveryMethodsFiltered_ReturnsDeliveryMethodDTOs() {
         // Arrange
         List<DeliveryMethodEntity> instances = new ArrayList<>();
         instances.add(instance);
 
-        final QDeliveryMethodEntity qInstance  = QDeliveryMethodEntity.deliveryMethodEntity;
+        final QDeliveryMethodEntity qInstance = QDeliveryMethodEntity.deliveryMethodEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         queryBuilder.and(qInstance.isActive.eq(true));
@@ -83,8 +79,7 @@ public class DeliveryMethodServiceTests {
         // Assert
         verify(repository, times(1)).findAll(queryBuilder);
         verify(modelMapper, times(1)).map(instance, service.getDTOClass());
-        assertThat(resultDTOs).isNotNull();
-        assertThat(resultDTOs).hasSize(1);
+        assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.get(0)).isEqualTo(instanceDTO);
     }
 }
