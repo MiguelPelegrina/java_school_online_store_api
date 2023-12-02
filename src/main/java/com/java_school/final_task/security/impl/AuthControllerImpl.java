@@ -35,8 +35,7 @@ public class AuthControllerImpl implements AuthController {
     private final UserRepository repository;
 
     @Override
-    @PostMapping
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDto) {
         try {
             // Get the user
@@ -60,8 +59,7 @@ public class AuthControllerImpl implements AuthController {
         }
     }
 
-    @PostMapping
-    @RequestMapping("/register")
+    @PostMapping("/register")
     @Override
     public ResponseEntity<Object> register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO) {
         try {
