@@ -83,7 +83,7 @@ public class WebConfig {
         return http.cors().and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/book_genres").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/book_genres", "/books/{id}").permitAll()
                         .requestMatchers(
                                 "/auth/login",
                                 "/auth/register",
