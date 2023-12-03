@@ -31,6 +31,7 @@ public class BookRestControllerImpl
         super(service);
     }
 
+    @Override
     @PostMapping("/save_all")
     public ResponseEntity<List<BookDTO>> saveInstances(@RequestBody List<BookEntity> instances) {
         List<BookDTO> instanceDTOs = service.saveInstances(instances);
@@ -42,14 +43,12 @@ public class BookRestControllerImpl
         }
     }
 
-    // TODO Not scalable, does not allow sorting more than one time or filtering more than one genre
     @GetMapping("/search")
     @Override
     public ResponseEntity<Page<BookDTO>> getAllInstances(BookRequest bookRequest) {
         return ResponseEntity.ok(this.service.getAllInstances(bookRequest));
     }
 
-    // TODO Implement Paging and sorting
     @GetMapping("/top_products")
     @Override
     public ResponseEntity<List<NumberedBookDTO>> getTopProducts(@RequestParam("limit") int limit) {
