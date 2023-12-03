@@ -8,11 +8,9 @@ import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
 import com.java_school.final_task.utils.impl.AbstractRestControllerImpl;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,10 +24,22 @@ public class BookRestControllerImpl
         implements BookRestController {
     /**
      * All arguments constructor.
+     *
      * @param service {@link BookServiceImpl} of the {@link BookEntity} entity.
      */
     public BookRestControllerImpl(BookServiceImpl service) {
         super(service);
+    }
+
+    @PostMapping("/save_all")
+    public ResponseEntity<List<BookDTO>> saveInstances(@RequestBody List<BookEntity> instances) {
+        List<BookDTO> instanceDTOs = service.saveInstances(instances);
+
+        if (instanceDTOs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(instanceDTOs, HttpStatus.CREATED);
+        }
     }
 
     // TODO Not scalable, does not allow sorting more than one time or filtering more than one genre
@@ -42,7 +52,7 @@ public class BookRestControllerImpl
     // TODO Implement Paging and sorting
     @GetMapping("/top_products")
     @Override
-    public ResponseEntity<List<NumberedBookDTO>> getTopProducts(@RequestParam("limit") int limit){
+    public ResponseEntity<List<NumberedBookDTO>> getTopProducts(@RequestParam("limit") int limit) {
         return ResponseEntity.ok(this.service.getTopProducts(limit));
     }
 }

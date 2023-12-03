@@ -8,6 +8,7 @@ import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,8 +18,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service class responsible for the interaction between the {@link BookRepository} and the
@@ -41,7 +44,7 @@ public class BookServiceImpl
      * @param repository              {@link BookRepository} of the {@link BookEntity} entity.
      * @param modelMapper             ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
      * @param bookParameterRepository {@link BookParameterRepository} of the {@link BookParameterEntity}
-     * @param queryFactory
+     * @param queryFactory            {@link QueryFactory} to create queries.
      */
     public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
@@ -137,5 +140,17 @@ public class BookServiceImpl
         }
 
         return super.saveInstance(book);
+    }
+
+    @Transactional
+    public List<BookDTO> saveInstances(List<BookEntity> instances) {
+        // TODO
+        //  - Check behaviour with not existing genre
+        //  - Check behaviour with more than one
+        //  - Check behaviour when book already exists
+
+        return repository.saveAll(instances).stream().map(
+                instance -> modelMapper.map(instance, getDTOClass())
+        ).collect(Collectors.toList());
     }
 }
