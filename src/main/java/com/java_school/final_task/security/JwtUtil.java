@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.java_school.final_task.utils.StringValues.SECRET_KEY;
+
 /**
  * The {@code JwtUtil} class is a utility component responsible for managing JSON Web Tokens (JWT) in a Spring
  * application. JWTs are used for user authentication and authorization within the application.
@@ -20,8 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
     // Class fields
-    private static final String SECRET_KEY = "mysecretkey";
-    private static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000;
+    private static final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000L;
 
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
@@ -42,7 +43,6 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            // TODO Handle exceptions (e.g., token expired, invalid signature, etc.)
             return Jwts.claims();
         }
     }

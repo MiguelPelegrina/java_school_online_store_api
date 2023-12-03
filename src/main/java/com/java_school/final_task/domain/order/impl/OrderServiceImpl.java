@@ -147,7 +147,6 @@ public class OrderServiceImpl
             // Convert the page to a DTO page
             return pageEntities.map(order -> modelMapper.map(order, this.getDTOClass()));
         } else {
-            // TODO Return this to frontend
             throw new InsufficientPermissionsException();
         }
     }

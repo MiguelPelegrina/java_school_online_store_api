@@ -3,7 +3,6 @@ package mothers.user.address.postal_code.city.country;
 import com.java_school.final_task.domain.user.user_address.postal_code.city.country.CountryDTO;
 import com.java_school.final_task.domain.user.user_address.postal_code.city.country.CountryEntity;
 
-// TODO Randomize values
 public class CountryMother {
     public static CountryEntity createCountry() {
         return CountryEntity.builder()

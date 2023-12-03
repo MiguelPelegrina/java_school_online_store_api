@@ -2,7 +2,12 @@ package com.java_school.final_task.utils;
 
 public final class StringValues {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Exceptions                                                                                                    //
+    // Security                                                                                                    //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static final String SECRET_KEY = System.getenv("SECRET") != null ? System.getenv("SECRET") : "mysecretkey";
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Exceptions                                                                                                   //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static final String ACCEPTABLE_MEDIA = "Acceptable MIME type: ";
     public static final String EMAIL_ALREADY_IN_USE = "A user with that email already exists";

@@ -3,10 +3,8 @@ package com.java_school.final_task.domain.book.impl;
 import com.java_school.final_task.domain.book.*;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
-import com.java_school.final_task.domain.book.genre.BookGenreRepository;
 import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatRepository;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
@@ -37,7 +35,6 @@ public class BookServiceImpl
         implements BookService {
     // Fields
     private final BookParameterRepository bookParameterRepository;
-    private final BookGenreRepository bookGenreRepository;
 
     private final JPAQueryFactory queryFactory;
 
@@ -47,13 +44,11 @@ public class BookServiceImpl
      * @param repository              {@link BookRepository} of the {@link BookEntity} entity.
      * @param modelMapper             ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
      * @param bookParameterRepository {@link BookParameterRepository} of the {@link BookParameterEntity}
-     * @param bookGenreRepository     {@link BookGenreRepository} of the {@link BookGenreRepository}
      * @param queryFactory            {@link QueryFactory} to create queries.
      */
-    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository, BookParametersFormatRepository bookParametersFormatRepository, BookGenreRepository bookGenreRepository, JPAQueryFactory queryFactory) {
+    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.bookParameterRepository = bookParameterRepository;
-        this.bookGenreRepository = bookGenreRepository;
         this.queryFactory = queryFactory;
     }
 
@@ -100,7 +95,6 @@ public class BookServiceImpl
         );
     }
 
-    // TODO Add sorting and paging
     @Override
     public List<NumberedBookDTO> getTopProducts(int limit) {
         QOrderBookEntity qOrderBook = QOrderBookEntity.orderBookEntity;

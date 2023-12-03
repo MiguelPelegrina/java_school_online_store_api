@@ -1,22 +1,31 @@
 package com.java_school.final_task.security;
 
-import com.java_school.final_task.domain.user.UserDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserRepository;
-import mothers.user.UserMother;
 import com.java_school.final_task.security.dto.LoginRequestBodyDTO;
+import com.java_school.final_task.security.dto.RegisterRequestBodyDTO;
 import com.java_school.final_task.security.impl.AuthControllerImpl;
+import com.java_school.final_task.security.impl.AuthServiceImpl;
+import mothers.user.UserMother;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for {@link AuthControllerImpl}
@@ -25,8 +34,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 public class AuthControllerTests {
-    @InjectMocks
-    private AuthControllerImpl controller;
+    @MockBean
+    private AuthServiceImpl service;
 
     @MockBean
     private JwtUtil jwtUtil;
@@ -34,28 +43,57 @@ public class AuthControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Mock
     private UserRepository repository;
 
-    private LoginRequestBodyDTO loginRequestBody;
+    private LoginRequestBodyDTO loginRequestBodyDTO;
+
+    private RegisterRequestBodyDTO registerRequestBodyDTO;
 
     private UserEntity instance;
 
-    private UserDTO instanceDTO;
-
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         // Arrange
         instance = UserMother.createUser();
 
-        loginRequestBody = LoginRequestBodyDTO.builder()
-                .email("email@.com")
-                .password("Password")
-                .build();
+        loginRequestBodyDTO = UserMother.createLoginRequestBodyDTO();
+
+        registerRequestBodyDTO = UserMother.createRegisterRequestBodyDTO();
     }
 
+    @Test
+    void UserController_LoginUser_ReturnsUserDTO() throws Exception {
+        // Arrange
+        when(service.login(loginRequestBodyDTO)).thenReturn(instance);
+        when(jwtUtil.createToken(instance)).thenReturn("mockedAccessToken");
 
+        // Act
+        ResultActions result = mockMvc.perform(post("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequestBodyDTO)));
+
+        // Assert
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken", CoreMatchers.is("mockedAccessToken")));
+    }
+
+    @Test
+    void UserController_RegisterUser_ReturnsUserDTO() throws Exception {
+        // Arrange
+        when(service.register(registerRequestBodyDTO)).thenReturn(instance);
+        when(jwtUtil.createToken(instance)).thenReturn("mockedAccessToken");
+
+        // Act
+        ResultActions result = mockMvc.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(registerRequestBodyDTO)));
+
+        // Assert
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken", CoreMatchers.is("mockedAccessToken")));
+    }
 }

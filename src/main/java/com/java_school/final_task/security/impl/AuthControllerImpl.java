@@ -1,20 +1,13 @@
 package com.java_school.final_task.security.impl;
 
 import com.java_school.final_task.domain.user.UserEntity;
-import com.java_school.final_task.domain.user.UserRepository;
-import com.java_school.final_task.exception.user.EmailAlreadyUsedException;
-import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.security.AuthController;
 import com.java_school.final_task.security.JwtUtil;
 import com.java_school.final_task.security.dto.AuthResultDTO;
 import com.java_school.final_task.security.dto.LoginRequestBodyDTO;
 import com.java_school.final_task.security.dto.RegisterRequestBodyDTO;
-import com.java_school.final_task.utils.StringValues;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,42 +24,17 @@ public class AuthControllerImpl implements AuthController {
     // Fields
     private final AuthServiceImpl service;
     private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository repository;
 
     @Override
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDto) {
-        try {
-            // Get the user
-            UserEntity user = repository.findUserByEmail(loginRequestBodyDto.getEmail()).orElseThrow(
-                    () -> new UserDoesNotExistException(String.format(StringValues.USER_DOES_NOT_EXIST, loginRequestBodyDto.getEmail()))
-            );
-
-            if (!user.isActive()) {
-                return ResponseEntity.status(401).body(StringValues.INACTIVE_USER);
-            }
-
-            if (!passwordEncoder.matches(loginRequestBodyDto.getPassword(), user.getPassword())) {
-                return ResponseEntity.status(401).body(StringValues.PASSWORD_NOT_MATCHING);
-            }
-
-            return ResponseEntity.ok(this.generateAuthResultDTO(user));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(StringValues.INVALID_CREDENTIALS);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public ResponseEntity<Object> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDTO) {
+        return ResponseEntity.ok(this.generateAuthResultDTO(service.login(loginRequestBodyDTO)));
     }
 
-    @PostMapping("/register")
     @Override
+    @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO) {
-        try {
-            return ResponseEntity.ok(this.generateAuthResultDTO(service.register(registerRequestBodyDTO)));
-        } catch (EmailAlreadyUsedException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        return ResponseEntity.ok(this.generateAuthResultDTO(service.register(registerRequestBodyDTO)));
     }
 
     /**
