@@ -3,8 +3,10 @@ package com.java_school.final_task.domain.book.impl;
 import com.java_school.final_task.domain.book.*;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
+import com.java_school.final_task.domain.book.genre.BookGenreRepository;
 import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
+import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatRepository;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
@@ -35,6 +37,7 @@ public class BookServiceImpl
         implements BookService {
     // Fields
     private final BookParameterRepository bookParameterRepository;
+    private final BookGenreRepository bookGenreRepository;
 
     private final JPAQueryFactory queryFactory;
 
@@ -44,11 +47,13 @@ public class BookServiceImpl
      * @param repository              {@link BookRepository} of the {@link BookEntity} entity.
      * @param modelMapper             ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
      * @param bookParameterRepository {@link BookParameterRepository} of the {@link BookParameterEntity}
+     * @param bookGenreRepository     {@link BookGenreRepository} of the {@link BookGenreRepository}
      * @param queryFactory            {@link QueryFactory} to create queries.
      */
-    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository, JPAQueryFactory queryFactory) {
+    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository, BookParametersFormatRepository bookParametersFormatRepository, BookGenreRepository bookGenreRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.bookParameterRepository = bookParameterRepository;
+        this.bookGenreRepository = bookGenreRepository;
         this.queryFactory = queryFactory;
     }
 
@@ -62,12 +67,6 @@ public class BookServiceImpl
         return instance.getId();
     }
 
-    // TODO
-    //  Scalable by
-    //  - Differentiating between filtering with AND (requires to be advanced filter in FE) and OR (searching by title,
-    //  or author, or ISBN) --> just use another RequestParam Optional<Boolean> advanced or a different mapping?
-    //  - Adding an Array of String for sorting
-    //  - Adding an Array of Genres for filtering
     @Override
     public Page<BookDTO> getAllInstances(BookRequest bookRequest) {
         // Variables
@@ -142,15 +141,11 @@ public class BookServiceImpl
         return super.saveInstance(book);
     }
 
+    @Override
     @Transactional
-    public List<BookDTO> saveInstances(List<BookEntity> instances) {
-        // TODO
-        //  - Check behaviour with not existing genre
-        //  - Check behaviour with more than one
-        //  - Check behaviour when book already exists
-
-        return repository.saveAll(instances).stream().map(
-                instance -> modelMapper.map(instance, getDTOClass())
+    public List<BookDTO> saveInstances(List<BookEntity> books) {
+        return repository.saveAll(books).stream().map(
+                book -> modelMapper.map(book, getDTOClass())
         ).collect(Collectors.toList());
     }
 }

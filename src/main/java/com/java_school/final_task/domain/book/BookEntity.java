@@ -31,9 +31,7 @@ public class BookEntity {
     @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false
-            // cascade = CascadeType.ALL
-    )
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "genre", referencedColumnName = "name", nullable = false)
     private BookGenreEntity genre;
 

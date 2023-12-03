@@ -14,14 +14,24 @@ import java.util.List;
  */
 public interface BookService {
     /**
+     * Saves a list of {@link BookEntity} instances to the database and returns a list of corresponding {@link BookDTO}s.
+     *
+     * @param books A list of {@link BookEntity} instances to be saved to the database.
+     * @return A list of {@link BookDTO}s representing the saved entities.
+     */
+    List<BookDTO> saveInstances(List<BookEntity> books);
+
+    /**
      * Retrieves a page of {@link BookDTO}s from the database based on {@link BookRequest}.
-     * @param bookRequest   {@link BookRequest} that contains all the specified parameters and sorting criteria.
-     * @return               ResponseEntity containing a Page of {@link BookDTO}}s based on the specified criteria.
+     *
+     * @param bookRequest {@link BookRequest} that contains all the specified parameters and sorting criteria.
+     * @return ResponseEntity containing a Page of {@link BookDTO}}s based on the specified criteria.
      */
     Page<BookDTO> getAllInstances(BookRequest bookRequest);
 
     /**
      * Retrieves the top products based on the total order amounts.
+     *
      * @param limit The maximum number of top products to retrieve.
      * @return A list of {@link NumberedBookDTO} representing the top products.
      */
