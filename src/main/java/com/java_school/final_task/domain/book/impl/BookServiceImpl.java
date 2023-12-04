@@ -6,7 +6,6 @@ import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
 import com.java_school.final_task.domain.book.genre.BookGenreRepository;
 import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
-import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatRepository;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
@@ -38,32 +37,23 @@ public class BookServiceImpl
     // Fields
     private final BookParameterRepository bookParameterRepository;
 
-    private final BookGenreRepository bookGenreRepository;
-
-    private final BookParametersFormatRepository bookParametersFormatRepository;
-
     private final JPAQueryFactory queryFactory;
 
     /**
      * All arguments constructor.
      *
-     * @param repository                      {@link BookRepository} of the {@link BookEntity} entity.
-     * @param modelMapper                     ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
-     * @param bookParameterRepository         {@link BookParameterRepository} of the {@link BookParameterEntity}
-     * @param bookGenreRepository
-     * @param bookParametersFormatRepository1
-     * @param queryFactory                    {@link QueryFactory} to create queries.
+     * @param repository              {@link BookRepository} of the {@link BookEntity} entity.
+     * @param modelMapper             ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
+     * @param bookParameterRepository {@link BookParameterRepository} of the {@link BookParameterEntity}
+     * @param queryFactory            {@link QueryFactory} to create queries.
      */
     public BookServiceImpl(BookRepository repository,
                            ModelMapper modelMapper,
                            BookParameterRepository bookParameterRepository,
                            BookGenreRepository bookGenreRepository,
-                           BookParametersFormatRepository bookParametersFormatRepository,
-                           BookParametersFormatRepository bookParametersFormatRepository1, JPAQueryFactory queryFactory) {
+                           JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.bookParameterRepository = bookParameterRepository;
-        this.bookGenreRepository = bookGenreRepository;
-        this.bookParametersFormatRepository = bookParametersFormatRepository1;
         this.queryFactory = queryFactory;
     }
 
