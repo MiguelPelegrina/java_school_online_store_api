@@ -3,9 +3,12 @@ package com.java_school.final_task.domain.book.impl;
 import com.java_school.final_task.domain.book.*;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
+import com.java_school.final_task.domain.book.genre.BookGenreEntity;
 import com.java_school.final_task.domain.book.genre.BookGenreRepository;
 import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
+import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatEntity;
+import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatRepository;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
@@ -23,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service class responsible for the interaction between the {@link BookRepository} and the
@@ -37,23 +41,32 @@ public class BookServiceImpl
     // Fields
     private final BookParameterRepository bookParameterRepository;
 
+    private final BookGenreRepository bookGenreRepository;
+
+    private final BookParametersFormatRepository bookParametersFormatRepository;
+
     private final JPAQueryFactory queryFactory;
 
     /**
      * All arguments constructor.
      *
-     * @param repository              {@link BookRepository} of the {@link BookEntity} entity.
-     * @param modelMapper             ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
-     * @param bookParameterRepository {@link BookParameterRepository} of the {@link BookParameterEntity}
-     * @param queryFactory            {@link QueryFactory} to create queries.
+     * @param repository                     {@link BookRepository} of the {@link BookEntity} entity.
+     * @param modelMapper                    ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
+     * @param bookParameterRepository        {@link BookParameterRepository} of the {@link BookParameterEntity}
+     * @param bookGenreRepository            {@link BookGenreRepository} of the {@link BookGenreEntity}
+     * @param bookParametersFormatRepository {@link BookParametersFormatRepository} of the {@link BookParametersFormatEntity}
+     * @param queryFactory                   {@link QueryFactory} to create queries.
      */
     public BookServiceImpl(BookRepository repository,
                            ModelMapper modelMapper,
                            BookParameterRepository bookParameterRepository,
                            BookGenreRepository bookGenreRepository,
+                           BookParametersFormatRepository bookParametersFormatRepository,
                            JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.bookParameterRepository = bookParameterRepository;
+        this.bookGenreRepository = bookGenreRepository;
+        this.bookParametersFormatRepository = bookParametersFormatRepository;
         this.queryFactory = queryFactory;
     }
 
@@ -140,16 +153,29 @@ public class BookServiceImpl
         return super.saveInstance(book);
     }
 
+    // TODO Test properly and write tests
     @Override
     @Transactional
     public List<BookDTO> saveInstances(List<BookEntity> books) {
-        // I assume this could be done better and more efficiently with
-        // - saveAll most likely, being much more efficient, but that would require to restructure the bookParameters
-        // to have a composite primary key(?)
+        // No clue how to do it with saveAll
         List<BookDTO> bookDTOs = new ArrayList<>();
 
         books.forEach(book ->
                 {
+                    // TODO Split into private methods
+                    // TODO Ignore books with the same ISBN?
+                    Optional<BookGenreEntity> bookGenre = bookGenreRepository.findById(
+                            String.valueOf(book.getGenre().getName())
+                    );
+
+                    bookGenre.ifPresent(book::setGenre);
+
+                    Optional<BookParametersFormatEntity> bookParametersFormat = bookParametersFormatRepository.findById(
+                            String.valueOf(book.getParameters().getFormat().getName())
+                    );
+
+                    bookParametersFormat.ifPresent(bookParametersFormatEntity -> book.getParameters().setFormat(bookParametersFormatEntity));
+
                     bookDTOs.add(modelMapper.map(this.saveInstance(book), getDTOClass()));
                 }
         );
