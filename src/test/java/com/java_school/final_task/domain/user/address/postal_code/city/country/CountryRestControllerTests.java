@@ -20,7 +20,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,6 +78,41 @@ class CountryRestControllerTests {
         result.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", CoreMatchers.is(instanceDTO.getName())))
                 .andExpect(jsonPath("$.active", CoreMatchers.is(instanceDTO.isActive())));
+    }
+
+    @Test
+    void CountryRestController_GetAllInstances_ReturnCountryDTOs() throws Exception {
+        // Arrange
+        List<CountryDTO> instances = new ArrayList<>();
+        instances.add(instanceDTO);
+
+        when(service.getAllInstances()).thenReturn(instances);
+
+        // Act
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/countries")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instances))
+        );
+
+        // Assert
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(instances.size())))
+                .andExpect(jsonPath("$[0].active", is(instanceDTO.isActive())));
+    }
+
+    @Test
+    void CountryRestController_CreateCountry_ReturnNoContent() throws Exception {
+        // Arrange
+        when(service.saveInstance(instance)).thenReturn(null);
+
+        // Act
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/countries")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instance))
+        );
+
+        // Assert
+        result.andExpect(status().isNoContent());
     }
 
     // Tests for own methods

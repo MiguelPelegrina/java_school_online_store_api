@@ -1,5 +1,6 @@
 package com.java_school.final_task.domain.order;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
 import com.java_school.final_task.domain.order.impl.OrderRestControllerImpl;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for {@link OrderRestControllerImpl}
@@ -39,6 +41,9 @@ class OrderRestControllerTests {
 
     @MockBean
     private OrderServiceImpl service;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private OrderDTO instanceDTO;
 
@@ -85,5 +90,40 @@ class OrderRestControllerTests {
         result.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.totalElements").value(page.getTotalElements()))
                 .andExpect(jsonPath("$.content[0].user.name").value("Name"));
+    }
+
+    /*@Test
+    void OrderController_CreateOrder_ReturnCreated() throws Exception {
+        // Arrange
+        SaveOrderDTO instance = SaveOrderDTO.builder()
+                .order(OrderMother.createOrder())
+                .orderedBooks(List.of(OrderBookMother.createOrderBook()))
+                .build();
+        when(service.saveInstance(instance)).thenReturn(instanceDTO);
+
+        // Act
+        ResultActions result = mockMvc.perform(post("/orders/withBooks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instanceDTO)));
+
+        // Assert
+        result.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", CoreMatchers.is(instanceDTO.getId())));
+    }*/
+
+    @Test
+    void OrderRestController_CreateOrder_ReturnNoContent() throws Exception {
+        // Arrange
+        OrderEntity instance = OrderMother.createOrder();
+        when(service.saveInstance(instance)).thenReturn(null);
+
+        // Act
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/orders/withBooks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instance))
+        );
+
+        // Assert
+        result.andExpect(status().isNoContent());
     }
 }

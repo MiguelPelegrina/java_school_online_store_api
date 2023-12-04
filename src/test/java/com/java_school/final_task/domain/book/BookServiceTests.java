@@ -1,8 +1,10 @@
 package com.java_school.final_task.domain.book;
 
 import com.java_school.final_task.domain.book.dto.BookDTO;
+import com.java_school.final_task.domain.book.genre.BookGenreRepository;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
+import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import mothers.book.BookMother;
@@ -38,7 +40,13 @@ class BookServiceTests {
     private BookRepository bookRepository;
 
     @Mock
+    private BookGenreRepository bookGenreRepository;
+
+    @Mock
     private BookParameterRepository bookParameterRepository;
+
+    @Mock
+    private BookParametersFormatRepository bookParametersFormatRepository;
 
     @Mock
     private JPAQueryFactory jpaQueryFactory;
@@ -85,6 +93,13 @@ class BookServiceTests {
         verify(modelMapper, times(1)).map(instance, BookDTO.class);
         assertEquals(instanceDTO, savedInstance);
     }
+
+    /*@Test
+    void BookService_CreateBooks_ReturnsSavedBooksDTO(){
+        when(bookGenreRepository.findById(instance.getGenre().getName())).thenReturn(Optional.ofNullable(instance.getGenre()));
+        when(bookParametersFormatRepository.findById(instance.getParameters().getFormat().getName()))
+                .thenReturn(Optional.ofNullable(instance.getParameters().getFormat()));
+    }*/
 
     @Test
     void BookService_GetAllBooksFiltered_ReturnsBookDTOPage() {

@@ -1,5 +1,6 @@
 package com.java_school.final_task.domain.book;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.impl.BookRestControllerImpl;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
@@ -20,12 +21,18 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for {@link BookRestControllerImpl}
@@ -39,6 +46,10 @@ class BookRestControllerTests {
 
     @MockBean
     private BookServiceImpl service;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     private BookDTO instanceDTO;
 
@@ -79,5 +90,43 @@ class BookRestControllerTests {
         result.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.totalElements").value(page.getTotalElements()))
                 .andExpect(jsonPath("$.content[0].title").value("Title"));
+    }
+
+    @Test
+    void BookRestController_SaveInstances_ReturnSavedBookDTOs() throws Exception {
+        // Arrange
+        List<BookEntity> instances = new ArrayList<>();
+        BookEntity book1 = BookMother.createBook();
+        instances.add(book1);
+        BookEntity book2 = BookMother.createBook();
+        instances.add(book2);
+
+        given(service.saveInstances(instances)).willAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/books/save_all")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instances))
+        );
+
+        // Assert
+        result.andExpect(status().isCreated())
+                .andExpect(jsonPath("$", hasSize(instances.size())))
+                .andExpect(jsonPath("$[0].active", is(instanceDTO.getActive())));
+    }
+
+    @Test
+    void BookRestController_SaveInstances_ReturnNoContent() throws Exception {
+        // Arrange
+        List<BookEntity> instances = new ArrayList<>();
+
+        // Act
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/books/save_all")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instances))
+        );
+
+        // Assert
+        result.andExpect(status().isNoContent());
     }
 }
