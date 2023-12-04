@@ -3,8 +3,10 @@ package com.java_school.final_task.domain.book.impl;
 import com.java_school.final_task.domain.book.*;
 import com.java_school.final_task.domain.book.dto.BookDTO;
 import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
+import com.java_school.final_task.domain.book.genre.BookGenreRepository;
 import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
+import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatRepository;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
@@ -20,8 +22,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service class responsible for the interaction between the {@link BookRepository} and the
@@ -36,19 +38,32 @@ public class BookServiceImpl
     // Fields
     private final BookParameterRepository bookParameterRepository;
 
+    private final BookGenreRepository bookGenreRepository;
+
+    private final BookParametersFormatRepository bookParametersFormatRepository;
+
     private final JPAQueryFactory queryFactory;
 
     /**
      * All arguments constructor.
      *
-     * @param repository              {@link BookRepository} of the {@link BookEntity} entity.
-     * @param modelMapper             ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
-     * @param bookParameterRepository {@link BookParameterRepository} of the {@link BookParameterEntity}
-     * @param queryFactory            {@link QueryFactory} to create queries.
+     * @param repository                      {@link BookRepository} of the {@link BookEntity} entity.
+     * @param modelMapper                     ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
+     * @param bookParameterRepository         {@link BookParameterRepository} of the {@link BookParameterEntity}
+     * @param bookGenreRepository
+     * @param bookParametersFormatRepository1
+     * @param queryFactory                    {@link QueryFactory} to create queries.
      */
-    public BookServiceImpl(BookRepository repository, ModelMapper modelMapper, BookParameterRepository bookParameterRepository, JPAQueryFactory queryFactory) {
+    public BookServiceImpl(BookRepository repository,
+                           ModelMapper modelMapper,
+                           BookParameterRepository bookParameterRepository,
+                           BookGenreRepository bookGenreRepository,
+                           BookParametersFormatRepository bookParametersFormatRepository,
+                           BookParametersFormatRepository bookParametersFormatRepository1, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.bookParameterRepository = bookParameterRepository;
+        this.bookGenreRepository = bookGenreRepository;
+        this.bookParametersFormatRepository = bookParametersFormatRepository1;
         this.queryFactory = queryFactory;
     }
 
@@ -138,8 +153,17 @@ public class BookServiceImpl
     @Override
     @Transactional
     public List<BookDTO> saveInstances(List<BookEntity> books) {
-        return repository.saveAll(books).stream().map(
-                book -> modelMapper.map(book, getDTOClass())
-        ).collect(Collectors.toList());
+        // I assume this could be done better and more efficiently with
+        // - saveAll most likely, being much more efficient, but that would require to restructure the bookParameters
+        // to have a composite primary key(?)
+        List<BookDTO> bookDTOs = new ArrayList<>();
+
+        books.forEach(book ->
+                {
+                    bookDTOs.add(modelMapper.map(this.saveInstance(book), getDTOClass()));
+                }
+        );
+
+        return bookDTOs;
     }
 }

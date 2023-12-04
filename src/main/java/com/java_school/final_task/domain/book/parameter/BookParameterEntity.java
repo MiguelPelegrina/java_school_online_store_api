@@ -22,7 +22,7 @@ public class BookParameterEntity {
     @Column(name = "author", nullable = false, length = 60)
     private String author;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "format", referencedColumnName = "name", nullable = false)
     private BookParametersFormatEntity format;
 
