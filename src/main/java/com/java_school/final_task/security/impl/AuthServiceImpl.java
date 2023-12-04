@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (!passwordEncoder.matches(loginRequestBodyDTO.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("User credentials do not match");
+            throw new BadCredentialsException(StringValues.PASSWORD_NOT_MATCHING);
         }
 
         return user;

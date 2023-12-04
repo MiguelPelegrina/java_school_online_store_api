@@ -68,7 +68,7 @@ public class BusinessLogicExceptionHandler {
 
     @ExceptionHandler(ProductOutOfStockException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<Object> handleProductNotAvailable(ProductOutOfStockException e) {
+    public ResponseEntity<Object> handleProductOutOfStock(ProductOutOfStockException e) {
         return ResponseEntity.status(405).body(e.getMessage());
     }
 

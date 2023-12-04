@@ -3,16 +3,16 @@ package com.java_school.final_task.domain.book;
 import com.java_school.final_task.domain.book.genre.BookGenreEntity;
 import com.java_school.final_task.domain.book.parameter.BookParameterEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
 
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @RequiredArgsConstructor
 @Table(name = "books", schema = "public", catalog = "online_store")
@@ -33,10 +33,12 @@ public class BookEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "genre", referencedColumnName = "name", nullable = false)
+    @ToString.Exclude
     private BookGenreEntity genre;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "parameters_id", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
     private BookParameterEntity parameters;
 
     @Column(name = "stock", nullable = false)
@@ -48,4 +50,19 @@ public class BookEntity {
     @Column(name = "image")
     @Lob
     private String image;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookEntity other = (BookEntity) o;
+        return getId() != 0 && getId() == other.getId();
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy
+                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+                : getClass().hashCode();
+    }
 }

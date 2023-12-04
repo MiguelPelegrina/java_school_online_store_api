@@ -15,7 +15,7 @@ public final class StringValues {
     public static final String INACTIVE_USER = "User is not active";
     public static final String INSUFFICIENT_PERMISSIONS = "Insufficient permissions";
     public static final String INSTANCE_NOT_FOUND = "Instance %s not found";
-    public static final String INVALID_CREDENTIALS = "Invalid username or password";
+    public static final String PRODUCT_ALREADY_EXISTS = "The following product already has the same ISBN: %s";
     public static final String PRODUCT_NOT_AVAILABLE = "The following product is not being sold anymore: %s";
     public static final String PRODUCT_OUT_OF_STOCK = "The following product is out of stock: %s";
     public static final String PASSWORD_NOT_MATCHING = "The user credentials (email and password) do not match";

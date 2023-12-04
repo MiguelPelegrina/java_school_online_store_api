@@ -131,24 +131,14 @@ public class BookServiceImpl
     }
 
     /**
-     * Overrides the base saveInstance method to handle BookEntity instances.
-     * Before saving a BookEntity, checks if there are existing BookParameterEntity instances
-     * with the same author and format. If found, associates the first matching BookParameterEntity
-     * with the BookEntity's parameters. Saves the BookEntity instance and returns a BookDTO.
+     * Saves the BookEntity instance and returns a BookDTO.
      *
      * @param book {@link BookEntity} instance to be saved.
      * @return {@link BookDTO} representing the saved BookEntity.
      */
     @Override
     public BookDTO saveInstance(BookEntity book) {
-        List<BookParameterEntity> bookParameters = bookParameterRepository.findByAuthorAndFormat(
-                book.getParameters().getAuthor(),
-                book.getParameters().getFormat()
-        );
-
-        if (!bookParameters.isEmpty()) {
-            book.setParameters(bookParameters.get(0));
-        }
+        setBookParametersByAuthorAndFormat(book);
 
         return super.saveInstance(book);
     }
@@ -157,29 +147,59 @@ public class BookServiceImpl
     @Override
     @Transactional
     public List<BookDTO> saveInstances(List<BookEntity> books) {
-        // No clue how to do it with saveAll
         List<BookDTO> bookDTOs = new ArrayList<>();
 
-        books.forEach(book ->
-                {
-                    // TODO Split into private methods
-                    // TODO Ignore books with the same ISBN?
-                    Optional<BookGenreEntity> bookGenre = bookGenreRepository.findById(
-                            String.valueOf(book.getGenre().getName())
-                    );
-
-                    bookGenre.ifPresent(book::setGenre);
-
-                    Optional<BookParametersFormatEntity> bookParametersFormat = bookParametersFormatRepository.findById(
-                            String.valueOf(book.getParameters().getFormat().getName())
-                    );
-
-                    bookParametersFormat.ifPresent(bookParametersFormatEntity -> book.getParameters().setFormat(bookParametersFormatEntity));
-
-                    bookDTOs.add(modelMapper.map(this.saveInstance(book), getDTOClass()));
-                }
-        );
+        books.forEach(book -> {
+            setBookGenre(book);
+            setBookParametersFormat(book);
+            setBookParametersByAuthorAndFormat(book);
+            bookDTOs.add(modelMapper.map(super.saveInstance(book), getDTOClass()));
+        });
 
         return bookDTOs;
+    }
+
+    /**
+     * Sets the {@link BookGenreEntity} of the given book based on the genre's name.
+     *
+     * @param book The {@link BookEntity} for which to set the genre.
+     */
+    private void setBookGenre(BookEntity book) {
+        Optional<BookGenreEntity> bookGenre = bookGenreRepository.findById(
+                String.valueOf(book.getGenre().getName())
+        );
+
+        bookGenre.ifPresent(book::setGenre);
+    }
+
+    /**
+     * Sets the {@link BookParametersFormatEntity} of the given book's parameters based on the format's name.
+     *
+     * @param book The {@link BookEntity} for which to set the parameters' format.
+     */
+    private void setBookParametersFormat(BookEntity book) {
+        Optional<BookParametersFormatEntity> bookParametersFormat = bookParametersFormatRepository.findById(
+                String.valueOf(book.getParameters().getFormat().getName())
+        );
+
+        bookParametersFormat.ifPresent(bookParametersFormatEntity ->
+                book.getParameters().setFormat(bookParametersFormatEntity)
+        );
+    }
+
+    /**
+     * Sets the {@link BookParameterEntity} of the given book based on the author and format.
+     *
+     * @param book The {@link BookEntity} for which to set the parameters.
+     */
+    private void setBookParametersByAuthorAndFormat(BookEntity book) {
+        List<BookParameterEntity> bookParameters = bookParameterRepository.findByAuthorAndFormat(
+                book.getParameters().getAuthor(),
+                book.getParameters().getFormat()
+        );
+
+        if (!bookParameters.isEmpty()) {
+            book.setParameters(bookParameters.get(0));
+        }
     }
 }
