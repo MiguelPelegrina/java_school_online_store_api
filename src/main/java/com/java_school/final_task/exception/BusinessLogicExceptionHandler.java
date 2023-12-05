@@ -5,6 +5,7 @@ import com.java_school.final_task.exception.book.ProductOutOfStockException;
 import com.java_school.final_task.exception.user.EmailAlreadyUsedException;
 import com.java_school.final_task.exception.user.InactiveUserException;
 import com.java_school.final_task.exception.user.InsufficientPermissionsException;
+import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.utils.StringValues;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -82,5 +83,11 @@ public class BusinessLogicExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<Object> handleConflict(ResourceConflictException e) {
         return ResponseEntity.status(409).body(e.getMessage());
+    }
+
+    @ExceptionHandler(UserDoesNotExistException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleUserDoesNotExist(UserDoesNotExistException e) {
+        return ResponseEntity.status(404).body(e.getMessage());
     }
 }

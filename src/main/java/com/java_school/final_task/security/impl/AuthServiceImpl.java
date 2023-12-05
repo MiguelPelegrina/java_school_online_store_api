@@ -32,7 +32,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserEntity login(LoginRequestBodyDTO loginRequestBodyDTO) {
-        // Get the user
         UserEntity user = repository.findUserByEmail(loginRequestBodyDTO.getEmail()).orElseThrow(
                 () -> new UserDoesNotExistException(String.format(StringValues.USER_DOES_NOT_EXIST, loginRequestBodyDTO.getEmail()))
         );
@@ -50,7 +49,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserEntity register(RegisterRequestBodyDTO registerRequestBodyDTO) {
-        // Check if a user with the same email already exists in the repository.
         final Optional<UserEntity> userInRepository = repository.findUserByEmail(registerRequestBodyDTO.getEmail());
 
         if (userInRepository.isPresent()) {
