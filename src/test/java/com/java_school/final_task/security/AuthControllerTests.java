@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class AuthControllerTests {
+class AuthControllerTests {
     @MockBean
     private AuthServiceImpl service;
 
@@ -116,7 +116,7 @@ public class AuthControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequestBodyDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof EmailAlreadyUsedException))
+                .andExpect(result -> assertInstanceOf(EmailAlreadyUsedException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(StringValues.EMAIL_ALREADY_IN_USE, Objects.requireNonNull(result.getResolvedException()).getMessage()));
 
         verify(service, times(1)).register(registerRequestBodyDTO);
@@ -132,7 +132,7 @@ public class AuthControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequestBodyDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof InactiveUserException))
+                .andExpect(result -> assertInstanceOf(InactiveUserException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(StringValues.INACTIVE_USER, Objects.requireNonNull(result.getResolvedException()).getMessage()));
 
         verify(service, times(1)).login(loginRequestBodyDTO);
@@ -148,7 +148,7 @@ public class AuthControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequestBodyDTO)))
                 .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserDoesNotExistException))
+                .andExpect(result -> assertInstanceOf(UserDoesNotExistException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(
                         String.format(StringValues.USER_DOES_NOT_EXIST, instance.getEmail()),
                         Objects.requireNonNull(result.getResolvedException()).getMessage())
@@ -167,7 +167,7 @@ public class AuthControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequestBodyDTO)))
                 .andExpect(status().isConflict())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadCredentialsException))
+                .andExpect(result -> assertInstanceOf(BadCredentialsException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(
                         StringValues.PASSWORD_NOT_MATCHING,
                         Objects.requireNonNull(result.getResolvedException()).getMessage())

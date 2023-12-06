@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
  * Test class for {@link PostalCodeServiceImpl}
  */
 @ExtendWith(MockitoExtension.class)
-public class PostalCodeServiceTests {
+class PostalCodeServiceTests {
     // Fields
     @Mock
     private PostalCodeRepository repository;
@@ -50,7 +50,7 @@ public class PostalCodeServiceTests {
     }
 
     @Test
-    public void PostalCodeService_GetEntityId_ReturnsIdClass() {
+    void PostalCodeService_GetEntityId_ReturnsIdClass() {
         // Act
         String entityId = service.getEntityId(instance);
 
@@ -59,7 +59,7 @@ public class PostalCodeServiceTests {
     }
 
     @Test
-    public void PostalCodeService_GetAllPostalCodesFiltered_ReturnsPostalCodeDTOs() {
+    void PostalCodeService_GetAllPostalCodesFiltered_ReturnsPostalCodeDTOs() {
         // Arrange
         List<PostalCodeEntity> instances = new ArrayList<>();
         instances.add(instance);
@@ -84,7 +84,7 @@ public class PostalCodeServiceTests {
     }
 
     @Test
-    public void PostalCodeService_GetAllActivePostalCodes_ReturnsPostalCodeDTOs() {
+    void PostalCodeService_GetAllActivePostalCodes_ReturnsPostalCodeDTOs() {
         // Arrange
         List<PostalCodeEntity> instances = new ArrayList<>();
         instances.add(instance);
