@@ -10,7 +10,7 @@ import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserRepository;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
-import com.java_school.final_task.exception.user.InsufficientPermissionsException;
+import com.java_school.final_task.exception.user.InactiveUserException;
 import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.security.JwtUtil;
 import com.java_school.final_task.utils.StringValues;
@@ -53,7 +53,7 @@ public class OrderServiceImpl
      * @param modelMapper    ModelMapper that converts the {@link OrderEntity} instance to {@link OrderDTO}
      * @param userRepository {@link UserRepository} of the {@link UserEntity}.
      * @param bookRepository {@link BookRepository} of the {@link BookEntity}.
-     * @param queryFactory
+     * @param queryFactory   {@link JPAQueryFactory} for query and DML clause creation.
      */
     public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserRepository userRepository,
                             BookRepository bookRepository, JPAQueryFactory queryFactory) {
@@ -147,7 +147,7 @@ public class OrderServiceImpl
             // Convert the page to a DTO page
             return pageEntities.map(order -> modelMapper.map(order, this.getDTOClass()));
         } else {
-            throw new InsufficientPermissionsException();
+            throw new InactiveUserException();
         }
     }
 

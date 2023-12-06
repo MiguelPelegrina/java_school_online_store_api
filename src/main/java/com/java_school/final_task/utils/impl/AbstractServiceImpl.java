@@ -2,7 +2,6 @@ package com.java_school.final_task.utils.impl;
 
 import com.java_school.final_task.exception.ResourceNotFoundException;
 import com.java_school.final_task.utils.AbstractService;
-import com.java_school.final_task.utils.StringValues;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -35,17 +34,15 @@ public abstract class AbstractServiceImpl<R extends JpaRepository<E, K>, E, T, K
 
     @Override
     public List<T> getAllInstances() {
-        return repository.findAll()
-                .stream()
-                .map(entity ->
-                        modelMapper.map(entity, getDTOClass()))
+        return repository.findAll().stream().map(
+                        entity -> modelMapper.map(entity, getDTOClass()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public T getInstanceById(K id) {
-        return modelMapper.map(repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(StringValues.INSTANCE_NOT_FOUND, id))), getDTOClass());
+        E instance = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id + ""));
+        return modelMapper.map(instance, getDTOClass());
     }
 
     @Override
