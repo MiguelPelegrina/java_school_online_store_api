@@ -101,7 +101,6 @@ public class UserServiceImpl
                     // Employees can not update other employees
                     // Clients can not update others
                 } else {
-                    // TODO Return this to frontend
                     throw new InsufficientPermissionsException();
                 }
             }

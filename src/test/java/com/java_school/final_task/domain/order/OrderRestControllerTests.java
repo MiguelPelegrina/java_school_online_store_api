@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
 import com.java_school.final_task.domain.order.impl.OrderRestControllerImpl;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
+import com.java_school.final_task.domain.user.UserRepository;
 import mothers.order.OrderMother;
+import mothers.request.RequestMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,7 +27,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,6 +47,9 @@ class OrderRestControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Mock
+    private UserRepository repository;
+
     private OrderDTO instanceDTO;
 
     @BeforeEach
@@ -58,19 +63,9 @@ class OrderRestControllerTests {
         // Arrange
         Page<OrderDTO> page = new PageImpl<>(Collections.singletonList(instanceDTO));
 
-        OrderRequest request = new OrderRequest();
-        request.setName("Name");
-        request.setDate(LocalDate.now());
-        request.setDeliveryMethod("");
-        request.setOrderStatus("");
-        request.setPaymentMethod("");
-        request.setPaymentStatus("");
-        request.setPage(0);
-        request.setSize(10);
-        request.setSortType("ASC");
-        request.setSortProperty("name");
+        OrderRequest request = RequestMother.createOrderRequest();
 
-        when(service.getAllInstances(any(OrderRequest.class))).thenReturn(page);
+        when(service.getAllInstances(request)).thenReturn(page);
 
         // Act
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/orders/search")
@@ -92,6 +87,22 @@ class OrderRestControllerTests {
                 .andExpect(jsonPath("$.content[0].user.name").value("Name"));
     }
 
+    @Test
+    void OrderRestController_CreateOrder_ReturnNoContent() throws Exception {
+        // Arrange
+        OrderEntity instance = OrderMother.createOrder();
+        when(service.saveInstance(instance)).thenReturn(null);
+
+        // Act
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/orders/withBooks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(instance))
+        );
+
+        // Assert
+        result.andExpect(status().isNoContent());
+    }
+
     /*@Test
     void OrderController_CreateOrder_ReturnCreated() throws Exception {
         // Arrange
@@ -110,20 +121,4 @@ class OrderRestControllerTests {
         result.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", CoreMatchers.is(instanceDTO.getId())));
     }*/
-
-    @Test
-    void OrderRestController_CreateOrder_ReturnNoContent() throws Exception {
-        // Arrange
-        OrderEntity instance = OrderMother.createOrder();
-        when(service.saveInstance(instance)).thenReturn(null);
-
-        // Act
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/orders/withBooks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(instance))
-        );
-
-        // Assert
-        result.andExpect(status().isNoContent());
-    }
 }

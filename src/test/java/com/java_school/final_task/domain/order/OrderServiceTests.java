@@ -8,10 +8,13 @@ import com.java_school.final_task.domain.order_book.OrderBookRepository;
 import com.java_school.final_task.domain.user.UserRepository;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
+import com.java_school.final_task.exception.user.InactiveUserException;
+import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.security.JwtUtil;
 import com.querydsl.core.BooleanBuilder;
 import mothers.order.OrderMother;
 import mothers.order_book.OrderBookMother;
+import mothers.request.RequestMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -117,6 +120,37 @@ class OrderServiceTests {
     }
 
     @Test
+    void OrderService_GetAllInstances_ThrowsUserDoesNotExistException() {
+        // Arrange
+        OrderRequest request = RequestMother.createOrderRequest();
+        RequestMother.prepareRequestAttributes(instance.getOrder().getUser().getId());
+
+        when(userRepository.findById(instance.getOrder().getUser().getId())).thenReturn(Optional.empty());
+
+        // Act
+        assertThrows(UserDoesNotExistException.class, () -> service.getAllInstances(request));
+
+        // Assert
+        verify(userRepository, times(1)).findById(instance.getOrder().getUser().getId());
+    }
+
+    @Test
+    void OrderService_GetAllInstances_ThrowsInactiveUserException() {
+        // Arrange
+        instance.getOrder().getUser().setActive(false);
+        OrderRequest request = RequestMother.createOrderRequest();
+        RequestMother.prepareRequestAttributes(instance.getOrder().getUser().getId());
+
+        when(userRepository.findById(instance.getOrder().getUser().getId())).thenReturn(Optional.ofNullable(instance.getOrder().getUser()));
+
+        // Act
+        assertThrows(InactiveUserException.class, () -> service.getAllInstances(request));
+
+        // Assert
+        verify(userRepository, times(1)).findById(instance.getOrder().getUser().getId());
+    }
+
+    @Test
     void OrderService_CreateOrder_ThrowsProductNotAvailableException() {
         // Arrange
         instance.getOrderedBooks().get(0).getBook().setActive(false);
@@ -143,7 +177,6 @@ class OrderServiceTests {
         verify(orderRepository).deleteById(instance.getOrder().getId());
     }
 
-    // TODO I might have went over board
     @Test
     void OrderService_GetAllOrdersByParams_ReturnsOrderDTOPage() {
         // Arrange
@@ -202,8 +235,6 @@ class OrderServiceTests {
         assertThat(resultDTOs).isNotNull().hasSize(1);
         assertThat(resultDTOs.getContent().get(0)).isEqualTo(instanceDTO);
     }
-
-    //@Test public void OrderService_GetCalculatedRevenue_ReturnsBigDecimal(){}
 
     // Auxiliary methods
     private SaveOrderDTO createSaveOrderDTO() {

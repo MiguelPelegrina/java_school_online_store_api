@@ -4,8 +4,8 @@ import com.java_school.final_task.domain.user.impl.UserServiceImpl;
 import com.java_school.final_task.domain.user.user_address.UserAddressRepository;
 import com.java_school.final_task.exception.user.InsufficientPermissionsException;
 import com.java_school.final_task.exception.user.UserDoesNotExistException;
-import com.java_school.final_task.security.JwtUtil;
 import com.querydsl.core.BooleanBuilder;
+import mothers.request.RequestMother;
 import mothers.user.UserMother;
 import mothers.user_role.UserRoleMother;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,17 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +60,7 @@ class UserServiceTests {
 
         instanceDTO = UserMother.createUserDTO();
 
-        prepareRequestAttributes();
+        RequestMother.prepareRequestAttributes(instance.getId());
     }
 
     @Test
@@ -107,9 +102,9 @@ class UserServiceTests {
 
         Page<UserEntity> page = new PageImpl<>(instances);
 
-        UserRequest request = generateUserRequest();
+        UserRequest request = RequestMother.createUserRequest();
 
-        PageRequest pageRequest = generatePageRequest(request);
+        PageRequest pageRequest = RequestMother.createPageRequest(request);
 
         queryBuilder.and(qInstance.name.containsIgnoreCase(request.getName())
                 .or(qInstance.surname.containsIgnoreCase(request.getName()))
@@ -133,7 +128,7 @@ class UserServiceTests {
     @Test
     void UserService_GetAllClients_ThrowsUserDoesNotExist() {
         // Arrange
-        UserRequest request = generateUserRequest();
+        UserRequest request = RequestMother.createUserRequest();
 
         // Act & assert
         assertThrows(UserDoesNotExistException.class, () -> service.getAllInstances(request));
@@ -151,42 +146,11 @@ class UserServiceTests {
     void UserService_GetAllClients_ThrowsInsufficientPermissions() {
         // Arrange
         instance.setRoles(Set.of(UserRoleMother.createUserRoleClient()));
-        UserRequest request = generateUserRequest();
+        UserRequest request = RequestMother.createUserRequest();
 
         when(userRepository.findById(instance.getId())).thenReturn(Optional.ofNullable(instance));
 
         // Act & assert
         assertThrows(InsufficientPermissionsException.class, () -> service.getAllInstances(request));
-    }
-
-    private void prepareRequestAttributes() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWd1ZWxAZW1haWwuY29tIiwiaWQiOjQsInJvbGVzIjpbIkFETUlOIl0sImV4cCI6MTkxNjY3Mzk1NX0.wrX_u_broIqIiO-47Z5pZ4hI8zvA40Yj40nAdBCpFJM");
-
-        ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
-        RequestContextHolder.setRequestAttributes(requestAttributes);
-
-        try (MockedStatic<JwtUtil> mockedStatic = mockStatic(JwtUtil.class)) {
-            mockedStatic.when(() -> JwtUtil.getIdFromToken(requestAttributes)).thenReturn(instance.getId());
-        }
-    }
-
-    private UserRequest generateUserRequest() {
-        UserRequest request = new UserRequest();
-        request.setName("Name");
-        request.setPage(0);
-        request.setPage(10);
-        request.setSortType("ASC");
-        request.setSortProperty("name");
-        return request;
-    }
-
-    private PageRequest generatePageRequest(UserRequest request) {
-        return PageRequest.of(
-                request.getPage(),
-                request.getSize(),
-                Sort.Direction.valueOf(request.getSortType()),
-                request.getSortProperty()
-        );
     }
 }
