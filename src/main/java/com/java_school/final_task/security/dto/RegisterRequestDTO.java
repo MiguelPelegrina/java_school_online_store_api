@@ -1,5 +1,6 @@
 package com.java_school.final_task.security.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @Builder
 @Data
 @NoArgsConstructor
+@Schema(description = "Data Transfer Object of a register request")
 public class RegisterRequestDTO {
     private Address address;
     private LocalDate dateOfBirth;
@@ -27,6 +29,7 @@ public class RegisterRequestDTO {
     @Builder
     @Data
     @NoArgsConstructor
+    @Schema(description = "Simplified address of a register request")
     public static class Address {
         private String number;
         private String postalCode;

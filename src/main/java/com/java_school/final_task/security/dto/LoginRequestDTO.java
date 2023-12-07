@@ -1,5 +1,6 @@
 package com.java_school.final_task.security.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @NoArgsConstructor
+@Schema(description = "Data Transfer Object of a login request")
 public class LoginRequestDTO {
     private String email;
     private String password;
