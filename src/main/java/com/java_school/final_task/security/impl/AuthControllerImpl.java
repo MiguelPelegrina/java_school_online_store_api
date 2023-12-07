@@ -4,8 +4,13 @@ import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.security.AuthController;
 import com.java_school.final_task.security.JwtUtil;
 import com.java_school.final_task.security.dto.AuthResultDTO;
-import com.java_school.final_task.security.dto.LoginRequestBodyDTO;
-import com.java_school.final_task.security.dto.RegisterRequestBodyDTO;
+import com.java_school.final_task.security.dto.LoginRequestDTO;
+import com.java_school.final_task.security.dto.RegisterRequestDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,16 +30,37 @@ public class AuthControllerImpl implements AuthController {
     private final AuthServiceImpl service;
     private final JwtUtil jwtUtil;
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logged in the user",
+                    content = {@Content(mediaType = "application/json", schema = @Schema)}),
+            @ApiResponse(responseCode = "404", description = "User is not registered", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Bad credentials", content = @Content)
+    })
+    @Operation(summary = "Logs in a user")
     @Override
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequestBodyDTO loginRequestBodyDTO) {
-        return ResponseEntity.ok(this.generateAuthResultDTO(service.login(loginRequestBodyDTO)));
+    public ResponseEntity<Object> login(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Login request", required = true,
+                    content = @Content(schema = @Schema(implementation = LoginRequestDTO.class)))
+            @RequestBody LoginRequestDTO loginRequestDTO) {
+        return ResponseEntity.ok(this.generateAuthResultDTO(service.login(loginRequestDTO)));
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "registered in the user",
+                    content = {@Content(mediaType = "application/json", schema = @Schema)}),
+            @ApiResponse(responseCode = "400", description = "Email is already being used", content = @Content)
+    })
+    @Operation(summary = "Registers a user")
     @Override
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody RegisterRequestBodyDTO registerRequestBodyDTO) {
-        return ResponseEntity.ok(this.generateAuthResultDTO(service.register(registerRequestBodyDTO)));
+    public ResponseEntity<Object> register(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Register request", required = true,
+                    content = @Content(schema = @Schema(implementation = RegisterRequestDTO.class)))
+            @RequestBody RegisterRequestDTO registerRequestDTO) {
+        return ResponseEntity.ok(this.generateAuthResultDTO(service.register(registerRequestDTO)));
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.java_school.final_task.domain.book;
 
 import com.java_school.final_task.domain.book.dto.BookDTO;
+import com.java_school.final_task.domain.book.dto.BookRequestDTO;
 import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ public interface BookRestController {
     ResponseEntity<List<BookDTO>> saveInstances(List<BookEntity> instances);
 
     /**
-     * Retrieves a page of {@link BookDTO}s from the database based on {@link BookRequest}
+     * Retrieves a page of {@link BookDTO}s from the database based on {@link BookRequestDTO}
      *
-     * @param bookRequest {@link BookRequest} that contains all the specified parameters and sorting criteria.
+     * @param bookRequestDTO {@link BookRequestDTO} that contains all the specified parameters and sorting criteria.
      * @return ResponseEntity containing a Page of {@link BookDTO}s based on the specified criteria.
      */
-    ResponseEntity<Page<BookDTO>> getAllInstances(BookRequest bookRequest);
+    ResponseEntity<Page<BookDTO>> getAllInstances(BookRequestDTO bookRequestDTO);
 
     /**
      * Retrieves the top products based on a specified limit.

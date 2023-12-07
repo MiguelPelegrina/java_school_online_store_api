@@ -1,6 +1,11 @@
 package com.java_school.final_task.domain.user.impl;
 
-import com.java_school.final_task.domain.user.*;
+import com.java_school.final_task.domain.user.QUserEntity;
+import com.java_school.final_task.domain.user.UserEntity;
+import com.java_school.final_task.domain.user.UserRepository;
+import com.java_school.final_task.domain.user.UserService;
+import com.java_school.final_task.domain.user.dto.UserDTO;
+import com.java_school.final_task.domain.user.dto.UserRequestDTO;
 import com.java_school.final_task.exception.user.InsufficientPermissionsException;
 import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.security.JwtUtil;
@@ -120,7 +125,7 @@ public class UserServiceImpl
     }
 
     @Override
-    public Page<UserDTO> getAllInstances(UserRequest userRequest) {
+    public Page<UserDTO> getAllInstances(UserRequestDTO userRequestDTO) {
         // Variables
         final QUserEntity qUser = QUserEntity.userEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -133,22 +138,22 @@ public class UserServiceImpl
 
         // Check if the current user is active
         if (currentUser.isActive() && !currentUser.isClient()) {
-            userRequest.getActive().ifPresent(aBoolean -> queryBuilder.and(qUser.active.eq(aBoolean)));
+            userRequestDTO.getActive().ifPresent(aBoolean -> queryBuilder.and(qUser.active.eq(aBoolean)));
 
-            if (!userRequest.getName().isEmpty()) {
-                queryBuilder.and(qUser.name.containsIgnoreCase(userRequest.getName())
-                        .or(qUser.surname.containsIgnoreCase(userRequest.getName()))
-                        .or(qUser.email.containsIgnoreCase(userRequest.getName())));
+            if (!userRequestDTO.getName().isEmpty()) {
+                queryBuilder.and(qUser.name.containsIgnoreCase(userRequestDTO.getName())
+                        .or(qUser.surname.containsIgnoreCase(userRequestDTO.getName()))
+                        .or(qUser.email.containsIgnoreCase(userRequestDTO.getName())));
             }
 
             queryBuilder.and(qUser.roles.any().role.name.eq("CLIENT"));
 
             // Generate the page request
             PageRequest pageRequest = PageRequest.of(
-                    userRequest.getPage(),
-                    userRequest.getSize(),
-                    Sort.Direction.valueOf(userRequest.getSortType()),
-                    userRequest.getSortProperty());
+                    userRequestDTO.getPage(),
+                    userRequestDTO.getSize(),
+                    Sort.Direction.valueOf(userRequestDTO.getSortType()),
+                    userRequestDTO.getSortProperty());
 
             // Find the data in the repository
             Page<UserEntity> pageEntities = this.repository.findAll(queryBuilder, pageRequest);

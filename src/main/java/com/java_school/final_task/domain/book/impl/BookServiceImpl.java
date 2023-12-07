@@ -1,7 +1,11 @@
 package com.java_school.final_task.domain.book.impl;
 
-import com.java_school.final_task.domain.book.*;
+import com.java_school.final_task.domain.book.BookEntity;
+import com.java_school.final_task.domain.book.BookRepository;
+import com.java_school.final_task.domain.book.BookService;
+import com.java_school.final_task.domain.book.QBookEntity;
 import com.java_school.final_task.domain.book.dto.BookDTO;
+import com.java_school.final_task.domain.book.dto.BookRequestDTO;
 import com.java_school.final_task.domain.book.dto.NumberedBookDTO;
 import com.java_school.final_task.domain.book.genre.BookGenreEntity;
 import com.java_school.final_task.domain.book.genre.BookGenreRepository;
@@ -81,28 +85,28 @@ public class BookServiceImpl
     }
 
     @Override
-    public Page<BookDTO> getAllInstances(BookRequest bookRequest) {
+    public Page<BookDTO> getAllInstances(BookRequestDTO bookRequestDTO) {
         // Variables
         final QBookEntity qBook = QBookEntity.bookEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
 
         // Check which parameters are present and build a query
-        bookRequest.getActive().ifPresent(aBoolean -> queryBuilder.and(qBook.active.eq(aBoolean)));
+        bookRequestDTO.getActive().ifPresent(aBoolean -> queryBuilder.and(qBook.active.eq(aBoolean)));
 
-        if (!bookRequest.getName().isEmpty()) {
-            queryBuilder.and(qBook.title.containsIgnoreCase(bookRequest.getName())
-                    .or(qBook.parameters.author.containsIgnoreCase(bookRequest.getName())));
+        if (!bookRequestDTO.getName().isEmpty()) {
+            queryBuilder.and(qBook.title.containsIgnoreCase(bookRequestDTO.getName())
+                    .or(qBook.parameters.author.containsIgnoreCase(bookRequestDTO.getName())));
         }
 
-        if (!bookRequest.getGenre().isEmpty()) {
-            queryBuilder.and(qBook.genre.name.containsIgnoreCase(bookRequest.getGenre()));
+        if (!bookRequestDTO.getGenre().isEmpty()) {
+            queryBuilder.and(qBook.genre.name.containsIgnoreCase(bookRequestDTO.getGenre()));
         }
 
         PageRequest pageRequest = PageRequest.of(
-                bookRequest.getPage(),
-                bookRequest.getSize(),
-                Sort.Direction.valueOf(bookRequest.getSortType()),
-                bookRequest.getSortProperty());
+                bookRequestDTO.getPage(),
+                bookRequestDTO.getSize(),
+                Sort.Direction.valueOf(bookRequestDTO.getSortType()),
+                bookRequestDTO.getSortProperty());
 
         // Find the data in the repository
         Page<BookEntity> pageEntities = this.repository.findAll(queryBuilder, pageRequest);
@@ -143,7 +147,6 @@ public class BookServiceImpl
         return super.saveInstance(book);
     }
 
-    // TODO Test properly and write tests
     @Override
     @Transactional
     public List<BookDTO> saveInstances(List<BookEntity> books) {

@@ -1,6 +1,9 @@
-package com.java_school.final_task.domain.order;
+package com.java_school.final_task.domain.order.dto;
 
+import com.java_school.final_task.domain.order.OrderEntity;
+import com.java_school.final_task.domain.order.OrderRepository;
 import com.java_school.final_task.utils.AbstractPageableSortableRequest;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,7 +17,8 @@ import java.time.LocalDate;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class OrderRequest extends AbstractPageableSortableRequest {
+@Schema(description = "A request to retrieve a filtered list of orders")
+public class OrderRequestDTO extends AbstractPageableSortableRequest {
     private String name = "";
     private LocalDate date;
     private String deliveryMethod = "";

@@ -1,14 +1,8 @@
 package com.java_school.final_task.domain.user.user_address;
 
 import com.java_school.final_task.domain.user.user_address.postal_code.PostalCodeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @Entity
 @RequiredArgsConstructor
+@Schema(description = "Address of a user")
 @Table(name = "user_addresses", schema = "public", catalog = "online_store")
 public class UserAddressEntity {
     @Id

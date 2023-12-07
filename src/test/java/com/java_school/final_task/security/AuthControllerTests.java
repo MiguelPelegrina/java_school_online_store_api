@@ -6,8 +6,8 @@ import com.java_school.final_task.domain.user.UserRepository;
 import com.java_school.final_task.exception.user.EmailAlreadyUsedException;
 import com.java_school.final_task.exception.user.InactiveUserException;
 import com.java_school.final_task.exception.user.UserDoesNotExistException;
-import com.java_school.final_task.security.dto.LoginRequestBodyDTO;
-import com.java_school.final_task.security.dto.RegisterRequestBodyDTO;
+import com.java_school.final_task.security.dto.LoginRequestDTO;
+import com.java_school.final_task.security.dto.RegisterRequestDTO;
 import com.java_school.final_task.security.impl.AuthControllerImpl;
 import com.java_school.final_task.security.impl.AuthServiceImpl;
 import com.java_school.final_task.utils.StringValues;
@@ -58,9 +58,9 @@ class AuthControllerTests {
     @Mock
     private UserRepository repository;
 
-    private LoginRequestBodyDTO loginRequestBodyDTO;
+    private LoginRequestDTO loginRequestDTO;
 
-    private RegisterRequestBodyDTO registerRequestBodyDTO;
+    private RegisterRequestDTO registerRequestDTO;
 
     private UserEntity instance;
 
@@ -69,21 +69,21 @@ class AuthControllerTests {
         // Arrange
         instance = UserMother.createUser();
 
-        loginRequestBodyDTO = UserMother.createLoginRequestBodyDTO();
+        loginRequestDTO = UserMother.createLoginRequestBodyDTO();
 
-        registerRequestBodyDTO = UserMother.createRegisterRequestBodyDTO();
+        registerRequestDTO = UserMother.createRegisterRequestBodyDTO();
     }
 
     @Test
     void AuthController_LoginUser_ReturnsUserDTO() throws Exception {
         // Arrange
-        when(service.login(loginRequestBodyDTO)).thenReturn(instance);
+        when(service.login(loginRequestDTO)).thenReturn(instance);
         when(jwtUtil.createToken(instance)).thenReturn("mockedAccessToken");
 
         // Act
         ResultActions result = mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(loginRequestBodyDTO)));
+                .content(objectMapper.writeValueAsString(loginRequestDTO)));
 
         // Assert
         result.andExpect(status().isOk())
@@ -93,13 +93,13 @@ class AuthControllerTests {
     @Test
     void AuthController_RegisterUser_ReturnsUserDTO() throws Exception {
         // Arrange
-        when(service.register(registerRequestBodyDTO)).thenReturn(instance);
+        when(service.register(registerRequestDTO)).thenReturn(instance);
         when(jwtUtil.createToken(instance)).thenReturn("mockedAccessToken");
 
         // Act
         ResultActions result = mockMvc.perform(post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(registerRequestBodyDTO)));
+                .content(objectMapper.writeValueAsString(registerRequestDTO)));
 
         // Assert
         result.andExpect(status().isOk())
@@ -109,44 +109,44 @@ class AuthControllerTests {
     @Test
     void AuthController_RegisterUser_HandleEmailAlreadyExistsException() throws Exception {
         // Assert
-        when(service.register(registerRequestBodyDTO)).thenThrow(new EmailAlreadyUsedException());
+        when(service.register(registerRequestDTO)).thenThrow(new EmailAlreadyUsedException());
 
         // Act & assert
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registerRequestBodyDTO)))
+                        .content(objectMapper.writeValueAsString(registerRequestDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertInstanceOf(EmailAlreadyUsedException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(StringValues.EMAIL_ALREADY_IN_USE, Objects.requireNonNull(result.getResolvedException()).getMessage()));
 
-        verify(service, times(1)).register(registerRequestBodyDTO);
+        verify(service, times(1)).register(registerRequestDTO);
     }
 
     @Test
     void AuthController_LoginUser_HandleInactiveUserException() throws Exception {
         // Arrange
-        when(service.login(loginRequestBodyDTO)).thenThrow(new InactiveUserException());
+        when(service.login(loginRequestDTO)).thenThrow(new InactiveUserException());
 
         // Act & assert
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginRequestBodyDTO)))
+                        .content(objectMapper.writeValueAsString(loginRequestDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertInstanceOf(InactiveUserException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(StringValues.INACTIVE_USER, Objects.requireNonNull(result.getResolvedException()).getMessage()));
 
-        verify(service, times(1)).login(loginRequestBodyDTO);
+        verify(service, times(1)).login(loginRequestDTO);
     }
 
     @Test
     void AuthController_LoginUser_HandleUserDoesNotExistException() throws Exception {
         // Arrange
-        when(service.login(loginRequestBodyDTO)).thenThrow(new UserDoesNotExistException(instance.getEmail()));
+        when(service.login(loginRequestDTO)).thenThrow(new UserDoesNotExistException(instance.getEmail()));
 
         // Act & assert
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginRequestBodyDTO)))
+                        .content(objectMapper.writeValueAsString(loginRequestDTO)))
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertInstanceOf(UserDoesNotExistException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(
@@ -154,18 +154,18 @@ class AuthControllerTests {
                         Objects.requireNonNull(result.getResolvedException()).getMessage())
                 );
 
-        verify(service, times(1)).login(loginRequestBodyDTO);
+        verify(service, times(1)).login(loginRequestDTO);
     }
 
     @Test
     void AuthController_LoginUser_HandleBadCredentialsException() throws Exception {
         // Arrange
-        when(service.login(loginRequestBodyDTO)).thenThrow(new BadCredentialsException(StringValues.PASSWORD_NOT_MATCHING));
+        when(service.login(loginRequestDTO)).thenThrow(new BadCredentialsException(StringValues.PASSWORD_NOT_MATCHING));
 
         // Act & assert
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginRequestBodyDTO)))
+                        .content(objectMapper.writeValueAsString(loginRequestDTO)))
                 .andExpect(status().isConflict())
                 .andExpect(result -> assertInstanceOf(BadCredentialsException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(
@@ -173,6 +173,6 @@ class AuthControllerTests {
                         Objects.requireNonNull(result.getResolvedException()).getMessage())
                 );
 
-        verify(service, times(1)).login(loginRequestBodyDTO);
+        verify(service, times(1)).login(loginRequestDTO);
     }
 }

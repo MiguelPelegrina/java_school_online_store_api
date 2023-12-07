@@ -7,8 +7,8 @@ import com.java_school.final_task.exception.user.InactiveUserException;
 import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.security.AuthService;
 import com.java_school.final_task.security.UserMapper;
-import com.java_school.final_task.security.dto.LoginRequestBodyDTO;
-import com.java_school.final_task.security.dto.RegisterRequestBodyDTO;
+import com.java_school.final_task.security.dto.LoginRequestDTO;
+import com.java_school.final_task.security.dto.RegisterRequestDTO;
 import com.java_school.final_task.utils.StringValues;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,16 +31,16 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository repository;
 
     @Override
-    public UserEntity login(LoginRequestBodyDTO loginRequestBodyDTO) {
-        UserEntity user = repository.findUserByEmail(loginRequestBodyDTO.getEmail()).orElseThrow(
-                () -> new UserDoesNotExistException(String.format(StringValues.USER_DOES_NOT_EXIST, loginRequestBodyDTO.getEmail()))
+    public UserEntity login(LoginRequestDTO loginRequestDTO) {
+        UserEntity user = repository.findUserByEmail(loginRequestDTO.getEmail()).orElseThrow(
+                () -> new UserDoesNotExistException(String.format(StringValues.USER_DOES_NOT_EXIST, loginRequestDTO.getEmail()))
         );
 
         if (!user.isActive()) {
             throw new InactiveUserException();
         }
 
-        if (!passwordEncoder.matches(loginRequestBodyDTO.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {
             throw new BadCredentialsException(StringValues.PASSWORD_NOT_MATCHING);
         }
 
@@ -48,14 +48,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserEntity register(RegisterRequestBodyDTO registerRequestBodyDTO) {
-        final Optional<UserEntity> userInRepository = repository.findUserByEmail(registerRequestBodyDTO.getEmail());
+    public UserEntity register(RegisterRequestDTO registerRequestDTO) {
+        final Optional<UserEntity> userInRepository = repository.findUserByEmail(registerRequestDTO.getEmail());
 
         if (userInRepository.isPresent()) {
             throw new EmailAlreadyUsedException();
         }
 
-        UserEntity user = userMapper.mapToUserEntity(registerRequestBodyDTO);
+        UserEntity user = userMapper.mapToUserEntity(registerRequestDTO);
 
         return repository.save(user);
     }

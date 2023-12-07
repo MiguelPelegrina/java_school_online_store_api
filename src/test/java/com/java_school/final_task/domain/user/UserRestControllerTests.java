@@ -1,5 +1,7 @@
 package com.java_school.final_task.domain.user;
 
+import com.java_school.final_task.domain.user.dto.UserDTO;
+import com.java_school.final_task.domain.user.dto.UserRequestDTO;
 import com.java_school.final_task.domain.user.impl.UserRestControllerImpl;
 import com.java_school.final_task.domain.user.impl.UserServiceImpl;
 import mothers.user.UserMother;
@@ -52,7 +54,7 @@ class UserRestControllerTests {
         // Arrange
         Page<UserDTO> page = new PageImpl<>(Collections.singletonList(instanceDTO));
 
-        UserRequest request = new UserRequest();
+        UserRequestDTO request = new UserRequestDTO();
         request.setName("Name");
         request.setActive(Optional.of(true));
         request.setPage(0);
@@ -60,7 +62,7 @@ class UserRestControllerTests {
         request.setSortType("ASC");
         request.setSortProperty("name");
 
-        when(service.getAllInstances(any(UserRequest.class))).thenReturn(page);
+        when(service.getAllInstances(any(UserRequestDTO.class))).thenReturn(page);
 
         // Act
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/users/search")

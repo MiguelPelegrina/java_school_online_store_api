@@ -3,6 +3,7 @@ package com.java_school.final_task.domain.order_book;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.java_school.final_task.domain.book.BookEntity;
 import com.java_school.final_task.domain.order.OrderEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -14,6 +15,7 @@ import org.hibernate.proxy.HibernateProxy;
 @ToString
 @Entity
 @RequiredArgsConstructor
+@Schema(description = "A book that is part of a order")
 @Table(name = "order_books", schema = "public", catalog = "online_store")
 public class OrderBookEntity {
     @Id

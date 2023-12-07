@@ -1,5 +1,7 @@
 package com.java_school.final_task.domain.user;
 
+import com.java_school.final_task.domain.user.dto.UserDTO;
+import com.java_school.final_task.domain.user.dto.UserRequestDTO;
 import com.java_school.final_task.domain.user.impl.UserServiceImpl;
 import com.java_school.final_task.domain.user.user_address.UserAddressRepository;
 import com.java_school.final_task.exception.user.InsufficientPermissionsException;
@@ -102,7 +104,7 @@ class UserServiceTests {
 
         Page<UserEntity> page = new PageImpl<>(instances);
 
-        UserRequest request = RequestMother.createUserRequest();
+        UserRequestDTO request = RequestMother.createUserRequest();
 
         PageRequest pageRequest = RequestMother.createPageRequest(request);
 
@@ -128,7 +130,7 @@ class UserServiceTests {
     @Test
     void UserService_GetAllClients_ThrowsUserDoesNotExist() {
         // Arrange
-        UserRequest request = RequestMother.createUserRequest();
+        UserRequestDTO request = RequestMother.createUserRequest();
 
         // Act & assert
         assertThrows(UserDoesNotExistException.class, () -> service.getAllInstances(request));
@@ -146,7 +148,7 @@ class UserServiceTests {
     void UserService_GetAllClients_ThrowsInsufficientPermissions() {
         // Arrange
         instance.setRoles(Set.of(UserRoleMother.createUserRoleClient()));
-        UserRequest request = RequestMother.createUserRequest();
+        UserRequestDTO request = RequestMother.createUserRequest();
 
         when(userRepository.findById(instance.getId())).thenReturn(Optional.ofNullable(instance));
 

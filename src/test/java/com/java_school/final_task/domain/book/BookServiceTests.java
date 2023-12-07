@@ -1,6 +1,7 @@
 package com.java_school.final_task.domain.book;
 
 import com.java_school.final_task.domain.book.dto.BookDTO;
+import com.java_school.final_task.domain.book.dto.BookRequestDTO;
 import com.java_school.final_task.domain.book.genre.BookGenreRepository;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
 import com.java_school.final_task.domain.book.parameter.BookParameterRepository;
@@ -112,7 +113,7 @@ class BookServiceTests {
 
         Page<BookEntity> page = new PageImpl<>(instances);
 
-        BookRequest request = new BookRequest();
+        BookRequestDTO request = new BookRequestDTO();
         request.setGenre("Genre");
         request.setName("Title");
         request.setActive(Optional.of(true));

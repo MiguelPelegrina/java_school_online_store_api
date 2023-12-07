@@ -1,7 +1,7 @@
 package mothers.request;
 
-import com.java_school.final_task.domain.order.OrderRequest;
-import com.java_school.final_task.domain.user.UserRequest;
+import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
+import com.java_school.final_task.domain.user.dto.UserRequestDTO;
 import com.java_school.final_task.security.JwtUtil;
 import org.mockito.MockedStatic;
 import org.springframework.data.domain.PageRequest;
@@ -15,8 +15,8 @@ import java.time.LocalDate;
 import static org.mockito.Mockito.mockStatic;
 
 public class RequestMother {
-    public static OrderRequest createOrderRequest() {
-        OrderRequest request = new OrderRequest();
+    public static OrderRequestDTO createOrderRequest() {
+        OrderRequestDTO request = new OrderRequestDTO();
         request.setName("Name");
         request.setDate(LocalDate.now());
         request.setDeliveryMethod("");
@@ -31,8 +31,8 @@ public class RequestMother {
         return request;
     }
 
-    public static UserRequest createUserRequest() {
-        UserRequest request = new UserRequest();
+    public static UserRequestDTO createUserRequest() {
+        UserRequestDTO request = new UserRequestDTO();
         request.setName("Name");
         request.setPage(0);
         request.setPage(10);
@@ -41,7 +41,7 @@ public class RequestMother {
         return request;
     }
 
-    public static PageRequest createPageRequest(UserRequest request) {
+    public static PageRequest createPageRequest(UserRequestDTO request) {
         return PageRequest.of(
                 request.getPage(),
                 request.getSize(),

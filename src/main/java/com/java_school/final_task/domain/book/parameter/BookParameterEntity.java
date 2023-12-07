@@ -1,6 +1,7 @@
 package com.java_school.final_task.domain.book.parameter;
 
 import com.java_school.final_task.domain.book.parameter.format.BookParametersFormatEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @Entity
 @RequiredArgsConstructor
+@Schema(description = "Parameters of a book, shared across multiple books")
 @Table(name = "book_parameters", schema = "public", catalog = "online_store")
 public class BookParameterEntity {
     @Id

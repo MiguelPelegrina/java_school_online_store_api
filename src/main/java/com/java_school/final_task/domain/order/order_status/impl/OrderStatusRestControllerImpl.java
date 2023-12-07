@@ -5,6 +5,12 @@ import com.java_school.final_task.domain.order.order_status.OrderStatusEntity;
 import com.java_school.final_task.domain.order.order_status.OrderStatusRepository;
 import com.java_school.final_task.domain.order.order_status.OrderStatusRestController;
 import com.java_school.final_task.utils.impl.AbstractRestControllerImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,16 +31,25 @@ public class OrderStatusRestControllerImpl
         implements OrderStatusRestController {
     /**
      * All arguments constructor.
+     *
      * @param service {@link OrderStatusServiceImpl} of the {@link OrderStatusEntity} entity.
      */
     public OrderStatusRestControllerImpl(OrderStatusServiceImpl service) {
         super(service);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retrieved a list of order statuses",
+                    content = {@Content(mediaType = "application/json", schema = @Schema)}),
+            @ApiResponse(responseCode = "401", description = "Not authorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+    })
     @GetMapping("/search")
+    @Operation(summary = "Retrieves a list of order statuses")
     @Override
     public ResponseEntity<List<OrderStatusDTO>> getAllInstances(
-            @RequestParam("active") Optional<Boolean> active){
+            @Parameter(description = "Active state of the order status", example = "true")
+            @RequestParam("active") Optional<Boolean> active) {
         return ResponseEntity.ok(this.service.getAllInstances(active));
     }
 }

@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 /**
-* Data Transfer Object (DTO) that stores the information for a login.
-*/
+ * Data Transfer Object (DTO) that stores the information for a login.
+ */
 @AllArgsConstructor
 @Builder
 @Data
 @NoArgsConstructor
-public class RegisterRequestBodyDTO {
+public class RegisterRequestDTO {
     private Address address;
     private LocalDate dateOfBirth;
     private String email;
@@ -27,7 +27,7 @@ public class RegisterRequestBodyDTO {
     @Builder
     @Data
     @NoArgsConstructor
-    public static class Address{
+    public static class Address {
         private String number;
         private String postalCode;
         private String street;

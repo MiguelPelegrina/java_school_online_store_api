@@ -3,6 +3,7 @@ package com.java_school.final_task.domain.user_role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.java_school.final_task.domain.role.RoleEntity;
 import com.java_school.final_task.domain.user.UserEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 @ToString
 @Entity
 @RequiredArgsConstructor
+@Schema(description = "Role that is assigned to a user")
 @Table(name = "user_roles", schema = "public", catalog = "online_store")
 public class UserRoleEntity {
     @Id

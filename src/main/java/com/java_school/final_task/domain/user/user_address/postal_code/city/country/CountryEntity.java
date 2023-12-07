@@ -1,5 +1,6 @@
 package com.java_school.final_task.domain.user.user_address.postal_code.city.country;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @Entity
 @RequiredArgsConstructor
+@Schema(description = "Country")
 @Table(name = "countries", schema = "public", catalog = "online_store")
 public class CountryEntity {
     @Id

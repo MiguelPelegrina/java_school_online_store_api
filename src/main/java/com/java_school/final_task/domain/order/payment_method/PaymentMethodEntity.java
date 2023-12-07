@@ -1,5 +1,6 @@
 package com.java_school.final_task.domain.order.payment_method;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
+@Schema(description = "Payment method of a order")
 @Table(name = "payment_methods", schema = "public", catalog = "online_store")
 public class PaymentMethodEntity {
     @Id

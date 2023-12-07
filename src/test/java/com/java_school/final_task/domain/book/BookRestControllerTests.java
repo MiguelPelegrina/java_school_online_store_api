@@ -2,6 +2,7 @@ package com.java_school.final_task.domain.book;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java_school.final_task.domain.book.dto.BookDTO;
+import com.java_school.final_task.domain.book.dto.BookRequestDTO;
 import com.java_school.final_task.domain.book.impl.BookRestControllerImpl;
 import com.java_school.final_task.domain.book.impl.BookServiceImpl;
 import mothers.book.BookMother;
@@ -64,7 +65,7 @@ class BookRestControllerTests {
         // Arrange
         Page<BookDTO> page = new PageImpl<>(Collections.singletonList(instanceDTO));
 
-        BookRequest request = new BookRequest();
+        BookRequestDTO request = new BookRequestDTO();
         request.setName("Title");
         request.setGenre("Genre");
         request.setActive(Optional.of(true));
@@ -73,7 +74,7 @@ class BookRestControllerTests {
         request.setSortType("ASC");
         request.setSortProperty("title");
 
-        when(service.getAllInstances(any(BookRequest.class))).thenReturn(page);
+        when(service.getAllInstances(any(BookRequestDTO.class))).thenReturn(page);
 
         // Act
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/books/search")

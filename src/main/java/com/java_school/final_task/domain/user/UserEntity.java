@@ -2,6 +2,7 @@ package com.java_school.final_task.domain.user;
 
 import com.java_school.final_task.domain.user.user_address.UserAddressEntity;
 import com.java_school.final_task.domain.user_role.UserRoleEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Data
 @Entity
 @RequiredArgsConstructor
+@Schema(description = "User with an address")
 @Table(name = "users", schema = "public", catalog = "online_store")
 public class UserEntity {
     // Fields

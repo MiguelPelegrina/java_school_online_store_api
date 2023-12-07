@@ -2,6 +2,7 @@ package com.java_school.final_task.domain.order;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
+import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
 import com.java_school.final_task.domain.order.impl.OrderRestControllerImpl;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
 import com.java_school.final_task.domain.user.UserRepository;
@@ -63,7 +64,7 @@ class OrderRestControllerTests {
         // Arrange
         Page<OrderDTO> page = new PageImpl<>(Collections.singletonList(instanceDTO));
 
-        OrderRequest request = RequestMother.createOrderRequest();
+        OrderRequestDTO request = RequestMother.createOrderRequest();
 
         when(service.getAllInstances(request)).thenReturn(page);
 

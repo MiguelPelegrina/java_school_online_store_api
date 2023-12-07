@@ -1,7 +1,9 @@
-package com.java_school.final_task.domain.user;
+package com.java_school.final_task.domain.user.dto;
 
+import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.user_address.UserAddressDTO;
 import com.java_school.final_task.domain.user_role.dto.UserRoleJsonDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +19,7 @@ import java.util.Set;
 @Builder
 @Data
 @NoArgsConstructor
+@Schema(description = "Data Transfer Object of a user")
 public class UserDTO {
     private int id;
     private String name;

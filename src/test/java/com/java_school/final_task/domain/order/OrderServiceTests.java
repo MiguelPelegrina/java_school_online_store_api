@@ -2,6 +2,7 @@ package com.java_school.final_task.domain.order;
 
 import com.java_school.final_task.domain.book.BookRepository;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
+import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
 import com.java_school.final_task.domain.order_book.OrderBookRepository;
@@ -122,7 +123,7 @@ class OrderServiceTests {
     @Test
     void OrderService_GetAllInstances_ThrowsUserDoesNotExistException() {
         // Arrange
-        OrderRequest request = RequestMother.createOrderRequest();
+        OrderRequestDTO request = RequestMother.createOrderRequest();
         RequestMother.prepareRequestAttributes(instance.getOrder().getUser().getId());
 
         when(userRepository.findById(instance.getOrder().getUser().getId())).thenReturn(Optional.empty());
@@ -138,7 +139,7 @@ class OrderServiceTests {
     void OrderService_GetAllInstances_ThrowsInactiveUserException() {
         // Arrange
         instance.getOrder().getUser().setActive(false);
-        OrderRequest request = RequestMother.createOrderRequest();
+        OrderRequestDTO request = RequestMother.createOrderRequest();
         RequestMother.prepareRequestAttributes(instance.getOrder().getUser().getId());
 
         when(userRepository.findById(instance.getOrder().getUser().getId())).thenReturn(Optional.ofNullable(instance.getOrder().getUser()));
@@ -194,22 +195,22 @@ class OrderServiceTests {
         queryBuilder.and(qInstance.paymentStatus.name.containsIgnoreCase(instance.getOrder().getPaymentStatus().getName()));
         queryBuilder.and(qInstance.date.eq(instance.getOrder().getDate()));
 
-        OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setDeliveryMethod("DeliveryMethod");
-        orderRequest.setOrderStatus("OrderStatus");
-        orderRequest.setPaymentMethod("PaymentMethod");
-        orderRequest.setPaymentStatus("PaymentStatus");
-        orderRequest.setDate(LocalDate.now());
-        orderRequest.setPage(0);
-        orderRequest.setSize(10);
-        orderRequest.setSortType("ASC");
-        orderRequest.setSortProperty("title");
+        OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
+        orderRequestDTO.setDeliveryMethod("DeliveryMethod");
+        orderRequestDTO.setOrderStatus("OrderStatus");
+        orderRequestDTO.setPaymentMethod("PaymentMethod");
+        orderRequestDTO.setPaymentStatus("PaymentStatus");
+        orderRequestDTO.setDate(LocalDate.now());
+        orderRequestDTO.setPage(0);
+        orderRequestDTO.setSize(10);
+        orderRequestDTO.setSortType("ASC");
+        orderRequestDTO.setSortProperty("title");
 
         PageRequest pageRequest = PageRequest.of(
-                orderRequest.getPage(),
-                orderRequest.getSize(),
-                Sort.Direction.valueOf(orderRequest.getSortType()),
-                orderRequest.getSortProperty());
+                orderRequestDTO.getPage(),
+                orderRequestDTO.getSize(),
+                Sort.Direction.valueOf(orderRequestDTO.getSortType()),
+                orderRequestDTO.getSortProperty());
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWd1ZWxAZW1haWwuY29tIiwiaWQiOjQsInJvbGVzIjpbIkFETUlOIl0sImV4cCI6MTkxNjY3Mzk1NX0.wrX_u_broIqIiO-47Z5pZ4hI8zvA40Yj40nAdBCpFJM");
@@ -227,7 +228,7 @@ class OrderServiceTests {
         when(modelMapper.map(instance.getOrder(), service.getDTOClass())).thenReturn(instanceDTO);
 
         // Act
-        Page<OrderDTO> resultDTOs = service.getAllInstances(orderRequest);
+        Page<OrderDTO> resultDTOs = service.getAllInstances(orderRequestDTO);
 
         // Assert
         verify(orderRepository, times(1)).findAll(queryBuilder, pageRequest);

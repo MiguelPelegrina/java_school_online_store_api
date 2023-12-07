@@ -6,7 +6,8 @@ import com.java_school.final_task.domain.order.order_status.OrderStatusDTO;
 import com.java_school.final_task.domain.order.payment_method.PaymentMethodDTO;
 import com.java_school.final_task.domain.order.payment_status.PaymentStatusDTO;
 import com.java_school.final_task.domain.order_book.OrderBookJsonDTO;
-import com.java_school.final_task.domain.user.UserDTO;
+import com.java_school.final_task.domain.user.dto.UserDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ import java.util.List;
 @Builder
 @Data
 @NoArgsConstructor
+@Schema(description = "Data Transfer Object of a order")
 public class OrderDTO {
     private int id;
     private UserDTO user;

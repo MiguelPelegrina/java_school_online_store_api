@@ -2,8 +2,12 @@ package com.java_school.final_task.domain.order.impl;
 
 import com.java_school.final_task.domain.book.BookEntity;
 import com.java_school.final_task.domain.book.BookRepository;
-import com.java_school.final_task.domain.order.*;
+import com.java_school.final_task.domain.order.OrderEntity;
+import com.java_school.final_task.domain.order.OrderRepository;
+import com.java_school.final_task.domain.order.OrderService;
+import com.java_school.final_task.domain.order.QOrderEntity;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
+import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.domain.user.UserEntity;
@@ -100,7 +104,7 @@ public class OrderServiceImpl
     }
 
     @Override
-    public Page<OrderDTO> getAllInstances(OrderRequest orderRequest) {
+    public Page<OrderDTO> getAllInstances(OrderRequestDTO orderRequestDTO) {
         // Variables
         final QOrderEntity qOrder = QOrderEntity.orderEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
@@ -114,32 +118,32 @@ public class OrderServiceImpl
         // Check if the current user is active
         if (currentUser.isActive()) {
             // Check which parameters are present and build a query
-            handleParameter(orderRequest.getDeliveryMethod(), queryBuilder, qOrder.deliveryMethod.name);
-            handleParameter(orderRequest.getOrderStatus(), queryBuilder, qOrder.orderStatus.name);
-            handleParameter(orderRequest.getPaymentMethod(), queryBuilder, qOrder.paymentMethod.name);
-            handleParameter(orderRequest.getPaymentStatus(), queryBuilder, qOrder.paymentStatus.name);
+            handleParameter(orderRequestDTO.getDeliveryMethod(), queryBuilder, qOrder.deliveryMethod.name);
+            handleParameter(orderRequestDTO.getOrderStatus(), queryBuilder, qOrder.orderStatus.name);
+            handleParameter(orderRequestDTO.getPaymentMethod(), queryBuilder, qOrder.paymentMethod.name);
+            handleParameter(orderRequestDTO.getPaymentStatus(), queryBuilder, qOrder.paymentStatus.name);
 
 
-            if (orderRequest.getDate() != null) {
-                queryBuilder.and(qOrder.date.eq(orderRequest.getDate()));
+            if (orderRequestDTO.getDate() != null) {
+                queryBuilder.and(qOrder.date.eq(orderRequestDTO.getDate()));
             }
 
             if (currentUser.isClient()) {
                 queryBuilder.and(qOrder.user.eq(currentUser));
             } else {
-                if (!orderRequest.getName().isEmpty()) {
-                    queryBuilder.and(qOrder.user.name.containsIgnoreCase(orderRequest.getName())
-                            .or(qOrder.user.surname.containsIgnoreCase(orderRequest.getName()))
-                            .or(qOrder.user.email.containsIgnoreCase(orderRequest.getName())));
+                if (!orderRequestDTO.getName().isEmpty()) {
+                    queryBuilder.and(qOrder.user.name.containsIgnoreCase(orderRequestDTO.getName())
+                            .or(qOrder.user.surname.containsIgnoreCase(orderRequestDTO.getName()))
+                            .or(qOrder.user.email.containsIgnoreCase(orderRequestDTO.getName())));
                 }
             }
 
             // Generate the page request
             PageRequest pageRequest = PageRequest.of(
-                    orderRequest.getPage(),
-                    orderRequest.getSize(),
-                    Sort.Direction.valueOf(orderRequest.getSortType()),
-                    orderRequest.getSortProperty());
+                    orderRequestDTO.getPage(),
+                    orderRequestDTO.getSize(),
+                    Sort.Direction.valueOf(orderRequestDTO.getSortType()),
+                    orderRequestDTO.getSortProperty());
 
             // Find the data in the repository
             Page<OrderEntity> pageEntities = this.repository.findAll(queryBuilder, pageRequest);

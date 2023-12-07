@@ -172,7 +172,6 @@
                         <exclude>**/security/**</exclude>
                         <exclude>**/*DTO.*</exclude>
                         <exclude>**/*Entity.*</exclude>
-                        <exclude>**/*Request.*</exclude>
                     </excludes>
                 </configuration>
                 <executions>

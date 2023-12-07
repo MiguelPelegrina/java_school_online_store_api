@@ -1,5 +1,6 @@
 package com.java_school.final_task.domain.role;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @Entity
 @RequiredArgsConstructor
+@Schema(description = "Role that can be assigned to a user")
 @Table(name = "roles", schema = "public", catalog = "online_store")
 public class RoleEntity {
     @Id

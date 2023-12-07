@@ -6,6 +6,7 @@ import com.java_school.final_task.domain.order.payment_method.PaymentMethodEntit
 import com.java_school.final_task.domain.order.payment_status.PaymentStatusEntity;
 import com.java_school.final_task.domain.order_book.OrderBookEntity;
 import com.java_school.final_task.domain.user.UserEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ import java.util.List;
 @Data
 @Entity
 @RequiredArgsConstructor
+@Schema(description = "A order of a user to buy several books")
 @Table(name = "orders", schema = "public", catalog = "online_store")
 public class OrderEntity {
     @Id

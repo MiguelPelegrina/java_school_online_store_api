@@ -1,9 +1,9 @@
 package mothers.user;
 
-import com.java_school.final_task.domain.user.UserDTO;
 import com.java_school.final_task.domain.user.UserEntity;
-import com.java_school.final_task.security.dto.LoginRequestBodyDTO;
-import com.java_school.final_task.security.dto.RegisterRequestBodyDTO;
+import com.java_school.final_task.domain.user.dto.UserDTO;
+import com.java_school.final_task.security.dto.LoginRequestDTO;
+import com.java_school.final_task.security.dto.RegisterRequestDTO;
 import mothers.user.address.UserAddressMother;
 import mothers.user_role.UserRoleMother;
 
@@ -40,22 +40,22 @@ public class UserMother {
                 .build();
     }
 
-    public static LoginRequestBodyDTO createLoginRequestBodyDTO() {
-        return LoginRequestBodyDTO.builder()
+    public static LoginRequestDTO createLoginRequestBodyDTO() {
+        return LoginRequestDTO.builder()
                 .email("email@.com")
                 .password("Password")
                 .build();
     }
 
-    public static RegisterRequestBodyDTO createRegisterRequestBodyDTO() {
-        return RegisterRequestBodyDTO.builder()
+    public static RegisterRequestDTO createRegisterRequestBodyDTO() {
+        return RegisterRequestDTO.builder()
                 .email("email@.com")
                 .dateOfBirth(LocalDate.now())
                 .phone("12345678912")
                 .password("Password")
                 .name("Name")
                 .surname("Surname")
-                .address(RegisterRequestBodyDTO.Address.builder()
+                .address(RegisterRequestDTO.Address.builder()
                         .number("1")
                         .street("Street")
                         .postalCode("Code")
