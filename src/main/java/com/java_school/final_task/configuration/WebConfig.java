@@ -84,7 +84,6 @@ public class WebConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/book_genres", "/books/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/world").permitAll()
                         .requestMatchers(
                                 "/auth/login",
                                 "/auth/register",
