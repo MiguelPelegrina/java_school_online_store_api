@@ -18,8 +18,8 @@ jobs:
 
         env:
           POSTGRES_DB: online_store
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
         options: >-
           --health-cmd pg_isready
