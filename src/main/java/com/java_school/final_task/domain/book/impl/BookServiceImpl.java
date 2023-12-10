@@ -142,26 +142,59 @@ public class BookServiceImpl
      */
     @Override
     public BookDTO saveInstance(BookEntity book) {
-        setBookGenre(book);
-        setBookParametersFormat(book);
-        setBookParametersByAuthorAndFormat(book);
+        setParametersAndFormat(book);
 
         return super.saveInstance(book);
     }
 
     @Override
     @Transactional
-    public List<BookDTO> saveInstances(List<BookEntity> books) {
-        List<BookDTO> bookDTOs = new ArrayList<>();
+    public List<BookDTO> saveInstances(List<BookEntity> newBooks) {
+        List<BookDTO> savedBookDTOs = new ArrayList<>();
 
-        books.forEach(book -> {
-            setBookGenre(book);
-            setBookParametersFormat(book);
-            setBookParametersByAuthorAndFormat(book);
-            bookDTOs.add(modelMapper.map(super.saveInstance(book), getDTOClass()));
+        newBooks.forEach(newBook -> {
+            BookEntity existingBook = getExistingBookByIsbn(newBook);
+
+            if (existingBook != null) {
+                setBookProperties(existingBook, newBook);
+                savedBookDTOs.add(modelMapper.map(super.saveInstance(existingBook), getDTOClass()));
+            } else {
+                setParametersAndFormat(newBook);
+                savedBookDTOs.add(modelMapper.map(super.saveInstance(newBook), getDTOClass()));
+            }
         });
 
-        return bookDTOs;
+        return savedBookDTOs;
+    }
+
+    /**
+     * Searches for a book with the given ISBN.
+     *
+     * @param book {@link BookEntity} instance to be checked.
+     * @return Existing {@link BookEntity} instance if found, otherwise null.
+     */
+    private BookEntity getExistingBookByIsbn(BookEntity book) {
+        Optional<BookEntity> storedBook = repository.findByIsbn(book.getIsbn());
+
+        return storedBook.orElse(null);
+    }
+
+    /**
+     * Sets properties of an existing {@link BookEntity} instance based on the values of a new book.
+     *
+     * @param existingBook Existing {@link BookEntity} instance to be updated.
+     * @param newBook      New {@link BookEntity} instance containing updated values.
+     */
+    private void setBookProperties(BookEntity existingBook, BookEntity newBook) {
+        setParametersAndFormat(newBook);
+
+        existingBook.setGenre(newBook.getGenre());
+        existingBook.getParameters().setFormat(newBook.getParameters().getFormat());
+        existingBook.setParameters(newBook.getParameters());
+        existingBook.setStock(newBook.getStock());
+        existingBook.setActive(newBook.isActive());
+        existingBook.setTitle(newBook.getTitle());
+        existingBook.setPrice(newBook.getPrice());
     }
 
     /**
@@ -206,5 +239,17 @@ public class BookServiceImpl
         if (!bookParameters.isEmpty()) {
             book.setParameters(bookParameters.get(0));
         }
+    }
+
+    /**
+     * Sets the attributes of the {@link BookEntity} are part of other entities ({@link BookGenreEntity},
+     * {@link BookParameterEntity, {@link BookParametersFormatEntity}) of the given  instance.
+     *
+     * @param book The {@link BookEntity} for which to set the parameters.
+     */
+    private void setParametersAndFormat(BookEntity book) {
+        setBookGenre(book);
+        setBookParametersFormat(book);
+        setBookParametersByAuthorAndFormat(book);
     }
 }

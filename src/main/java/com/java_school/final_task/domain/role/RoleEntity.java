@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @Builder
 @Data
@@ -17,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Schema(description = "Role that can be assigned to a user")
 @Table(name = "roles", schema = "public", catalog = "online_store")
-public class RoleEntity {
+public class RoleEntity implements Serializable {
     @Id
     @Column(name = "name", length = 45)
     private String name;

@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -21,7 +22,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @Schema(description = "Role that is assigned to a user")
 @Table(name = "user_roles", schema = "public", catalog = "online_store")
-public class UserRoleEntity {
+public class UserRoleEntity implements Serializable {
     @Id
     @GeneratedValue
     private int id;

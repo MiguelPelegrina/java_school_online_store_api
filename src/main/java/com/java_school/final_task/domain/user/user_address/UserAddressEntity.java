@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @Builder
 @Data
@@ -15,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Schema(description = "Address of a user")
 @Table(name = "user_addresses", schema = "public", catalog = "online_store")
-public class UserAddressEntity {
+public class UserAddressEntity implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue

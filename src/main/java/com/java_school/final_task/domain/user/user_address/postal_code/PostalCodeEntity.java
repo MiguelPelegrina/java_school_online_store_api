@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @Builder
 @Data
@@ -15,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Schema(description = "Postal code of a city")
 @Table(name = "postal_codes", schema = "public", catalog = "online_store")
-public class PostalCodeEntity {
+public class PostalCodeEntity implements Serializable {
     @Id
     @Column(name = "code", length = 45)
     private String code;

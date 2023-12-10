@@ -6,6 +6,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface that extends from JpaRepository. Accesses the table of the entity {@link BookEntity} identified by an ID with
@@ -14,4 +15,6 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, Integer>, QuerydslPredicateExecutor<BookEntity> {
     List<BookEntity> findAll(Predicate predicate);
+
+    Optional<BookEntity> findByIsbn(String isbn);
 }

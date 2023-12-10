@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @Builder
 @Data
@@ -15,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Schema(description = "City of a country")
 @Table(name = "cities", schema = "public", catalog = "online_store")
-public class CityEntity {
+public class CityEntity implements Serializable {
     @Id
     @Column(name = "name", nullable = false, length = 45)
     private String name;

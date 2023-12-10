@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Schema(description = "User with an address")
 @Table(name = "users", schema = "public", catalog = "online_store")
-public class UserEntity {
+public class UserEntity implements Serializable {
     // Fields
     @Id
     @Column(name = "id")
