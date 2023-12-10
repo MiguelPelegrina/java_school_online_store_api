@@ -54,20 +54,20 @@ public class BookServiceImpl
     /**
      * All arguments constructor.
      *
-     * @param repository                     {@link BookRepository} of the {@link BookEntity} entity.
+     * @param bookRepository                 {@link BookRepository} of the {@link BookEntity} entity.
      * @param modelMapper                    ModelMapper that converts the {@link BookEntity} to {@link BookDTO}
      * @param bookParameterRepository        {@link BookParameterRepository} of the {@link BookParameterEntity}
      * @param bookGenreRepository            {@link BookGenreRepository} of the {@link BookGenreEntity}
      * @param bookParametersFormatRepository {@link BookParametersFormatRepository} of the {@link BookParametersFormatEntity}
      * @param queryFactory                   {@link QueryFactory} to create queries.
      */
-    public BookServiceImpl(BookRepository repository,
+    public BookServiceImpl(BookRepository bookRepository,
                            ModelMapper modelMapper,
                            BookParameterRepository bookParameterRepository,
                            BookGenreRepository bookGenreRepository,
                            BookParametersFormatRepository bookParametersFormatRepository,
                            JPAQueryFactory queryFactory) {
-        super(repository, modelMapper);
+        super(bookRepository, modelMapper);
         this.bookParameterRepository = bookParameterRepository;
         this.bookGenreRepository = bookGenreRepository;
         this.bookParametersFormatRepository = bookParametersFormatRepository;
@@ -142,6 +142,8 @@ public class BookServiceImpl
      */
     @Override
     public BookDTO saveInstance(BookEntity book) {
+        setBookGenre(book);
+        setBookParametersFormat(book);
         setBookParametersByAuthorAndFormat(book);
 
         return super.saveInstance(book);
