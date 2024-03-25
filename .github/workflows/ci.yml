@@ -10,6 +10,9 @@ on:
 jobs:
  build:
     runs-on: ubuntu-latest
+    env: 
+      MAIL_USERNAME: ${{ secrets.EMAIL_NAME }}
+      MAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
     services:
       postgres:
