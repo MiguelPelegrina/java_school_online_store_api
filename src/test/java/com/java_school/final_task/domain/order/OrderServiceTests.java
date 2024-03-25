@@ -6,7 +6,7 @@ import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
 import com.java_school.final_task.domain.order_book.OrderBookRepository;
-import com.java_school.final_task.domain.user.UserRepository;
+import com.java_school.final_task.domain.user.UserService;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
 import com.java_school.final_task.exception.user.InactiveUserException;
@@ -57,7 +57,7 @@ class OrderServiceTests {
     private BookRepository bookRepository;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @InjectMocks
     private OrderServiceImpl service;
@@ -126,13 +126,13 @@ class OrderServiceTests {
         OrderRequestDTO request = RequestMother.createOrderRequest();
         RequestMother.prepareRequestAttributes(instance.getOrder().getUser().getId());
 
-        when(userRepository.findById(instance.getOrder().getUser().getId())).thenReturn(Optional.empty());
+        when(userService.getCurrentUser()).thenThrow(UserDoesNotExistException.class);
 
         // Act
         assertThrows(UserDoesNotExistException.class, () -> service.getAllInstances(request));
 
         // Assert
-        verify(userRepository, times(1)).findById(instance.getOrder().getUser().getId());
+        verify(userService, times(1)).getCurrentUser();
     }
 
     @Test
@@ -142,13 +142,13 @@ class OrderServiceTests {
         OrderRequestDTO request = RequestMother.createOrderRequest();
         RequestMother.prepareRequestAttributes(instance.getOrder().getUser().getId());
 
-        when(userRepository.findById(instance.getOrder().getUser().getId())).thenReturn(Optional.ofNullable(instance.getOrder().getUser()));
+        when(userService.getCurrentUser()).thenReturn(instance.getOrder().getUser());
 
         // Act
         assertThrows(InactiveUserException.class, () -> service.getAllInstances(request));
 
         // Assert
-        verify(userRepository, times(1)).findById(instance.getOrder().getUser().getId());
+        verify(userService, times(1)).getCurrentUser();
     }
 
     @Test
@@ -218,7 +218,7 @@ class OrderServiceTests {
         ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
         RequestContextHolder.setRequestAttributes(requestAttributes);
 
-        when(userRepository.findById(instance.getOrder().getUser().getId())).thenReturn(Optional.ofNullable(instance.getOrder().getUser()));
+        when(userService.getCurrentUser()).thenReturn(instance.getOrder().getUser());
 
         try (MockedStatic<JwtUtil> mockedStatic = mockStatic(JwtUtil.class)) {
             mockedStatic.when(() -> JwtUtil.getIdFromToken(requestAttributes)).thenReturn(instance.getOrder().getUser().getId());

@@ -11,13 +11,10 @@ import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.domain.user.UserEntity;
-import com.java_school.final_task.domain.user.UserRepository;
+import com.java_school.final_task.domain.user.UserService;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
 import com.java_school.final_task.exception.user.InactiveUserException;
-import com.java_school.final_task.exception.user.UserDoesNotExistException;
-import com.java_school.final_task.security.JwtUtil;
-import com.java_school.final_task.utils.StringValues;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
@@ -29,7 +26,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -45,7 +41,7 @@ public class OrderServiceImpl
         extends AbstractServiceImpl<OrderRepository, OrderEntity, OrderDTO, Integer>
         implements OrderService {
     // Fields
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final BookRepository bookRepository;
 
     private final JPAQueryFactory queryFactory;
@@ -55,14 +51,14 @@ public class OrderServiceImpl
      *
      * @param repository     {@link OrderRepository} of the {@link OrderEntity}.
      * @param modelMapper    ModelMapper that converts the {@link OrderEntity} instance to {@link OrderDTO}
-     * @param userRepository {@link UserRepository} of the {@link UserEntity}.
+     * @param userService    {@link UserService} of the {@link UserEntity}.
      * @param bookRepository {@link BookRepository} of the {@link BookEntity}.
      * @param queryFactory   {@link JPAQueryFactory} for query and DML clause creation.
      */
-    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserRepository userRepository,
+    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserService userService,
                             BookRepository bookRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.bookRepository = bookRepository;
         this.queryFactory = queryFactory;
     }
@@ -108,12 +104,9 @@ public class OrderServiceImpl
         // Variables
         final QOrderEntity qOrder = QOrderEntity.orderEntity;
         final BooleanBuilder queryBuilder = new BooleanBuilder();
-        int currentUserId = JwtUtil.getIdFromToken(RequestContextHolder.getRequestAttributes());
 
         // Get the user that sends the request from the database
-        UserEntity currentUser = userRepository.findById(currentUserId).orElseThrow(() ->
-                new UserDoesNotExistException(String.format(StringValues.USER_DOES_NOT_EXIST, currentUserId))
-        );
+        UserEntity currentUser = userService.getCurrentUser();
 
         // Check if the current user is active
         if (currentUser.isActive()) {
@@ -122,7 +115,6 @@ public class OrderServiceImpl
             handleParameter(orderRequestDTO.getOrderStatus(), queryBuilder, qOrder.orderStatus.name);
             handleParameter(orderRequestDTO.getPaymentMethod(), queryBuilder, qOrder.paymentMethod.name);
             handleParameter(orderRequestDTO.getPaymentStatus(), queryBuilder, qOrder.paymentStatus.name);
-
 
             if (orderRequestDTO.getDate() != null) {
                 queryBuilder.and(qOrder.date.eq(orderRequestDTO.getDate()));

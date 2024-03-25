@@ -18,4 +18,6 @@ public interface UserService {
      * @return ResponseEntity containing a Page of {@link UserDTO}}s based on the specified criteria.
      */
     Page<UserDTO> getAllInstances(UserRequestDTO userRequestDTO);
+
+    UserEntity getCurrentUser();
 }

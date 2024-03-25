@@ -125,6 +125,17 @@ public class UserServiceImpl
     }
 
     @Override
+    public UserEntity getCurrentUser() {
+        int currentUserId = JwtUtil.getIdFromToken(RequestContextHolder.getRequestAttributes());
+
+        // Get the user that sends the request from the database
+        return repository.findById(currentUserId).orElseThrow(() ->
+                new UserDoesNotExistException(String.format(StringValues.USER_DOES_NOT_EXIST, currentUserId))
+        );
+
+    }
+
+    @Override
     public Page<UserDTO> getAllInstances(UserRequestDTO userRequestDTO) {
         // Variables
         final QUserEntity qUser = QUserEntity.userEntity;
