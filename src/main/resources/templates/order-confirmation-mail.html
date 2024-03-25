@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Order Confirmation</title>
+</head>
+<body>
+<h1>Order Confirmation at Online Bookstore</h1>
+<p>Dear [[${customerName}]],</p>
+<p>Thank you for your order. Here are the details:</p>
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Amount</th>
+        <th>Price</th>
+    </tr>
+    <tr th:each="orderedBook : ${orderedBooks}">
+        <td th:text="${orderedBook.book.title}"></td>
+        <td th:text="${orderedBook.amount}"></td>
+        <td th:text="${orderedBook.book.price}"></td>
+    </tr>
+</table>
+<p>Total: <strong th:text="${total}"></strong></p>
+<p>Thank you for shopping with us!</p>
+</body>
+</html>

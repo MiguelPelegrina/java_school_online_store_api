@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -54,4 +55,10 @@ public class OrderEntity {
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
+
+    public BigDecimal getTotal() {
+        return this.orderedBooks.stream()
+                .map(OrderBookEntity::getTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

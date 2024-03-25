@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @Builder
 @Getter
@@ -50,5 +52,9 @@ public class OrderBookEntity {
         return this instanceof HibernateProxy
                 ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
                 : getClass().hashCode();
+    }
+
+    public BigDecimal getTotal() {
+        return this.getBook().getPrice().multiply(BigDecimal.valueOf(this.getAmount()));
     }
 }

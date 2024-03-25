@@ -196,7 +196,7 @@ public class OrderServiceImpl
                 orderedBook.setOrder(newOrder)
         );
 
-        this.mailService.sendEmail(saveOrderDTO.getOrder().getUser().getEmail(), "Order", "You have issued your order successfully");
+        this.mailService.sendOrderConfirmationMail(saveOrderDTO);
 
         return modelMapper.map(repository.save(newOrder), getDTOClass());
     }
