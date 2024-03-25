@@ -12,10 +12,13 @@ import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserService;
+import com.java_school.final_task.domain.user.impl.UserServiceImpl;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
 import com.java_school.final_task.exception.user.InactiveUserException;
+import com.java_school.final_task.utils.MailService;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
+import com.java_school.final_task.utils.impl.MailServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -42,6 +45,8 @@ public class OrderServiceImpl
         implements OrderService {
     // Fields
     private final UserService userService;
+
+    private final MailServiceImpl mailService;
     private final BookRepository bookRepository;
 
     private final JPAQueryFactory queryFactory;
@@ -51,14 +56,16 @@ public class OrderServiceImpl
      *
      * @param repository     {@link OrderRepository} of the {@link OrderEntity}.
      * @param modelMapper    ModelMapper that converts the {@link OrderEntity} instance to {@link OrderDTO}
-     * @param userService    {@link UserService} of the {@link UserEntity}.
+     * @param userService    {@link UserServiceImpl} of the {@link UserEntity}.
+     * @param mailService    {@link MailServiceImpl} of the {@link MailService}
      * @param bookRepository {@link BookRepository} of the {@link BookEntity}.
      * @param queryFactory   {@link JPAQueryFactory} for query and DML clause creation.
      */
-    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, UserService userService,
-                            BookRepository bookRepository, JPAQueryFactory queryFactory) {
+    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, MailServiceImpl mailService,
+                            UserServiceImpl userService, BookRepository bookRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.userService = userService;
+        this.mailService = mailService;
         this.bookRepository = bookRepository;
         this.queryFactory = queryFactory;
     }
@@ -188,6 +195,8 @@ public class OrderServiceImpl
         saveOrderDTO.getOrderedBooks().forEach(orderedBook ->
                 orderedBook.setOrder(newOrder)
         );
+
+        this.mailService.sendEmail(saveOrderDTO.getOrder().getUser().getEmail(), "Order", "You have issued your order successfully");
 
         return modelMapper.map(repository.save(newOrder), getDTOClass());
     }

@@ -72,7 +72,7 @@ public class UserServiceImpl
 
         // Get the user that sends the request from the database
         UserEntity activeExistingUser = repository.findById(userId).orElseThrow(() -> new UserDoesNotExistException(
-                String.format(StringValues.USER_DOES_NOT_EXIST, userId)
+                toSaveOrUpdateUser.getEmail()
         ));
 
         // Get the roles and the password of the user that is being updated, if they exist.
