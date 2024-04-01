@@ -2,6 +2,7 @@ package com.java_school.final_task.utils;
 
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.utils.impl.MailServiceImpl;
+import com.java_school.final_task.utils.impl.PDFServiceImpl;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
 import jakarta.mail.internet.MimeMessage;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -33,10 +35,14 @@ public class MailServiceTests {
     @Mock
     private SpringTemplateEngine templateEngine;
 
+    @Mock
+    private PDFServiceImpl pdfService;
+
     @InjectMocks
     private MailServiceImpl mailService;
 
     private MimeMessage message;
+    private MimeMessageHelper helper;
 
     @BeforeEach
     public void setUp() {
@@ -48,6 +54,11 @@ public class MailServiceTests {
         mailProperties.setProperty("mail.debug", "false");
 
         message = new MimeMessage(Session.getDefaultInstance(mailProperties));
+        try {
+            helper = new MimeMessageHelper(message, true);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
         when(mailSender.createMimeMessage()).thenReturn(message);
     }
 
@@ -59,10 +70,12 @@ public class MailServiceTests {
                 .orderedBooks(List.of(OrderBookMother.createOrderBook()))
                 .build();
 
-        message.setSubject("Order confirmation at Online Bookstore");
-        message.setRecipients(MimeMessage.RecipientType.TO, saveOrderDTO.getOrder().getUser().getEmail());
+        helper.setSubject("Order confirmation at Online Bookstore");
+        helper.setTo(saveOrderDTO.getOrder().getUser().getEmail());
 
         when(templateEngine.process(anyString(), any(Context.class))).thenReturn("Test HTML content");
+        byte[] mockPdfBytes = "Mock PDF Content".getBytes();
+        when(pdfService.generateOrderDetailsPDF(saveOrderDTO)).thenReturn(mockPdfBytes);
 
         // Act
         mailService.sendOrderConfirmationMail(saveOrderDTO);
@@ -73,5 +86,5 @@ public class MailServiceTests {
         assertEquals("Order confirmation at Online Bookstore", message.getSubject());
     }
 
-    // TODO Test MessagingException
+    // TODO Increase coverage
 }

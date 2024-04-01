@@ -7,7 +7,9 @@ import com.java_school.final_task.utils.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -22,21 +24,21 @@ public class MailServiceImpl implements MailService {
 
     private final SpringTemplateEngine thymeleafTemplateEngine;
 
+    private final PDFServiceImpl pdfService;
+
     @Value("${MAIL_USERNAME}")
     private String mailFromAddress;
 
-    public MailServiceImpl(JavaMailSender mailSender, SpringTemplateEngine thymeleafTemplateEngine) {
+    public MailServiceImpl(JavaMailSender mailSender, PDFServiceImpl pdfService, SpringTemplateEngine thymeleafTemplateEngine) {
         this.mailSender = mailSender;
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
+        this.pdfService = pdfService;
     }
 
     @Override
     public void sendOrderConfirmationMail(SaveOrderDTO saveOrderDTO) {
-        MimeMessage message = mailSender.createMimeMessage();
-
         try {
-            message.setRecipients(MimeMessage.RecipientType.TO, saveOrderDTO.getOrder().getUser().getEmail());
-            message.setSubject("Order confirmation at Online Bookstore");
+            byte[] pdfContent = pdfService.generateOrderDetailsPDF(saveOrderDTO);
 
             // Prepare the model for the template
             Map<String, Object> templateModel = new HashMap<>();
@@ -50,13 +52,23 @@ public class MailServiceImpl implements MailService {
             thymeleafContext.setVariables(templateModel);
             String htmlContent = thymeleafTemplateEngine.process("order-confirmation-mail", thymeleafContext);
 
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(saveOrderDTO.getOrder().getUser().getEmail());
+            helper.setSubject("Order confirmation at Online Bookstore");
+
             // Set the content of the email
-            message.setContent(htmlContent, "text/html; charset=utf-8");
+            helper.setText(htmlContent, true);
+
+            // Add the PDF as an attachment
+            String attachmentName = "order_" + saveOrderDTO.getOrder().getDate() + ".pdf";
+            helper.addAttachment(attachmentName, new ByteArrayResource(pdfContent));
+
+            this.sendMail(message);
         } catch (MessagingException e) {
             throw new MessagingExceptionWrapper();
         }
 
-        this.sendMail(message);
     }
 
     /*@Override
