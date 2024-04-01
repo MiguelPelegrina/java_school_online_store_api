@@ -150,7 +150,7 @@ class AuthControllerTests {
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertInstanceOf(UserDoesNotExistException.class, result.getResolvedException()))
                 .andExpect(result -> assertEquals(
-                        String.format(StringValues.USER_DOES_NOT_EXIST, instance.getEmail()),
+                        instance.getEmail(),
                         Objects.requireNonNull(result.getResolvedException()).getMessage())
                 );
 

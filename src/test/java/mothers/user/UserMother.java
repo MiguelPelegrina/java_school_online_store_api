@@ -15,7 +15,7 @@ public class UserMother {
         return UserEntity.builder()
                 .id(4)
                 .active(true)
-                .email("email@.com")
+                .email("email@gmail.com")
                 .dateOfBirth(LocalDate.now())
                 .phone("12345678912")
                 .password("Password")
@@ -30,7 +30,7 @@ public class UserMother {
         return UserDTO.builder()
                 .id(4)
                 .isActive(true)
-                .email("email@.com")
+                .email("email@gmail.com")
                 .dateOfBirth(LocalDate.now())
                 .phone("12345678912")
                 .name("Name")
@@ -42,14 +42,14 @@ public class UserMother {
 
     public static LoginRequestDTO createLoginRequestBodyDTO() {
         return LoginRequestDTO.builder()
-                .email("email@.com")
+                .email("email@gmail.com")
                 .password("Password")
                 .build();
     }
 
     public static RegisterRequestDTO createRegisterRequestBodyDTO() {
         return RegisterRequestDTO.builder()
-                .email("email@.com")
+                .email("email@gmail.com")
                 .dateOfBirth(LocalDate.now())
                 .phone("12345678912")
                 .password("Password")

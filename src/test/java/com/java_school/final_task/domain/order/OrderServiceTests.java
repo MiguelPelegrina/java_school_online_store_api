@@ -6,12 +6,13 @@ import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order.impl.OrderServiceImpl;
 import com.java_school.final_task.domain.order_book.OrderBookRepository;
-import com.java_school.final_task.domain.user.UserService;
+import com.java_school.final_task.domain.user.impl.UserServiceImpl;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
 import com.java_school.final_task.exception.user.InactiveUserException;
 import com.java_school.final_task.exception.user.UserDoesNotExistException;
 import com.java_school.final_task.security.JwtUtil;
+import com.java_school.final_task.utils.impl.MailServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import mothers.order.OrderMother;
 import mothers.order_book.OrderBookMother;
@@ -57,7 +58,10 @@ class OrderServiceTests {
     private BookRepository bookRepository;
 
     @Mock
-    private UserService userService;
+    private UserServiceImpl userService;
+
+    @Mock
+    private MailServiceImpl mailService;
 
     @InjectMocks
     private OrderServiceImpl service;
