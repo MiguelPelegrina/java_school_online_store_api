@@ -6,4 +6,6 @@ public interface MailService {
     void sendOrderConfirmationMail(SaveOrderDTO saveOrderDTO);
 
     //void sendRegistrationConfirmationMail(String to, String text);
+
+    //void sendPasswordResetMail();
 }
