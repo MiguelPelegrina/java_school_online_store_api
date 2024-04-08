@@ -25,6 +25,7 @@ services:
     image: postgres:latest
     ports:
       - "5432:5432"
+    restart: on-failure
     volumes:
       - ../FinalTask3/src/main/resources/sql:/docker-entrypoint-initdb.d
       - ./src/main/resources/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
