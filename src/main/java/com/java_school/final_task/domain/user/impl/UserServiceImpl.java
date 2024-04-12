@@ -23,6 +23,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.Optional;
 
+// TODO Too many comments
+
 /**
  * Service class responsible for the interaction between the {@link UserRepository} and the
  * {@link UserRestControllerImpl}. Obtains data from the

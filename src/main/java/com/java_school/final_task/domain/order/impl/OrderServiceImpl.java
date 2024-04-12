@@ -2,23 +2,18 @@ package com.java_school.final_task.domain.order.impl;
 
 import com.java_school.final_task.domain.book.BookEntity;
 import com.java_school.final_task.domain.book.BookRepository;
-import com.java_school.final_task.domain.order.OrderEntity;
-import com.java_school.final_task.domain.order.OrderRepository;
-import com.java_school.final_task.domain.order.OrderService;
-import com.java_school.final_task.domain.order.QOrderEntity;
+import com.java_school.final_task.domain.order.*;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
 import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order_book.QOrderBookEntity;
 import com.java_school.final_task.domain.user.UserEntity;
 import com.java_school.final_task.domain.user.UserService;
-import com.java_school.final_task.domain.user.impl.UserServiceImpl;
 import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
 import com.java_school.final_task.exception.user.InactiveUserException;
 import com.java_school.final_task.utils.MailService;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
-import com.java_school.final_task.utils.impl.MailServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,21 +29,19 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Service class responsible for the interaction between the {@link OrderRepository} and the {@link OrderRestControllerImpl}.
+ * Service class responsible for the interaction between the {@link OrderRepository} and the {@link OrderRestController}.
  * Obtains data from the {@link OrderRepository} and returns the object(s) of the {@link OrderEntity} as {@link OrderDTO}
- * to the {@link OrderRestControllerImpl}.
+ * to the {@link OrderRestController}.
  */
-@Secured({"ROLE_ADMIN", "EMPLOYEE", "CLIENT"})
+@Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE", "ROLE_CLIENT"})
 @Service
 public class OrderServiceImpl
         extends AbstractServiceImpl<OrderRepository, OrderEntity, OrderDTO, Integer>
         implements OrderService {
     // Fields
     private final UserService userService;
-
-    private final MailServiceImpl mailService;
+    private final MailService mailService;
     private final BookRepository bookRepository;
-
     private final JPAQueryFactory queryFactory;
 
     /**
@@ -56,13 +49,13 @@ public class OrderServiceImpl
      *
      * @param repository     {@link OrderRepository} of the {@link OrderEntity}.
      * @param modelMapper    ModelMapper that converts the {@link OrderEntity} instance to {@link OrderDTO}
-     * @param userService    {@link UserServiceImpl} of the {@link UserEntity}.
-     * @param mailService    {@link MailServiceImpl} of the {@link MailService}
+     * @param userService    {@link UserService} of the {@link UserEntity}.
+     * @param mailService    {@link MailService} of the {@link MailService}
      * @param bookRepository {@link BookRepository} of the {@link BookEntity}.
      * @param queryFactory   {@link JPAQueryFactory} for query and DML clause creation.
      */
-    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, MailServiceImpl mailService,
-                            UserServiceImpl userService, BookRepository bookRepository, JPAQueryFactory queryFactory) {
+    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, MailService mailService,
+                            UserService userService, BookRepository bookRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
         this.userService = userService;
         this.mailService = mailService;
@@ -101,7 +94,7 @@ public class OrderServiceImpl
     }
 
     @Override
-    @Secured({"ROLE_ADMIN", "EMPLOYEE"})
+    @Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
     public void deleteInstance(Integer integer) {
         super.deleteInstance(integer);
     }
@@ -117,11 +110,7 @@ public class OrderServiceImpl
 
         // Check if the current user is active
         if (currentUser.isActive()) {
-            // Check which parameters are present and build a query
-            handleParameter(orderRequestDTO.getDeliveryMethod(), queryBuilder, qOrder.deliveryMethod.name);
-            handleParameter(orderRequestDTO.getOrderStatus(), queryBuilder, qOrder.orderStatus.name);
-            handleParameter(orderRequestDTO.getPaymentMethod(), queryBuilder, qOrder.paymentMethod.name);
-            handleParameter(orderRequestDTO.getPaymentStatus(), queryBuilder, qOrder.paymentStatus.name);
+            handleQueryParameters(orderRequestDTO, queryBuilder, qOrder);
 
             if (orderRequestDTO.getDate() != null) {
                 queryBuilder.and(qOrder.date.eq(orderRequestDTO.getDate()));
@@ -201,7 +190,28 @@ public class OrderServiceImpl
         return modelMapper.map(repository.save(newOrder), getDTOClass());
     }
 
-    private void handleParameter(String parameter, BooleanBuilder queryBuilder, StringExpression expression) {
-        queryBuilder.and(!"".equals(parameter) ? expression.containsIgnoreCase(parameter) : null);
+    /**
+     * Handles a query parameter by adding a condition to the BooleanBuilder.
+     *
+     * @param parameter    The query parameter to handle.
+     * @param queryBuilder The BooleanBuilder to which the condition will be added.
+     * @param expression   The StringExpression representing the field to filter on.
+     */
+    private void handleQueryParameter(String parameter, BooleanBuilder queryBuilder, StringExpression expression) {
+        queryBuilder.and(!parameter.trim().isEmpty() ? expression.containsIgnoreCase(parameter) : null);
+    }
+
+    /**
+     * Handles multiple query parameters for an order request by delegating to handleQueryParameter for each parameter.
+     *
+     * @param orderRequestDTO The OrderRequestDTO containing the query parameters.
+     * @param queryBuilder    The BooleanBuilder to which the conditions will be added.
+     * @param qOrder          The QOrderEntity representing the query entity.
+     */
+    private void handleQueryParameters(OrderRequestDTO orderRequestDTO, BooleanBuilder queryBuilder, QOrderEntity qOrder) {
+        handleQueryParameter(orderRequestDTO.getDeliveryMethod(), queryBuilder, qOrder.deliveryMethod.name);
+        handleQueryParameter(orderRequestDTO.getOrderStatus(), queryBuilder, qOrder.orderStatus.name);
+        handleQueryParameter(orderRequestDTO.getPaymentMethod(), queryBuilder, qOrder.paymentMethod.name);
+        handleQueryParameter(orderRequestDTO.getPaymentStatus(), queryBuilder, qOrder.paymentStatus.name);
     }
 }
