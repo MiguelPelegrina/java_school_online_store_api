@@ -98,7 +98,8 @@ public class WebConfig {
                                 "/payment_statuses/search",
                                 "/postal_codes/search",
                                 "/swagger-ui/**",
-                                "/api-docs/swagger-config"
+                                "/api-docs/swagger-config",
+                                "/actuator/prometheus"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
