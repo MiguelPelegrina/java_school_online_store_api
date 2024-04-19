@@ -1,6 +1,6 @@
 spring:
   application:
-    name: spring-prometheus-demo
+    name: online-store
 management:
   endpoints:
     web:

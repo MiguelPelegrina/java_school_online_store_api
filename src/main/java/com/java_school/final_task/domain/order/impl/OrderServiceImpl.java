@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 /**
  * Service class responsible for the interaction between the {@link OrderRepository} and the {@link OrderRestController}.
@@ -91,6 +92,33 @@ public class OrderServiceImpl
         } catch (NullPointerException e) {
             return BigDecimal.ZERO;
         }
+    }
+
+    @Override
+    @Secured({"ROLE_ADMIN", "ROLE_EMPLOYEE"})
+    public BigDecimal[] calculateRevenueOfYearByMonths(LocalDate date, boolean isLast12Months) {
+        BigDecimal[] revenues = new BigDecimal[12];
+        LocalDate currentDate = LocalDate.now();
+        LocalDate startDate;
+
+        if (isLast12Months) {
+            startDate = currentDate.minusMonths(12); // Start date is 12 months before the current date
+        } else {
+            startDate = YearMonth.of(date.getYear(), 1).atDay(1); // Start date is the first day of the specified year
+        }
+
+        for (int i = 0; i < 12; i++) {
+            YearMonth yearMonth = YearMonth.from(startDate.plusMonths(i + 1));
+            LocalDate firstOfMonth = yearMonth.atDay(1);
+            LocalDate lastOfMonth = yearMonth.atEndOfMonth();
+
+            // Ensure we don't go beyond the current date for last 12 months
+            if (isLast12Months && lastOfMonth.isAfter(currentDate)) {
+                lastOfMonth = currentDate;
+            }
+            revenues[i] = this.calculateTotalRevenue(firstOfMonth, lastOfMonth);
+        }
+        return revenues;
     }
 
     @Override
