@@ -57,7 +57,7 @@ public class OrderRestControllerImpl
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Calculated the revenue",
+            @ApiResponse(responseCode = "200", description = "Calculate the total revenue",
                     content = {@Content(mediaType = "application/json", schema = @Schema)}),
             @ApiResponse(responseCode = "401", description = "Not authorized", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
@@ -71,6 +71,32 @@ public class OrderRestControllerImpl
             @Parameter(description = "End date", example = "12-12-2023")
             @RequestParam("end") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate) {
         return ResponseEntity.ok(this.service.calculateTotalRevenue(startDate, endDate));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Calculate the revenue of a year from january to december",
+                    content = {@Content(mediaType = "application/json", schema = @Schema)}),
+            @ApiResponse(responseCode = "401", description = "Not authorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+    })
+    @GetMapping("/revenueOfYearByMonths")
+    @Override
+    public ResponseEntity<BigDecimal[]> calculateRevenuesOfYearByMonths(
+            @RequestParam("date") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date) {
+        return ResponseEntity.ok(this.service.calculateRevenueOfYearByMonths(date, false));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Calculate the revenue of the last 12 months",
+                    content = {@Content(mediaType = "application/json", schema = @Schema)}),
+            @ApiResponse(responseCode = "401", description = "Not authorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+    })
+    @GetMapping("/revenueOfLast12Months")
+    @Override
+    public ResponseEntity<BigDecimal[]> calculateRevenuesOfLast12Months(
+            @RequestParam("date") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date) {
+        return ResponseEntity.ok(this.service.calculateRevenueOfYearByMonths(date, true));
     }
 
     @ApiResponses(value = {
