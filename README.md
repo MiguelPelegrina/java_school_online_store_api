@@ -1,5 +1,3 @@
-![Build Status](https://github.com/MiguelPelegrina/java_school_online_store_api/actions/workflows/ci.yml/badge.svg)
-
 # JavaSchoolFinalTask2
 Final Task
 Online store information system. 

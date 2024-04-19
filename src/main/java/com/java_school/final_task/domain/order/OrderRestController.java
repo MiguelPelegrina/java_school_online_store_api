@@ -31,22 +31,6 @@ public interface OrderRestController {
     ResponseEntity<BigDecimal> calculateTotalRevenue(LocalDate startDate, LocalDate endDate);
 
     /**
-     * Calculates the revenue of a year from January to December based on the provided date.
-     *
-     * @param date The date to calculate the revenue for, formatted as "dd-MM-yyyy".
-     * @return A ResponseEntity containing an array of BigDecimal representing the revenue for each month of the year.
-     */
-    ResponseEntity<BigDecimal[]> calculateRevenuesOfYearByMonths(LocalDate date);
-
-    /**
-     * Calculates the revenue of the last 12 months.
-     *
-     * @param date The date to calculate the revenue from, formatted as "dd-MM-yyyy".
-     * @return A ResponseEntity containing an array of BigDecimal representing the revenue for each of the last 12 months.
-     */
-    ResponseEntity<BigDecimal[]> calculateRevenuesOfLast12Months(LocalDate date);
-
-    /**
      * Submits a POST request with a {@link SaveOrderDTO} to create an order instance in the database.
      *
      * @param saveOrderDTO Instance to create.
@@ -54,6 +38,4 @@ public interface OrderRestController {
      * If successful, the code is 200 created successfully, 204 otherwise.
      */
     ResponseEntity<OrderDTO> saveInstance(SaveOrderDTO saveOrderDTO);
-
-
 }

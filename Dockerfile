@@ -1,4 +1,4 @@
-FROM openjdk:23-ea-17-jdk-oraclelinux8
+FROM openjdk:17-jdk-alpine
 
 COPY ./target/online_store-0.0.1-SNAPSHOT.jar ./app.jar
 
