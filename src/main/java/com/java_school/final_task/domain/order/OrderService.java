@@ -16,6 +16,15 @@ import java.time.LocalDate;
  */
 public interface OrderService {
     /**
+     * Calculates the revenue for a specified year or the last 12 months.
+     *
+     * @param year           The year for which the revenue should be calculated.
+     * @param isLast12Months A boolean flag indicating whether to calculate the revenue for the last 12 months from the current date.
+     * @return An array of BigDecimal representing the revenue for each month within the specified year or for the last 12 months.
+     */
+    BigDecimal[] calculateRevenueOfYearByMonths(LocalDate year, boolean isLast12Months);
+
+    /**
      * Retrieves a page of {@link OrderDTO}s from the database based on {@link OrderRequestDTO}.
      *
      * @param orderRequestDTO {@link OrderRequestDTO} that contains all the specified parameters and sorting criteria.
