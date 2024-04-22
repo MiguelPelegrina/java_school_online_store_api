@@ -49,5 +49,11 @@ public interface OrderService {
      */
     OrderDTO saveInstance(SaveOrderDTO saveOrderDTO);
 
+    /**
+     * Generates a PDF document for the details of a specific order.
+     *
+     * @param id The unique identifier of the order.
+     * @return A byte array representing the generated PDF document.
+     */
     byte[] generateOrderPDF(Integer id);
 }

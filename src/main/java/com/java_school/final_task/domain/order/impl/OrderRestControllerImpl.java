@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -128,7 +129,15 @@ public class OrderRestControllerImpl
         }
     }
 
-    @GetMapping("/generateOrderPDF/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Generated the PDF file",
+                    content = {@Content(mediaType = "application/pdf", schema = @Schema)}),
+            @ApiResponse(responseCode = "401", description = "Not authorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
+    })
+    @Operation(summary = "Saves a order or updates it, if already exists")
+    @GetMapping(value = "/generateOrderPDF/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     @Override
     public ResponseEntity<byte[]> generateOrderPDF(@PathVariable Integer id) {
         return ResponseEntity.ok(this.service.generateOrderPDF(id));

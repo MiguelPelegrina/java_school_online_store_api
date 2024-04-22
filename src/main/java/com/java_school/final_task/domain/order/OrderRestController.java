@@ -55,5 +55,11 @@ public interface OrderRestController {
      */
     ResponseEntity<OrderDTO> saveInstance(SaveOrderDTO saveOrderDTO);
 
+    /**
+     * Retrieves a PDF document for the details of a specific order identified by its ID.
+     *
+     * @param id The unique identifier of the order.
+     * @return ResponseEntity containing the generated PDF document as a byte array.
+     */
     ResponseEntity<byte[]> generateOrderPDF(Integer id);
 }
