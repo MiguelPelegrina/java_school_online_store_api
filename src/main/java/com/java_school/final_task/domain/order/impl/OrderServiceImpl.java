@@ -2,7 +2,11 @@ package com.java_school.final_task.domain.order.impl;
 
 import com.java_school.final_task.domain.book.BookEntity;
 import com.java_school.final_task.domain.book.BookRepository;
-import com.java_school.final_task.domain.order.*;
+import com.java_school.final_task.domain.order.OrderEntity;
+import com.java_school.final_task.domain.order.OrderRepository;
+import com.java_school.final_task.domain.order.OrderRestController;
+import com.java_school.final_task.domain.order.OrderService;
+import com.java_school.final_task.domain.order.QOrderEntity;
 import com.java_school.final_task.domain.order.dto.OrderDTO;
 import com.java_school.final_task.domain.order.dto.OrderRequestDTO;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
@@ -13,6 +17,7 @@ import com.java_school.final_task.exception.book.ProductNotAvailableException;
 import com.java_school.final_task.exception.book.ProductOutOfStockException;
 import com.java_school.final_task.exception.user.InactiveUserException;
 import com.java_school.final_task.utils.MailService;
+import com.java_school.final_task.utils.PDFService;
 import com.java_school.final_task.utils.impl.AbstractServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.StringExpression;
@@ -28,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Optional;
 
 /**
  * Service class responsible for the interaction between the {@link OrderRepository} and the {@link OrderRestController}.
@@ -42,6 +48,7 @@ public class OrderServiceImpl
     // Fields
     private final UserService userService;
     private final MailService mailService;
+    private final PDFService pdfService;
     private final BookRepository bookRepository;
     private final JPAQueryFactory queryFactory;
 
@@ -55,13 +62,14 @@ public class OrderServiceImpl
      * @param bookRepository {@link BookRepository} of the {@link BookEntity}.
      * @param queryFactory   {@link JPAQueryFactory} for query and DML clause creation.
      */
-    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, MailService mailService,
+    public OrderServiceImpl(OrderRepository repository, ModelMapper modelMapper, MailService mailService, PDFService pdfService,
                             UserService userService, BookRepository bookRepository, JPAQueryFactory queryFactory) {
         super(repository, modelMapper);
-        this.userService = userService;
-        this.mailService = mailService;
         this.bookRepository = bookRepository;
+        this.mailService = mailService;
+        this.pdfService = pdfService;
         this.queryFactory = queryFactory;
+        this.userService = userService;
     }
 
     @Override
@@ -216,6 +224,13 @@ public class OrderServiceImpl
         this.mailService.sendOrderConfirmationMail(saveOrderDTO);
 
         return modelMapper.map(repository.save(newOrder), getDTOClass());
+    }
+
+    @Override
+    public byte[] generateOrderPDF(Integer id) {
+        Optional<OrderEntity> instance = this.repository.findById(id);
+        SaveOrderDTO instanceDTO = modelMapper.map(instance, SaveOrderDTO.class);
+        return this.pdfService.generateOrderDetailsPDF(instanceDTO);
     }
 
     /**

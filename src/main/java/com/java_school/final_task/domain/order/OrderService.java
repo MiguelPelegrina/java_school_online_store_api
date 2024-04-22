@@ -48,4 +48,6 @@ public interface OrderService {
      * @return An {@link OrderDTO} representing the saved order.
      */
     OrderDTO saveInstance(SaveOrderDTO saveOrderDTO);
+
+    byte[] generateOrderPDF(Integer id);
 }

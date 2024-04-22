@@ -3,7 +3,11 @@ package com.java_school.final_task.utils.impl;
 import com.java_school.final_task.domain.order.dto.SaveOrderDTO;
 import com.java_school.final_task.domain.order_book.OrderBookEntity;
 import com.java_school.final_task.utils.PDFService;
-import com.lowagie.text.*;
+import com.lowagie.text.Document;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +68,7 @@ public class PDFServiceImpl implements PDFService {
      * Adds the body section with order details to the PDF document.
      *
      * @param document     The {@link Document} object representing the PDF document.
-     * @param saveOrderDTO The @link SaveOrderDTO} object containing the details of the order.
+     * @param saveOrderDTO The {@link SaveOrderDTO} object containing the details of the order.
      */
     private void addOrderConfirmationBody(Document document, SaveOrderDTO saveOrderDTO) {
         Font fontParagraph = FontFactory.getFont(FontFactory.TIMES);

@@ -55,5 +55,5 @@ public interface OrderRestController {
      */
     ResponseEntity<OrderDTO> saveInstance(SaveOrderDTO saveOrderDTO);
 
-
+    ResponseEntity<byte[]> generateOrderPDF(Integer id);
 }
