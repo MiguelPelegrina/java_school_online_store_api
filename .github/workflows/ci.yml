@@ -73,4 +73,3 @@ jobs:
         javadoc-branch: master
         java-version: 17
         target-folder: javadoc 
-        custom-command: javadoc -d javadoc -sourcepath target/generated-sources/annotations -subpackages .
